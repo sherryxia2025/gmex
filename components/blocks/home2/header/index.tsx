@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import AuthButton from "@/components/auth/auth-button";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
@@ -89,9 +90,10 @@ function DesktopHeader({ isScrolled }: { isScrolled: boolean }) {
           isScrolled ? "text-[#3D3D3D] dark:text-[#E5E5E5]" : "text-white"
         }`}
       >
-        <Link href="/" className="font-bold text-xl">
+        {/* <Link href="/" className="font-bold text-xl">
           Login
-        </Link>
+        </Link> */}
+        <AuthButton />
       </div>
     </div>
   );
@@ -209,7 +211,7 @@ function MobileHeader({
 
           {/* Auth Buttons */}
           <div className="space-y-3 pt-4 border-t border-gray-300 dark:border-gray-700">
-            <Link
+            {/* <Link
               href="/"
               onClick={closeMenu}
               className={`block text-center py-3 px-4 rounded-lg transition-colors ${
@@ -219,7 +221,8 @@ function MobileHeader({
               }`}
             >
               Login
-            </Link>
+            </Link> */}
+            <AuthButton />
           </div>
         </div>
       </div>
