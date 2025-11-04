@@ -1,0 +1,393 @@
+---
+title: Error Handling
+description: Handle errors gracefully in your app
+---
+
+# Error Handling
+
+Implement robust error handling to provide a great user experience.
+
+## Error Boundaries
+
+React Error Boundaries catch JavaScript errors in components.
+
+### Global Error Boundary
+
+```tsx
+// app/[locale]/error.tsx
+'use client';
+
+import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error('Error:', error);
+  }, [error]);
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-4">Something went wrong!</h2>
+        <p className="text-gray-600 mb-8">
+          We're sorry for the inconvenience. Please try again.
+        </p>
+        <Button onClick={reset}>Try again</Button>
+      </div>
+    </div>
+  );
+}
+```
+
+### Route-Specific Error
+
+```tsx
+// app/[locale]/dashboard/error.tsx
+'use client';
+
+export default function DashboardError({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
+  return (
+    <div className="container mx-auto px-4 py-16">
+      <h2 className="text-xl font-bold mb-4">Dashboard Error</h2>
+      <p className="mb-4">{error.message}</p>
+      <button onClick={reset}>Reload Dashboard</button>
+    </div>
+  );
+}
+```
+
+## Not Found Pages
+
+```tsx
+// app/[locale]/not-found.tsx
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+
+export default function NotFound() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-6xl font-bold mb-4">404</h1>
+      <h2 className="text-2xl font-semibold mb-4">Page Not Found</h2>
+      <p className="text-gray-600 mb-8">
+        The page you're looking for doesn't exist.
+      </p>
+      <Link href="/">
+        <Button>Go Home</Button>
+      </Link>
+    </div>
+  );
+}
+```
+
+## API Error Handling
+
+### Standard Error Response
+
+```typescript
+// lib/api-error.ts
+export class ApiError extends Error {
+  constructor(
+    public statusCode: number,
+    message: string,
+    public code?: string
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+export function handleApiError(error: unknown) {
+  if (error instanceof ApiError) {
+    return {
+      error: error.message,
+      code: error.code,
+      statusCode: error.statusCode,
+    };
+  }
+
+  console.error('Unexpected error:', error);
+
+  return {
+    error: 'Internal server error',
+    statusCode: 500,
+  };
+}
+```
+
+### API Route Error Handling
+
+```typescript
+// app/api/users/route.ts
+import { NextResponse } from 'next/server';
+import { ApiError, handleApiError } from '@/lib/api-error';
+import { auth } from '@/lib/auth';
+
+export async function GET() {
+  try {
+    const session = await auth();
+
+    if (!session) {
+      throw new ApiError(401, 'Unauthorized', 'UNAUTHORIZED');
+    }
+
+    // Your logic here
+    const data = await fetchData();
+
+    return NextResponse.json(data);
+  } catch (error) {
+    const { error: message, statusCode } = handleApiError(error);
+    return NextResponse.json({ error: message }, { status: statusCode });
+  }
+}
+```
+
+## Client-Side Error Handling
+
+### Fetch with Error Handling
+
+```typescript
+// lib/api-client.ts
+export async function apiClient<T>(
+  url: string,
+  options?: RequestInit
+): Promise<T> {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers,
+      },
+      ...options,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Request failed');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  }
+}
+```
+
+### Usage with Error States
+
+```tsx
+'use client';
+
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
+
+export function UserProfile({ userId }: { userId: string }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const data = await apiClient(`/api/users/${userId}`);
+        setUser(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load user');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadUser();
+  }, [userId]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="text-red-500">Error: {error}</div>;
+  if (!user) return <div>User not found</div>;
+
+  return <div>{user.name}</div>;
+}
+```
+
+## Error Logging
+
+### Sentry Integration
+
+```bash
+pnpm add @sentry/nextjs
+```
+
+```typescript
+// sentry.client.config.ts
+import * as Sentry from '@sentry/nextjs';
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  tracesSampleRate: 1.0,
+  beforeSend(event, hint) {
+    // Filter sensitive data
+    if (event.request) {
+      delete event.request.cookies;
+    }
+    return event;
+  },
+});
+```
+
+```typescript
+// sentry.server.config.ts
+import * as Sentry from '@sentry/nextjs';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  tracesSampleRate: 1.0,
+});
+```
+
+### Manual Error Logging
+
+```typescript
+import * as Sentry from '@sentry/nextjs';
+
+try {
+  // Your code
+} catch (error) {
+  Sentry.captureException(error, {
+    tags: {
+      section: 'payment',
+    },
+    extra: {
+      userId: user.id,
+    },
+  });
+
+  throw error;
+}
+```
+
+## Validation Errors
+
+### Zod Schema Validation
+
+```typescript
+import { z } from 'zod';
+
+const userSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  age: z.number().min(18),
+});
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const data = userSchema.parse(body);
+
+    // Process valid data
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          error: 'Validation failed',
+          details: error.errors,
+        },
+        { status: 400 }
+      );
+    }
+
+    throw error;
+  }
+}
+```
+
+## Toast Notifications
+
+```tsx
+// components/ui/toast.tsx
+'use client';
+
+import { createContext, useContext, useState } from 'react';
+
+type Toast = {
+  id: string;
+  message: string;
+  type: 'success' | 'error' | 'info';
+};
+
+const ToastContext = createContext<{
+  showToast: (message: string, type: Toast['type']) => void;
+}>({
+  showToast: () => {},
+});
+
+export function ToastProvider({ children }) {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const showToast = (message: string, type: Toast['type']) => {
+    const id = Math.random().toString(36);
+    setToasts((prev) => [...prev, { id, message, type }]);
+
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 3000);
+  };
+
+  return (
+    <ToastContext.Provider value={{ showToast }}>
+      {children}
+      <div className="fixed bottom-4 right-4 space-y-2">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className={`p-4 rounded-lg shadow-lg ${
+              toast.type === 'error'
+                ? 'bg-red-500 text-white'
+                : toast.type === 'success'
+                ? 'bg-green-500 text-white'
+                : 'bg-blue-500 text-white'
+            }`}
+          >
+            {toast.message}
+          </div>
+        ))}
+      </div>
+    </ToastContext.Provider>
+  );
+}
+
+export function useToast() {
+  return useContext(ToastContext);
+}
+```
+
+## Best Practices
+
+1. **User-friendly messages**: Don't show technical errors to users
+2. **Log everything**: Track errors for debugging
+3. **Graceful degradation**: App should still work with errors
+4. **Retry logic**: Implement for transient failures
+5. **Error boundaries**: Prevent entire app crashes
+6. **Validation**: Validate input on client and server
+7. **Status codes**: Use appropriate HTTP status codes
+
+## Next Steps
+
+- Set up [Analytics](/docs/features/analytics)
+- Implement [Customer Support](/docs/features/customer-support)
+- Learn about [Security](/docs/security)
+

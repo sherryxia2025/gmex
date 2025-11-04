@@ -1,0 +1,392 @@
+---
+title: 错误处理
+description: 在您的应用中优雅地处理错误
+---
+
+# 错误处理
+
+实现健壮的错误处理，以提供出色的用户体验。
+
+## 错误边界
+
+React 错误边界捕获组件中的 JavaScript 错误。
+
+### 全局错误边界
+
+```tsx
+// app/[locale]/error.tsx
+'use client';
+
+import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error('Error:', error);
+  }, [error]);
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-4">出错了！</h2>
+        <p className="text-gray-600 mb-8">
+          抱歉给您带来不便。请重试。
+        </p>
+        <Button onClick={reset}>重试</Button>
+      </div>
+    </div>
+  );
+}
+```
+
+### 路由特定错误
+
+```tsx
+// app/[locale]/dashboard/error.tsx
+'use client';
+
+export default function DashboardError({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
+  return (
+    <div className="container mx-auto px-4 py-16">
+      <h2 className="text-xl font-bold mb-4">仪表板错误</h2>
+      <p className="mb-4">{error.message}</p>
+      <button onClick={reset}>重新加载仪表板</button>
+    </div>
+  );
+}
+```
+
+## 未找到页面
+
+```tsx
+// app/[locale]/not-found.tsx
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+
+export default function NotFound() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-6xl font-bold mb-4">404</h1>
+      <h2 className="text-2xl font-semibold mb-4">页面未找到</h2>
+      <p className="text-gray-600 mb-8">
+        您要查找的页面不存在。
+      </p>
+      <Link href="/">
+        <Button>返回首页</Button>
+      </Link>
+    </div>
+  );
+}
+```
+
+## API 错误处理
+
+### 标准错误响应
+
+```typescript
+// lib/api-error.ts
+export class ApiError extends Error {
+  constructor(
+    public statusCode: number,
+    message: string,
+    public code?: string
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+export function handleApiError(error: unknown) {
+  if (error instanceof ApiError) {
+    return {
+      error: error.message,
+      code: error.code,
+      statusCode: error.statusCode,
+    };
+  }
+
+  console.error('意外错误:', error);
+
+  return {
+    error: '内部服务器错误',
+    statusCode: 500,
+  };
+}
+```
+
+### API 路由错误处理
+
+```typescript
+// app/api/users/route.ts
+import { NextResponse } from 'next/server';
+import { ApiError, handleApiError } from '@/lib/api-error';
+import { auth } from '@/lib/auth';
+
+export async function GET() {
+  try {
+    const session = await auth();
+
+    if (!session) {
+      throw new ApiError(401, '未授权', 'UNAUTHORIZED');
+    }
+
+    // 您的逻辑代码
+    const data = await fetchData();
+
+    return NextResponse.json(data);
+  } catch (error) {
+    const { error: message, statusCode } = handleApiError(error);
+    return NextResponse.json({ error: message }, { status: statusCode });
+  }
+}
+```
+
+## 客户端错误处理
+
+### 带错误处理的 Fetch
+
+```typescript
+// lib/api-client.ts
+export async function apiClient<T>(
+  url: string,
+  options?: RequestInit
+): Promise<T> {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers,
+      },
+      ...options,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || '请求失败');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('API 错误:', error);
+    throw error;
+  }
+}
+```
+
+### 错误状态使用
+
+```tsx
+'use client';
+
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
+
+export function UserProfile({ userId }: { userId: string }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const data = await apiClient(`/api/users/${userId}`);
+        setUser(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '加载用户失败');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadUser();
+  }, [userId]);
+
+  if (loading) return <div>加载中...</div>;
+  if (error) return <div className="text-red-500">错误: {error}</div>;
+  if (!user) return <div>用户未找到</div>;
+
+  return <div>{user.name}</div>;
+}
+```
+
+## 错误日志
+
+### Sentry 集成
+
+```bash
+pnpm add @sentry/nextjs
+```
+
+```typescript
+// sentry.client.config.ts
+import * as Sentry from '@sentry/nextjs';
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  tracesSampleRate: 1.0,
+  beforeSend(event, hint) {
+    // 过滤敏感数据
+    if (event.request) {
+      delete event.request.cookies;
+    }
+    return event;
+  },
+});
+```
+
+```typescript
+// sentry.server.config.ts
+import * as Sentry from '@sentry/nextjs';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  tracesSampleRate: 1.0,
+});
+```
+
+### 手动错误日志
+
+```typescript
+import * as Sentry from '@sentry/nextjs';
+
+try {
+  // 您的代码
+} catch (error) {
+  Sentry.captureException(error, {
+    tags: {
+      section: 'payment',
+    },
+    extra: {
+      userId: user.id,
+    },
+  });
+
+  throw error;
+}
+```
+
+## 验证错误
+
+### Zod 模式验证
+
+```typescript
+import { z } from 'zod';
+
+const userSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  age: z.number().min(18),
+});
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const data = userSchema.parse(body);
+
+    // 处理有效数据
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          error: '验证失败',
+          details: error.errors,
+        },
+        { status: 400 }
+      );
+    }
+
+    throw error;
+  }
+}
+```
+
+## Toast 通知
+
+```tsx
+// components/ui/toast.tsx
+'use client';
+
+import { createContext, useContext, useState } from 'react';
+
+type Toast = {
+  id: string;
+  message: string;
+  type: 'success' | 'error' | 'info';
+};
+
+const ToastContext = createContext<{
+  showToast: (message: string, type: Toast['type']) => void;
+}>({
+  showToast: () => {},
+});
+
+export function ToastProvider({ children }) {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const showToast = (message: string, type: Toast['type']) => {
+    const id = Math.random().toString(36);
+    setToasts((prev) => [...prev, { id, message, type }]);
+
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 3000);
+  };
+
+  return (
+    <ToastContext.Provider value={{ showToast }}>
+      {children}
+      <div className="fixed bottom-4 right-4 space-y-2">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className={`p-4 rounded-lg shadow-lg ${
+              toast.type === 'error'
+                ? 'bg-red-500 text-white'
+                : toast.type === 'success'
+                ? 'bg-green-500 text-white'
+                : 'bg-blue-500 text-white'
+            }`}
+          >
+            {toast.message}
+          </div>
+        ))}
+      </div>
+    </ToastContext.Provider>
+  );
+}
+
+export function useToast() {
+  return useContext(ToastContext);
+}
+```
+
+## 最佳实践
+
+1. **用户友好信息**：不要向用户显示技术错误
+2. **记录所有内容**：跟踪错误以便调试
+3. **优雅降级**：应用在出现错误时仍应能正常工作
+4. **重试逻辑**：针对瞬时故障实现重试逻辑
+5. **错误边界**：防止整个应用崩溃
+6. **验证**：在客户端和服务器端验证输入
+7. **状态码**：使用适当的 HTTP 状态码
+
+## 后续步骤
+
+- 设置 [分析](/docs/features/analytics)
+- 实施 [客户支持](/docs/features/customer-support)
+- 了解 [安全](/docs/security)

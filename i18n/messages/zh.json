@@ -1,0 +1,450 @@
+{
+  "common": {
+    "language": "语言",
+    "english": "English",
+    "chinese": "Chinese",
+    "generate": "生成",
+    "optimize": "优化"
+  },
+  "home": {
+    "title": "欢迎使用 Next.js",
+    "getStarted": "开始编辑",
+    "saveChanges": "保存并立即看到您的更改。",
+    "deployNow": "立即部署",
+    "readDocs": "阅读文档",
+    "learn": "学习",
+    "examples": "示例",
+    "goToNextjs": "前往 nextjs.org →"
+  },
+  "auth": {
+    "signIn": "登录",
+    "signOut": "退出",
+    "signInWith": "使用 {provider} 登录",
+    "signInError": "登录失败",
+    "signOutError": "退出失败",
+    "signInDescription": "请选择一个登录方式",
+    "noAuthenticationProvidersConfigured": "未配置任何认证方式"
+  },
+  "user": {
+    "profile": {
+      "adminPanel": "管理面板",
+      "userCenter": "用户中心"
+    },
+    "my_orders": "我的订单"
+  },
+  "user_center": {
+    "title": "用户中心",
+    "description": "管理您的订单和积分",
+    "navigation": "导航",
+    "my_orders_description": "查看您的所有订单记录",
+    "my_credits_description": "查看您的积分余额和交易记录",
+    "view_orders": "查看订单",
+    "view_credits": "查看积分"
+  },
+  "my_orders": {
+    "title": "我的订单",
+    "description": "查看您的所有订单记录",
+    "table_description": "显示 {count} 个订单",
+    "read_docs": "阅读文档",
+    "no_orders": "暂无订单",
+    "no_orders_description": "您还没有任何订单记录",
+    "table": {
+      "order_no": "订单号",
+      "email": "邮箱",
+      "product_name": "产品名称",
+      "amount": "金额",
+      "interval": "周期",
+      "interval_month": "月付",
+      "interval_year": "年付",
+      "interval_one_time": "一次性",
+      "paid_at": "支付时间",
+      "status": "状态",
+      "manage_billing": "管理账单"
+    }
+  },
+  "discord": {
+    "get_invite_button": "获取 Discord 邀请码",
+    "dialog_title": "获取 Discord 邀请码",
+    "dialog_description": "感谢您的购买！点击下方按钮获取专属 Discord 社区邀请码",
+    "generate_button": "生成邀请码",
+    "generating": "正在生成邀请码...",
+    "generate_failed": "生成邀请码失败",
+    "network_error": "网络错误，请重试",
+    "retry": "重试",
+    "success_message": "邀请码已生成成功！",
+    "copy": "复制",
+    "copied": "已复制",
+    "copy_link": "复制链接",
+    "join_now": "立即加入",
+    "invite_expiry": "此邀请码有效期为 1 小时，仅可使用一次",
+    "copy_failed": "复制失败"
+  },
+  "my_credits": {
+    "title": "我的积分",
+    "description": "查看您的积分余额和交易记录",
+    "recharge": "充值",
+    "left_tip": "剩余积分: {left_credits}",
+    "no_credits": "暂无积分记录",
+    "no_credits_description": "您还没有任何积分记录，点击充值按钮开始购买积分",
+    "table": {
+      "trans_no": "交易号",
+      "trans_type": "交易类型",
+      "credits": "积分",
+      "created_at": "创建时间",
+      "expired_at": "过期时间"
+    }
+  },
+  "posts": {
+    "title": "博客",
+    "description": "发现我们社区的见解、教程和故事",
+    "noPosts": "未找到文章",
+    "noPostsInCategory": "此分类中没有找到文章。",
+    "noPostsYet": "还没有发布任何文章。",
+    "viewAllPosts": "查看所有文章",
+    "readMore": "阅读更多",
+    "backToPosts": "返回文章列表",
+    "publishedOn": "发布于",
+    "category": "分类",
+    "filterByCategory": "按分类筛选",
+    "allPosts": "所有文章",
+    "filteredBy": "筛选条件：",
+    "clear": "清除",
+    "page": "第",
+    "previous": "上一页",
+    "next": "下一页"
+  },
+  "navigation": {
+    "product": "产品",
+    "blog": "博客",
+    "faq": "常见问题",
+    "docs": "文档",
+    "pricing": "价格"
+  },
+  "aiPlayground": {
+    "title": "AI Playground",
+    "description": "测试和对比不同的 AI 模型，支持批量测试和结果对比",
+    "inputConfig": "输入配置",
+    "inputConfigDescription": "配置测试参数",
+    "imageUrl": "图像 URL",
+    "imageUrlPlaceholder": "https://example.com/image.png",
+    "prompt": "提示词",
+    "promptPlaceholder": "输入提示词...",
+    "modelSelection": "模型选择与执行",
+    "modelSelectionDescription": "选择要测试的模型并开始批测",
+    "selectModels": "选择模型",
+    "selectAll": "全选",
+    "clear": "清空",
+    "testing": "测试中...",
+    "testSelectedModels": "测试选中的模型",
+    "parallelTestHint": "将并行测试所有选中的模型",
+    "testResults": "测试结果",
+    "modelsSelected": "已选择 {count} 个模型",
+    "selectModelsToTest": "请选择模型并开始测试",
+    "waitingForTest": "等待测试...",
+    "selectModelsPrompt": "选择模型后点击测试按钮查看结果",
+    "retest": "重新测试",
+    "selectAtLeastOneModel": "请至少选择一个模型",
+    "status": {
+      "pending": "pending",
+      "running": "running",
+      "success": "success",
+      "error": "error"
+    },
+    "modelTypes": {
+      "textToText": "文本生成",
+      "textToImage": "文本转图像",
+      "textToVideo": "文本转视频",
+      "imageToVideo": "图像转视频",
+      "imageToImage": "图像转图像",
+      "removeBg": "移除背景"
+    },
+    "defaultPrompts": {
+      "textToText": "给我讲一个关于编程的笑话",
+      "textToImage": "一座美丽的山脉上的日落",
+      "textToVideo": "一只猫在玩球",
+      "imageToVideo": "为这张图片添加动态效果",
+      "imageToImage": "让它更加丰富多彩",
+      "removeBg": ""
+    }
+  },
+  "admin": {
+    "title": "管理面板",
+    "dashboard": "管理仪表板",
+    "welcome": "欢迎",
+    "backToHome": "返回首页",
+    "navigation": {
+      "title": "导航",
+      "users": "用户管理",
+      "orders": "订单管理",
+      "categories": "分类管理",
+      "posts": "文章管理"
+    },
+    "users": {
+      "title": "用户管理",
+      "description": "管理用户账户和权限",
+      "stats": {
+        "totalUsers": "总用户数",
+        "verifiedUsers": "已验证用户",
+        "pendingUsers": "待审核用户",
+        "newThisMonth": "本月新增"
+      },
+      "search": {
+        "placeholder": "搜索用户...",
+        "allProviders": "所有提供商",
+        "allStatus": "所有状态",
+        "verified": "已验证",
+        "pending": "待审核",
+        "filter": "筛选"
+      },
+      "table": {
+        "user": "用户",
+        "provider": "提供商",
+        "githubId": "GitHub ID",
+        "status": "状态",
+        "lastLogin": "最后登录",
+        "actions": "操作",
+        "neverLoggedIn": "从未登录",
+        "notLinked": "未绑定",
+        "justNow": "刚刚",
+        "hoursAgo": "{hours} 小时前",
+        "daysAgo": "{days} 天前"
+      },
+      "pagination": {
+        "showing": "显示",
+        "to": "到",
+        "of": "共",
+        "results": "条结果",
+        "previous": "上一页",
+        "next": "下一页"
+      },
+      "messages": {
+        "noUsersFound": "未找到用户",
+        "loading": "加载中...",
+        "deleteConfirm": "确定要删除此用户吗？",
+        "deleteSuccess": "用户删除成功",
+        "deleteError": "删除用户失败"
+      }
+    },
+    "orders": {
+      "title": "订单管理",
+      "description": "管理客户订单和交易",
+      "stats": {
+        "totalOrders": "总订单数",
+        "revenue": "收入",
+        "pending": "待处理",
+        "completed": "已完成"
+      },
+      "search": {
+        "placeholder": "搜索订单...",
+        "allStatus": "所有状态",
+        "pending": "待处理",
+        "paid": "已支付",
+        "failed": "失败"
+      },
+      "table": {
+        "order": "订单",
+        "customer": "客户",
+        "product": "产品",
+        "total": "总额",
+        "status": "状态",
+        "date": "日期",
+        "actions": "操作",
+        "credits": "积分",
+        "oneTime": "一次性"
+      },
+      "pagination": {
+        "showingPage": "显示第 {current} 页，共 {total} 页",
+        "previous": "上一页",
+        "next": "下一页"
+      },
+      "messages": {
+        "loading": "加载订单中...",
+        "noOrdersFound": "未找到订单"
+      }
+    },
+    "categories": {
+      "title": "分类管理",
+      "description": "管理博客分类",
+      "addCategory": "添加分类",
+      "table": {
+        "name": "名称",
+        "title": "标题",
+        "description": "描述",
+        "sort": "排序",
+        "status": "状态",
+        "createdAt": "创建时间",
+        "actions": "操作"
+      },
+      "actions": {
+        "edit": "编辑",
+        "view": "查看",
+        "delete": "删除"
+      },
+      "messages": {
+        "noCategoriesFound": "未找到分类"
+      }
+    },
+    "posts": {
+      "title": "文章管理",
+      "description": "管理博客",
+      "addPost": "添加文章",
+      "table": {
+        "title": "标题",
+        "description": "描述",
+        "slug": "路径",
+        "locale": "语言",
+        "category": "分类",
+        "status": "状态",
+        "createdAt": "创建时间",
+        "actions": "操作"
+      },
+      "actions": {
+        "edit": "编辑",
+        "view": "查看"
+      },
+      "messages": {
+        "noPostsFound": "未找到文章"
+      }
+    },
+    "common": {
+      "loading": "加载中...",
+      "search": "搜索",
+      "filter": "筛选",
+      "actions": "操作",
+      "edit": "编辑",
+      "view": "查看",
+      "delete": "删除",
+      "save": "保存",
+      "cancel": "取消",
+      "confirm": "确认",
+      "previous": "上一页",
+      "next": "下一页",
+      "page": "页",
+      "of": "共",
+      "total": "总计",
+      "showing": "显示",
+      "to": "到",
+      "results": "条结果",
+      "noData": "暂无数据",
+      "error": "错误",
+      "success": "成功",
+      "warning": "警告",
+      "info": "信息"
+    }
+  },
+  "payment": {
+    "success": {
+      "title": "支付成功！",
+      "description": "感谢您的购买。您的订单已确认。",
+      "loading": "正在加载订单信息...",
+      "error": "支付错误",
+      "orderNotFound": "找不到订单。这可能是因为支付仍在处理中。请稍等片刻并刷新页面，或如果此问题持续存在，请联系支持。",
+      "loadError": "加载订单信息失败",
+      "refreshPage": "刷新页面",
+      "returnHome": "返回首页",
+      "orderDetails": "订单详情",
+      "orderNumber": "订单号",
+      "product": "产品",
+      "amount": "金额",
+      "credits": "积分",
+      "billing": "计费",
+      "validFor": "有效期",
+      "months": "个月",
+      "unlimited": "无限",
+      "status": "状态",
+      "paidAt": "支付时间",
+      "email": "邮箱",
+      "whatsNext": "接下来做什么？",
+      "creditsAdded": "您的积分已添加到您的账户",
+      "startBuilding": "您现在可以开始构建您的SaaS项目",
+      "checkEmail": "请检查您的邮箱以获取确认收据",
+      "returnToUserCenter": "返回用户中心",
+      "discordInvite": {
+        "title": "加入我们的 Discord 社区",
+        "description": "感谢您的购买！这是您的专属 Discord 邀请链接：",
+        "generateDescription": "感谢您的购买！生成您的专属 Discord 邀请链接：",
+        "copyLink": "复制链接",
+        "joinNow": "立即加入",
+        "validityInfo": "此邀请链接有效期为1小时，只能使用一次。",
+        "generating": "正在生成您的 Discord 邀请...",
+        "generationFailed": "生成 Discord 邀请失败",
+        "retryGenerate": "重新生成邀请",
+        "generateInvite": "生成 Discord 邀请"
+      },
+      "githubInvite": {
+        "title": "加入我们的 GitHub 仓库",
+        "description": "加入 GitHub 获取项目代码。",
+        "sendInvite": "发送 GitHub 邀请",
+        "inviteSent": "GitHub 邀请发送成功！",
+        "inviteFailed": "发送 GitHub 邀请失败",
+        "sending": "正在发送邀请...",
+        "retry": "重试",
+        "dialogTitle": "输入 GitHub 用户名",
+        "dialogDescription": "请输入您要邀请到我们私有仓库的 GitHub 用户名。",
+        "usernameLabel": "GitHub 用户名",
+        "cancel": "取消"
+      }
+    },
+    "canceled": {
+      "title": "支付已取消",
+      "description": "您的支付已取消。未产生任何费用。",
+      "orderInfo": "订单信息",
+      "orderNumber": "订单号",
+      "whyCanceled": "为什么支付被取消了？",
+      "reasons": {
+        "canceled": "您在结账过程中点击了\"取消\"按钮",
+        "declined": "您的银行或发卡机构拒绝了支付",
+        "expired": "由于不活动导致会话过期",
+        "technical": "支付过程中的技术问题"
+      },
+      "needHelp": "需要帮助？",
+      "helpDescription": "如果您在支付方面遇到问题，可以尝试以下方法：",
+      "helpTips": {
+        "checkCard": "检查您的卡片信息是否正确",
+        "sufficientFunds": "确保您有足够的资金",
+        "differentMethod": "尝试不同的支付方式",
+        "contactBank": "如果问题持续存在，请联系您的银行"
+      },
+      "tryAgain": "重试",
+      "returnHome": "返回首页",
+      "stillTrouble": "仍然遇到问题？我们在这里帮助您。",
+      "contactSupport": "联系支持"
+    }
+  },
+  "unauthorized": {
+    "title": "未授权",
+    "description": "您没有权限访问此页面。如果您认为这是一个错误，请联系管理员。",
+    "goHome": "返回首页",
+    "errorCode": "错误代码: 403 - 禁止访问"
+  },
+  "authError": {
+    "unauthorized": {
+      "title": "需要身份验证",
+      "description": "请登录以访问此页面。"
+    },
+    "forbidden": {
+      "title": "访问被拒绝",
+      "description": "您没有权限访问此资源。"
+    },
+    "sessionExpired": {
+      "title": "会话已过期",
+      "description": "您的会话已过期，请重新登录。",
+      "tip": "您的会话可能由于不活动或安全原因而过期。"
+    },
+    "accountBanned": {
+      "title": "账户已被暂停",
+      "description": "您的账户已被暂停，请联系客服获取帮助。"
+    },
+    "unknown": {
+      "title": "身份验证错误",
+      "description": "发生了意外的身份验证错误。"
+    },
+    "actions": {
+      "refresh": "刷新页面",
+      "goHome": "返回首页",
+      "contactSupport": "联系客服",
+      "signIn": "登录"
+    },
+    "errorCode": "错误代码: {code}"
+  }
+}

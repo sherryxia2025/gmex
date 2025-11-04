@@ -1,0 +1,12 @@
+import { getLLMText, source } from "@/lib/source";
+
+// cached forever
+export const revalidate = false;
+
+export async function GET() {
+  // TODO: support mdx file and only en language.
+  const scan = source.getPages().map(getLLMText);
+  const scanned = await Promise.all(scan);
+
+  return new Response(scanned.join("\n\n"));
+}

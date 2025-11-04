@@ -1,0 +1,284 @@
+---
+title: Google OAuth
+description: Implement Google sign-in with OAuth 2.0
+---
+
+# Google OAuth
+
+Enable users to sign in with their Google accounts.
+
+## Setup
+
+### 1. Create Google OAuth Credentials
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Navigate to "APIs & Services" → "Credentials"
+4. Click "Create Credentials" → "OAuth client ID"
+5. Choose "Web application"
+6. Add authorized redirect URIs:
+   - Development: `http://localhost:3000/api/auth/callback/google`
+   - Production: `https://yoursite.com/api/auth/callback/google`
+
+### 2. Configure Environment Variables
+
+Add to your `.env.local`:
+
+```bash
+GOOGLE_CLIENT_ID=your_client_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your_client_secret
+```
+
+### 3. Configure Better Auth
+
+The Google OAuth provider is already configured in this starter. Check `lib/auth.ts`:
+
+```typescript
+import { betterAuth } from 'better-auth';
+import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { db } from '@/prisma';
+
+export const auth = betterAuth({
+  database: prismaAdapter(db, {
+    provider: 'postgresql',
+  }),
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
+  },
+});
+```
+
+## Implementation
+
+### Sign In Button
+
+```tsx
+'use client';
+
+import { authClient } from '@/lib/auth-client';
+import { Button } from '@/components/ui/button';
+
+export function GoogleSignInButton() {
+  const handleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: '/dashboard',
+    });
+  };
+
+  return (
+    <Button onClick={handleSignIn} variant="outline">
+      <GoogleIcon className="mr-2 h-4 w-4" />
+      Continue with Google
+    </Button>
+  );
+}
+```
+
+### Auth Dialog with Google
+
+```tsx
+import { AuthButton } from '@/components/auth/auth-button';
+
+export function Header() {
+  return (
+    <header>
+      <nav>
+        <AuthButton />
+      </nav>
+    </header>
+  );
+}
+```
+
+The existing `AuthButton` component already includes Google OAuth:
+
+```tsx
+// components/auth/auth-button.tsx
+'use client';
+
+import { authClient } from '@/lib/auth-client';
+
+export function AuthButton() {
+  const { data: session } = useSession();
+
+  if (session) {
+    return <UserMenu user={session.user} />;
+  }
+
+  return (
+    <Button onClick={() => authClient.signIn.social({ provider: 'google' })}>
+      Sign In
+    </Button>
+  );
+}
+```
+
+## User Data
+
+Google provides the following user data:
+
+```typescript
+interface GoogleUser {
+  id: string;
+  email: string;
+  name: string;
+  image: string;
+  emailVerified: boolean;
+}
+```
+
+## Handle Sign In Callback
+
+The callback is handled automatically by Better Auth at `/api/auth/callback/google`.
+
+### Custom Callback Logic
+
+```typescript
+// lib/auth.ts
+export const auth = betterAuth({
+  // ... other config
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account.provider === 'google') {
+        // Custom logic after Google sign-in
+        console.log('User signed in with Google:', user.email);
+
+        // Example: Check if email domain is allowed
+        const allowedDomains = ['company.com'];
+        const emailDomain = user.email.split('@')[1];
+
+        if (!allowedDomains.includes(emailDomain)) {
+          return false; // Deny sign-in
+        }
+      }
+
+      return true;
+    },
+  },
+});
+```
+
+## Scopes
+
+Request additional permissions:
+
+```typescript
+await authClient.signIn.social({
+  provider: 'google',
+  callbackURL: '/dashboard',
+  options: {
+    scope: 'openid email profile https://www.googleapis.com/auth/calendar',
+  },
+});
+```
+
+Common Google scopes:
+- `openid email profile` - Basic profile (default)
+- `https://www.googleapis.com/auth/calendar` - Google Calendar
+- `https://www.googleapis.com/auth/drive` - Google Drive
+- `https://www.googleapis.com/auth/gmail.readonly` - Gmail read
+
+## Link Existing Account
+
+Allow users to link Google to existing account:
+
+```tsx
+'use client';
+
+import { authClient } from '@/lib/auth-client';
+
+export function LinkGoogleAccount() {
+  const handleLink = async () => {
+    await authClient.linkSocial({
+      provider: 'google',
+    });
+  };
+
+  return (
+    <Button onClick={handleLink}>
+      Link Google Account
+    </Button>
+  );
+}
+```
+
+## Unlink Account
+
+```tsx
+export function UnlinkGoogleAccount() {
+  const handleUnlink = async () => {
+    await authClient.unlinkSocial({
+      provider: 'google',
+    });
+  };
+
+  return (
+    <Button onClick={handleUnlink} variant="destructive">
+      Unlink Google
+    </Button>
+  );
+}
+```
+
+## Error Handling
+
+```tsx
+const handleSignIn = async () => {
+  try {
+    await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: '/dashboard',
+    });
+  } catch (error) {
+    if (error.code === 'access_denied') {
+      console.log('User cancelled sign-in');
+    } else {
+      console.error('Sign-in error:', error);
+    }
+  }
+};
+```
+
+## Testing
+
+1. Test with different Google accounts
+2. Test email verification flow
+3. Test with accounts that have no profile picture
+4. Test error scenarios (cancelled sign-in)
+
+## Production Checklist
+
+- [ ] Configure production redirect URIs
+- [ ] Enable OAuth consent screen
+- [ ] Add privacy policy URL
+- [ ] Add terms of service URL
+- [ ] Verify domain ownership
+- [ ] Request verification for sensitive scopes
+
+## Troubleshooting
+
+### Redirect URI Mismatch
+
+Make sure redirect URI in Google Console matches exactly:
+```
+http://localhost:3000/api/auth/callback/google
+```
+
+### Invalid Client
+
+Check that `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are correct.
+
+### Access Denied
+
+User may have cancelled sign-in or denied permissions.
+
+## Next Steps
+
+- Add [GitHub OAuth](/docs/features/oauth-github)
+- Implement [Magic Links](/docs/features/magic-links)
+- Learn about [User Authentication](/docs/tutorials/user-authentication)
+

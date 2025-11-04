@@ -1,0 +1,366 @@
+---
+title: 表单
+description: 表单组件和验证
+---
+
+# 表单
+
+使用 React Hook Form 和 Zod 构建带验证的表单。
+
+## 安装
+
+```bash
+pnpm add react-hook-form zod @hookform/resolvers
+```
+
+## 基本表单
+
+```tsx
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+
+const formSchema = z.object({
+  email: z.string().email('无效的电子邮件地址'),
+  password: z.string().min(8, '密码必须至少包含 8 个字符'),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+export function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+  });
+
+  const onSubmit = async (data: FormData) => {
+    console.log(data);
+    // 处理表单提交
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium mb-2">
+          电子邮件
+        </label>
+        <Input
+          id="email"
+          type="email"
+          {...register('email')}
+          className={errors.email ? 'border-red-500' : ''}
+        />
+        {errors.email && (
+          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="password" className="block text-sm font-medium mb-2">
+          密码
+        </label>
+        <Input
+          id="password"
+          type="password"
+          {...register('password')}
+          className={errors.password ? 'border-red-500' : ''}
+        />
+        {errors.password && (
+          <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+        )}
+      </div>
+
+      <Button type="submit" disabled={isSubmitting} className="w-full">
+        {isSubmitting ? '提交中...' : '登录'}
+      </Button>
+    </form>
+  );
+}
+```
+
+## shadcn/ui 表单
+
+```tsx
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+
+export function ProfileForm() {
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+    },
+  });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>姓名</FormLabel>
+              <FormControl>
+                <Input placeholder="John Doe" {...field} />
+              </FormControl>
+              <FormDescription>
+                您的公开显示名称
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>电子邮件</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="john@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit">更新个人资料</Button>
+      </form>
+    </Form>
+  );
+}
+```
+
+## 输入组件
+
+### 文本输入
+
+```tsx
+<Input
+  type="text"
+  placeholder="输入文本"
+  {...register('fieldName')}
+/>
+```
+
+### 文本区域
+
+```tsx
+<Textarea
+  placeholder="输入描述"
+  rows={5}
+  {...register('description')}
+/>
+```
+
+### 选择
+
+```tsx
+<select {...register('country')} className="border rounded px-3 py-2">
+  <option value="">选择国家</option>
+  <option value="us">美国</option>
+  <option value="uk">英国</option>
+</select>
+```
+
+### 复选框
+
+```tsx
+<div className="flex items-center space-x-2">
+  <input
+    type="checkbox"
+    id="terms"
+    {...register('terms')}
+    className="rounded border-gray-300"
+  />
+  <label htmlFor="terms" className="text-sm">
+    我同意条款和条件
+  </label>
+</div>
+```
+
+### 单选按钮
+
+```tsx
+<div className="space-y-2">
+  <div className="flex items-center space-x-2">
+    <input
+      type="radio"
+      id="option1"
+      value="option1"
+      {...register('choice')}
+    />
+    <label htmlFor="option1">选项 1</label>
+  </div>
+  <div className="flex items-center space-x-2">
+    <input
+      type="radio"
+      id="option2"
+      value="option2"
+      {...register('choice')}
+    />
+    <label htmlFor="option2">选项 2</label>
+  </div>
+</div>
+```
+
+## 复杂验证
+
+```tsx
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string()
+    .min(8, '密码必须至少包含 8 个字符')
+    .regex(/[A-Z]/, '密码必须包含大写字母')
+    .regex(/[0-9]/, '密码必须包含数字'),
+  confirmPassword: z.string(),
+  age: z.number().min(18, '必须年满 18 岁'),
+  website: z.string().url().optional(),
+  terms: z.boolean().refine((val) => val === true, {
+    message: '您必须接受条款',
+  }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: '密码不匹配',
+  path: ['confirmPassword'],
+});
+```
+
+## 文件上传
+
+```tsx
+const fileSchema = z.object({
+  file: z.instanceof(FileList).refine((files) => files.length > 0, {
+    message: '文件是必需的',
+  }),
+});
+
+export function FileUploadForm() {
+  const { register, handleSubmit } = useForm({
+    resolver: zodResolver(fileSchema),
+  });
+
+  const onSubmit = async (data: any) => {
+    const file = data.file[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input type="file" {...register('file')} />
+      <Button type="submit">上传</Button>
+    </form>
+  );
+}
+```
+
+## 动态字段
+
+```tsx
+import { useFieldArray } from 'react-hook-form';
+
+export function DynamicForm() {
+  const { control, register } = useForm({
+    defaultValues: {
+      items: [{ name: '', quantity: 0 }],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'items',
+  });
+
+  return (
+    <form>
+      {fields.map((field, index) => (
+        <div key={field.id} className="flex gap-2">
+          <Input {...register(`items.${index}.name`)} placeholder="项目名称" />
+          <Input
+            type="number"
+            {...register(`items.${index}.quantity`, { valueAsNumber: true })}
+            placeholder="数量"
+          />
+          <Button type="button" onClick={() => remove(index)}>
+            移除
+          </Button>
+        </div>
+      ))}
+      <Button
+        type="button"
+        onClick={() => append({ name: '', quantity: 0 })}
+      >
+        添加项目
+      </Button>
+    </form>
+  );
+}
+```
+
+## 服务器操作
+
+```tsx
+'use client';
+
+import { useFormState } from 'react-dom';
+import { createUser } from '@/app/actions/user';
+
+export function ServerActionForm() {
+  const [state, formAction] = useFormState(createUser, null);
+
+  return (
+    <form action={formAction} className="space-y-4">
+      <div>
+        <label htmlFor="name">姓名</label>
+        <Input id="name" name="name" required />
+      </div>
+      <div>
+        <label htmlFor="email">电子邮件</label>
+        <Input id="email" name="email" type="email" required />
+      </div>
+      {state?.error && (
+        <p className="text-red-500">{state.error}</p>
+      )}
+      <Button type="submit">创建用户</Button>
+    </form>
+  );
+}
+```
+
+## 最佳实践
+
+1. **双向验证**：客户端和服务器
+2. **清晰的错误消息**：帮助用户修复错误
+3. **加载状态**：提交时显示反馈
+4. **提交时禁用**：防止重复提交
+5. **成功时重置**：成功提交后清除表单
+6. **可访问的标签**：使用正确的表单标签
+7. **焦点管理**：聚焦到第一个错误字段
+
+## 后续步骤
+
+- 了解 [按钮](/docs/components/button)
+- 探索 [对话框](/docs/components/dialog)
+- 阅读关于 [验证](https://zod.dev/) 的内容

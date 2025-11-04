@@ -1,0 +1,320 @@
+---
+title: Database
+description: Database integration with Prisma ORM
+---
+
+# Database
+
+This starter uses Prisma as the ORM for database operations.
+
+## Setup
+
+Prisma is already configured in this project. The schema is located at `/prisma/schema.prisma`.
+
+### Database Connection
+
+Configure your database URL in `.env.local`:
+
+```bash
+DATABASE_URL="postgresql://user:password@localhost:5432/mydb"
+```
+
+Supported databases:
+- PostgreSQL
+- MySQL
+- SQLite
+- MongoDB
+- SQL Server
+- CockroachDB
+
+## Prisma Schema
+
+Define your data models in `prisma/schema.prisma`:
+
+```prisma
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  posts         Post[]
+  sessions      Session[]
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+```
+
+## Migrations
+
+### Create a Migration
+
+```bash
+pnpm prisma migrate dev --name init
+```
+
+### Apply Migrations
+
+```bash
+pnpm prisma migrate deploy
+```
+
+### Reset Database
+
+```bash
+pnpm prisma migrate reset
+```
+
+## Prisma Client
+
+Import and use the Prisma client:
+
+```typescript
+// prisma/index.ts
+import { PrismaClient } from './generated/prisma';
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
+
+export const db = globalForPrisma.prisma ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
+```
+
+## CRUD Operations
+
+### Create
+
+```typescript
+import { db } from '@/prisma';
+
+// Create a user
+const user = await db.user.create({
+  data: {
+    name: 'John Doe',
+    email: 'john@example.com',
+  },
+});
+
+// Create with relations
+const post = await db.post.create({
+  data: {
+    title: 'Hello World',
+    content: 'This is my first post',
+    author: {
+      connect: { id: user.id },
+    },
+  },
+});
+```
+
+### Read
+
+```typescript
+// Find unique
+const user = await db.user.findUnique({
+  where: { email: 'john@example.com' },
+});
+
+// Find many
+const users = await db.user.findMany({
+  where: {
+    posts: {
+      some: {
+        published: true,
+      },
+    },
+  },
+  include: {
+    posts: true,
+  },
+});
+
+// Find first
+const post = await db.post.findFirst({
+  where: {
+    published: true,
+  },
+  orderBy: {
+    createdAt: 'desc',
+  },
+});
+```
+
+### Update
+
+```typescript
+// Update one
+const user = await db.user.update({
+  where: { id: '123' },
+  data: {
+    name: 'Jane Doe',
+  },
+});
+
+// Update many
+await db.post.updateMany({
+  where: {
+    published: false,
+  },
+  data: {
+    published: true,
+  },
+});
+```
+
+### Delete
+
+```typescript
+// Delete one
+await db.user.delete({
+  where: { id: '123' },
+});
+
+// Delete many
+await db.post.deleteMany({
+  where: {
+    published: false,
+  },
+});
+```
+
+## Relations
+
+### One-to-Many
+
+```typescript
+// Get user with posts
+const user = await db.user.findUnique({
+  where: { id: '123' },
+  include: {
+    posts: {
+      where: {
+        published: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    },
+  },
+});
+```
+
+### Many-to-Many
+
+```prisma
+model Post {
+  id         String      @id @default(cuid())
+  title      String
+  categories Category[]  @relation("PostCategories")
+}
+
+model Category {
+  id    String  @id @default(cuid())
+  name  String  @unique
+  posts Post[]  @relation("PostCategories")
+}
+```
+
+```typescript
+// Create post with categories
+const post = await db.post.create({
+  data: {
+    title: 'My Post',
+    categories: {
+      connect: [
+        { id: 'cat1' },
+        { id: 'cat2' },
+      ],
+    },
+  },
+});
+```
+
+## Transactions
+
+```typescript
+// Sequential operations
+const [user, post] = await db.$transaction([
+  db.user.create({
+    data: { name: 'John', email: 'john@example.com' },
+  }),
+  db.post.create({
+    data: { title: 'First Post', authorId: 'user-id' },
+  }),
+]);
+
+// Interactive transaction
+await db.$transaction(async (tx) => {
+  const user = await tx.user.create({
+    data: { name: 'John', email: 'john@example.com' },
+  });
+
+  await tx.post.create({
+    data: {
+      title: 'First Post',
+      authorId: user.id,
+    },
+  });
+});
+```
+
+## Prisma Studio
+
+Open Prisma Studio to view and edit your data:
+
+```bash
+pnpm prisma studio
+```
+
+## Best Practices
+
+1. **Use transactions** for related operations
+2. **Index frequently queried fields** for performance
+3. **Use select/include wisely** to avoid over-fetching
+4. **Implement soft deletes** for important data
+5. **Use connection pooling** in production
+6. **Run migrations** in CI/CD pipeline
+
+## Next Steps
+
+- Learn about [API Routes](/docs/tutorials/api-call)
+- Explore [Authentication](/docs/tutorials/user-authentication)
+

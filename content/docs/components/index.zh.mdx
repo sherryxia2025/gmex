@@ -1,0 +1,88 @@
+---
+title: 组件
+description: 为你的应用提供预构建的UI组件
+---
+
+# 组件
+
+探索这些预构建的组件以加速你的开发。
+
+## UI组件
+
+此起始模板包括一整套用Tailwind CSS和Radix UI构建的UI组件。
+
+## 可用组件
+
+- [按钮](/docs/components/button) - 按钮和CTA
+- [对话框](/docs/components/dialog) - 模态对话框
+- [表单](/docs/components/forms) - 表单组件
+- [导航](/docs/components/navigation) - 导航组件
+- [布局](/docs/components/layout) - 布局组件
+
+## 组件库
+
+所有组件位于 `/components` 目录中，并遵循这些原则:
+
+- **无障碍**: 基于 Radix UI 基础组件构建
+- **可定制**: 通过 Tailwind CSS 轻松样式化
+- **TypeScript**: 完全类型化以改善开发体验
+- **响应式**: 移动优先设计
+
+## 安装
+
+组件使用 shadcn/ui。添加新组件:
+
+```bash
+pnpm dlx shadcn-ui@latest add button
+pnpm dlx shadcn-ui@latest add dialog
+pnpm dlx shadcn-ui@latest add input
+```
+
+## 基本用法
+
+```tsx
+import { Button } from '@/components/ui/button';
+import { Dialog } from '@/components/ui/dialog';
+
+export function MyComponent() {
+  return (
+    <div>
+      <Button>点击我</Button>
+      <Dialog>
+        {/* 对话框内容 */}
+      </Dialog>
+    </div>
+  );
+}
+```
+
+## 自定义
+
+组件使用 Tailwind CSS 进行样式化:
+
+```tsx
+<Button className="bg-blue-500 hover:bg-blue-600">
+  自定义按钮
+</Button>
+```
+
+## 主题配置
+
+更新 `tailwind.config.ts` 来自定义你的主题:
+
+```typescript
+export default {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#4F46E5',
+        secondary: '#7C3AED',
+      },
+    },
+  },
+};
+```
+
+## 下一步
+
+探索各个组件文档以了解更多关于每个组件的信息。

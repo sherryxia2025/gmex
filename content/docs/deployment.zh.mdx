@@ -1,0 +1,349 @@
+---
+title: 部署
+description: 将您的应用部署到生产环境
+---
+
+# 部署
+
+通过这些平台将您的 Next.js 应用部署到生产环境。
+
+## Vercel（推荐）
+
+部署 Next.js 应用的最简单方法。
+
+### 设置
+
+1. 将代码推送到 GitHub
+2. 前往 [vercel.com](https://vercel.com)
+3. 点击“新建项目”
+4. 导入您的存储库
+5. 配置构建设置（自动检测）
+6. 添加环境变量
+7. 点击“部署”
+
+### 构建设置
+
+Vercel 自动检测 Next.js 设置：
+
+```
+Build Command: pnpm run build
+Output Directory: .next
+Install Command: pnpm install
+```
+
+### 环境变量
+
+在 Vercel 仪表板中添加：
+
+```bash
+DATABASE_URL=postgresql://...
+NEXTAUTH_SECRET=...
+NEXTAUTH_URL=https://yourapp.vercel.app
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_PUBLIC_KEY=pk_live_...
+```
+
+### 自定义域
+
+1. 前往项目设置 → 域名
+2. 添加您的域名
+3. 在您的注册商处更新 DNS 记录
+4. 等待 SSL 证书
+
+### 部署工作流
+
+```bash
+# 自动部署
+git push origin main
+
+# 预览部署
+git push origin feature-branch
+```
+
+## Docker
+
+使用 Docker 进行完整控制的部署。
+
+### Dockerfile
+
+已经在启动器中包含：
+
+```dockerfile
+FROM node:20-alpine AS base
+
+# Install dependencies
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
+
+# Build
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN corepack enable pnpm && pnpm run build
+
+# Production
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD ["node", "server.js"]
+```
+
+### 构建和运行
+
+```bash
+# 构建镜像
+docker build -t myapp .
+
+# 运行容器
+docker run -p 3000:3000 --env-file .env.local myapp
+```
+
+### Docker Compose
+
+```yaml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```
+
+## 自托管（VPS）
+
+将您的应用部署到您自己的服务器。
+
+### 先决条件
+
+- Ubuntu 22.04 LTS
+- Node.js 20+
+- Nginx
+- PM2
+
+### 设置
+
+```bash
+# 安装 Node.js
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 安装 pnpm
+npm install -g pnpm
+
+# 安装 PM2
+npm install -g pm2
+
+# 克隆存储库
+git clone https://github.com/yourusername/yourapp.git
+cd yourapp
+
+# 安装依赖
+pnpm install
+
+# 构建
+pnpm run build
+
+# 使用 PM2 启动
+pm2 start npm --name "myapp" -- start
+pm2 save
+pm2 startup
+```
+
+### Nginx 配置
+
+```nginx
+server {
+    listen 80;
+    server_name yourapp.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+### 使用 Let's Encrypt 配置 SSL
+
+```bash
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d yourapp.com
+```
+
+## 部署前检查清单
+
+- [ ] 设置 `NODE_ENV=production`
+- [ ] 配置环境变量
+- [ ] 启用 HTTPS
+- [ ] 设置数据库备份
+- [ ] 配置错误跟踪（Sentry）
+- [ ] 设置监控
+- [ ] 在预发布环境中测试所有功能
+- [ ] 运行数据库迁移
+- [ ] 为资源设置 CDN
+- [ ] 配置缓存
+- [ ] 启用压缩
+- [ ] 设置安全头
+- [ ] 配置速率限制
+- [ ] 设置自动备份
+
+## 环境变量
+
+生产环境变量：
+
+```bash
+# Application
+NODE_ENV=production
+NEXT_PUBLIC_URL=https://yourapp.com
+
+# Database
+DATABASE_URL=postgresql://user:pass@host:5432/db
+
+# Auth
+NEXTAUTH_SECRET=your-secret-min-32-chars
+NEXTAUTH_URL=https://yourapp.com
+
+# OAuth
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+
+# Stripe
+STRIPE_SECRET_KEY=sk_live_...
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Email
+RESEND_API_KEY=re_...
+
+# Analytics (optional)
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-...
+```
+
+## 数据库迁移
+
+在部署时运行迁移：
+
+```bash
+# 在 Vercel（vercel.json）中
+{
+  "buildCommand": "pnpm prisma migrate deploy && pnpm run build"
+}
+
+# 手动
+pnpm prisma migrate deploy
+```
+
+## 监控
+
+### Vercel Analytics
+
+已包含在 `@vercel/analytics` 中。
+
+### 使用 Sentry 进行错误跟踪
+
+```bash
+pnpm add @sentry/nextjs
+```
+
+在 `sentry.client.config.ts` 和 `sentry.server.config.ts` 中配置。
+
+### 使用 Uptime Monitoring
+
+使用以下服务：
+- [UptimeRobot](https://uptimerobot.com)
+- [Pingdom](https://pingdom.com)
+- [Better Uptime](https://betteruptime.com)
+
+## 性能
+
+### 启用压缩
+
+Next.js 在 Vercel 上自动压缩。
+
+对于自行托管：
+
+```nginx
+gzip on;
+gzip_types text/plain text/css application/json application/javascript;
+```
+
+### CDN
+
+使用 Vercel 的 CDN 或 Cloudflare。
+
+### 图片优化
+
+Next.js Image 组件自动处理优化。
+
+## 备份策略
+
+### 数据库备份
+
+```bash
+# 自动每日备份
+pg_dump $DATABASE_URL > backup-$(date +%Y%m%d).sql
+```
+
+### 文件备份
+
+将用户上传的文件存储在 S3 或类似的对象存储中。
+
+## 回滚
+
+### Vercel
+
+前往 Deployments → Previous deployment → Promote to Production
+
+### 自行托管
+
+```bash
+git checkout previous-commit
+pnpm install
+pnpm run build
+pm2 restart myapp
+```
+
+## 后续步骤
+
+- 设置 [监控](/docs/features/analytics)
+- 配置 [错误跟踪](/docs/features/error-handling)
+- 查看 [安全](/docs/security)

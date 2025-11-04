@@ -1,0 +1,229 @@
+---
+title: 对话框
+description: 模态对话框组件
+---
+
+# 对话框
+
+一个用于重要互动的模态对话框组件。
+
+## 用法
+
+```tsx
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+
+export function Example() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>打开对话框</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>对话框标题</DialogTitle>
+          <DialogDescription>
+            这是对话框的描述。
+          </DialogDescription>
+        </DialogHeader>
+        <div className="py-4">
+          对话框内容在此
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+## 受控对话框
+
+```tsx
+'use client';
+
+import { useState } from 'react';
+
+export function ControlledDialog() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>打开</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>受控对话框</DialogTitle>
+        </DialogHeader>
+        <div className="py-4">
+          <p>这个对话框是受控的</p>
+          <Button onClick={() => setOpen(false)} className="mt-4">
+            关闭
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+## 确认对话框
+
+```tsx
+export function ConfirmDialog({ onConfirm }) {
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = () => {
+    onConfirm();
+    setOpen(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="destructive">删除</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>你确定吗？</DialogTitle>
+          <DialogDescription>
+            此操作无法撤销。这将永久删除您的数据。
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-end gap-2 mt-4">
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            取消
+          </Button>
+          <Button variant="destructive" onClick={handleConfirm}>
+            删除
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+## 表单对话框
+
+```tsx
+export function FormDialog() {
+  const [open, setOpen] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // 处理表单提交
+    setOpen(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>创建新项</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>创建项目</DialogTitle>
+          <DialogDescription>
+            请填写下方详细信息
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium mb-2">
+              名称
+            </label>
+            <Input id="name" required />
+          </div>
+          <div>
+            <label htmlFor="description" className="block text-sm font-medium mb-2">
+              描述
+            </label>
+            <Textarea id="description" />
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              取消
+            </Button>
+            <Button type="submit">创建</Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+## 可滚动对话框
+
+```tsx
+<Dialog>
+  <DialogTrigger asChild>
+    <Button>打开长内容</Button>
+  </DialogTrigger>
+  <DialogContent className="max-h-[80vh] overflow-y-auto">
+    <DialogHeader>
+      <DialogTitle>长内容</DialogTitle>
+    </DialogHeader>
+    <div className="py-4">
+      {/* 长可滚动内容 */}
+      <p>Lorem ipsum dolor sit amet...</p>
+    </div>
+  </DialogContent>
+</Dialog>
+```
+
+## 自定义宽度
+
+```tsx
+<DialogContent className="max-w-2xl">
+  {/* 更宽的对话框内容 */}
+</DialogContent>
+```
+
+## 属性
+
+### 对话框
+
+| Prop | Type | Description |
+|------|------|-------------|
+| open | boolean | 受控打开状态 |
+| onOpenChange | (open: boolean) => void | 打开状态变化时的回调 |
+| defaultOpen | boolean | 默认打开状态 |
+| modal | boolean | 对话框是否为模态（默认: true） |
+
+### 对话框内容
+
+| Prop | Type | Description |
+|------|------|-------------|
+| className | string | 附加的 CSS 类 |
+| children | ReactNode | 对话框内容 |
+
+## 最佳实践
+
+1. **用于重要操作**: 不要过度使用对话框
+2. **保持内容集中**: 每个对话框一个明确的目的
+3. **提供明确的操作**: 明确告知用户应该做什么
+4. **处理ESC键**: 让用户能轻松关闭对话框
+5. **移动响应**: 在不同屏幕尺寸上进行测试
+
+## 无障碍设计
+
+对话框组件在设计时考虑了无障碍性:
+
+- 焦点陷阱确保焦点保持在对话框内
+- ESC键关闭对话框
+- 点击外部区域关闭对话框
+- 适当的ARIA属性
+- 屏幕阅读器支持
+
+## 下一步
+
+- 探索 [Button](/docs/components/button) 组件
+- 学习有关 [Forms](/docs/components/forms)

@@ -1,0 +1,368 @@
+{
+  "hero": {
+    "title": ": 快速上线，快速变现",
+    "brandName": "PressFast",
+    "description": "告别 WordPress 冗余，PressFast 是一个 AI 原生的代码模板，专为外贸电商打造，集成了 CMS、支付、AI-SDK 等核心组件，支持在 AI-coding 编辑器中通过 vibe-coding 快速修改和上线。",
+    "buttonText": "获取 PressFast",
+    "buttonHref": "#pricing"
+  },
+  "heroMobile": {
+    "title": "快速上线",
+    "brandName": "PressFast",
+    "title2": "快速变现",
+    "description": "告别 WordPress 冗余，PressFast 是一个 AI 原生的代码模板，专为外贸电商打造，集成了 CMS、支付、AI-SDK 等核心组件，支持在 AI-coding 编辑器中通过 vibe-coding 快速修改和上线。",
+    "buttonText": "获取 PressFast",
+    "buttonHref": "#pricing"
+  },
+  "header": {
+    "brandName": "PressFast",
+    "logo": "",
+    "navigation": [
+      { "text": "首页", "href": "/" },
+      { "text": "定价", "href": "/#pricing" },
+      { "text": "博客", "href": "/posts" },
+      { "text": "文档", "href": "/docs" }
+    ],
+    "showLanguageSwitcher": true,
+    "showThemeSwitcher": true
+  },
+  "what": {
+    "title": "PressFast 使用场景",
+    "description": "PressFast 是一个面向 AI 时代的高性能样板，提供开箱即用的核心组件，助您即刻启动全球商业项目。",
+    "items": [
+      {
+        "title": "SaaS 产品官网",
+        "description": "交付专业的 SaaS 官网和功能页。使用 Vibe-coding 极速二开，集成 Fumadocs 确保清晰文档，即刻获得完整用户认证和沟通能力。",
+        "cover": "/images/what1.png"
+      },
+      {
+        "title": "B2B 外贸询盘站",
+        "description": "专业的 B2B 外贸询盘和线索平台。内置 SEO 友好 CMS 和 Crisp 实时沟通，高效定制询盘流程，助力外贸业务即刻获取高质量线索。",
+        "cover": "/images/what2.png"
+      },
+      {
+        "title": "B2C 电商独立站",
+        "description": "电商独立站上线与变现。 集成 Stripe 支付，利用 CMS 发布商品，确保即时交易。基于高性能栈，保障全球访问速度，实现 PressFast, Cash Fast。",
+        "cover": "/images/what3.png"
+      }
+    ]
+  },
+  "why": {
+    "title": "为什么选择 PressFast",
+    "description": "获取启动 AI 创业项目所需的一切——从即用型模板到技术支持。",
+    "cover": "/images/why.png",
+    "questions": [
+      {
+        "icon": "home:BookmarkIcon",
+        "question": "完整框架",
+        "answer": "基于 Next.js 构建，集成身份验证、支付和 AI——一切开箱即用。"
+      },
+      {
+        "icon": "home:ChartIcon",
+        "question": "丰富的模板库",
+        "answer": "访问全面的预构建模板集合，用于常见的 AI 应用，节省数周的开发时间。"
+      },
+      {
+        "icon": "home:DatabaseSmallIcon",
+        "question": "技术指导",
+        "answer": "获取专家支持和文档，帮助您有效地实施、定制和扩展您的 AI 解决方案。"
+      }
+    ]
+  },
+  "showcase": {
+    "title": "使用 PressFast 构建的 AI SaaS 创业项目",
+    "cases": [
+      {
+        "cover": "/images/showcase1.png",
+        "title": "SiteSnapper",
+        "description": "通过 AI 驱动的洞察捕获和分析网站截图，提供更好的用户体验。",
+        "buttonText": "了解更多"
+      },
+      {
+        "cover": "/images/showcase2.png",
+        "title": "SEO Combine",
+        "description": "一体化 SEO 工具包，结合关键词研究、内容优化和排名分析。",
+        "buttonText": "了解更多"
+      },
+      {
+        "cover": "/images/showcase3.png",
+        "title": "TrendsBar",
+        "description": "从数十个生产就绪的 AI SaaS 模板中选择，快速启动您的项目。",
+        "buttonText": "了解更多"
+      },
+      {
+        "cover": "/images/showcase4.png",
+        "title": "Raphael AI",
+        "description": "先进的 AI 驱动的创意助手，用于生成令人惊叹的视觉内容和设计。",
+        "buttonText": "了解更多"
+      }
+    ]
+  },
+  "usage": {
+    "name": "usage",
+    "title": "如何使用 PressFast 启动项目",
+    "description": "通过三个简单步骤启动您的 AI SaaS 创业项目：",
+    "image_position": "left",
+    "text_align": "center",
+    "items": [
+      {
+        "title": "获取 PressFast 样板",
+        "description": "购买 PressFast 样板，获取完整的代码包和核心组件。"
+      },
+      {
+        "title": "启动您的项目",
+        "description": "克隆代码并阅读文档。您的变现引擎已准备就绪。"
+      },
+      {
+        "title": "Vibe-Coding 定制",
+        "description": "在 AI-coding 编辑器中，通过 Vibe-coding 快速修改模板，融入您的业务和 AI 功能需求。"
+      },
+      {
+        "title": "极速上线变现",
+        "description": "一键部署项目至生产环境，开始服务"
+      }
+    ]
+  },
+  "happyAiCoding": {
+    "title": "您可以在 AI-coding 编辑器中愉快地开发",
+    "buttonText": "获取 PressFast",
+    "buttonHref": "#pricing"
+  },
+  "features": {
+    "title": "PressFast 核心功能",
+    "description": "快速高效启动您的 AI SaaS 创业项目所需的一切。",
+    "items": [
+      {
+        "icon": "home:AiChatIcon",
+        "title": "AI 原生架构",
+        "description": "预集成 AI-SDK 和 Replicate 接口，您的定制功能可轻松调用前沿 AI 模型，确保产品具备强大的 AI 核心竞争力。"
+      },
+      {
+        "icon": "home:CodeIcon",
+        "title": "高性能开发堆栈",
+        "description": "基于 Next.js 和 Tailwind CSS 的生产级样板。使用 shadcn/ui 加速界面构建，通过 Prisma/Drizzle 管理数据层。集成 Fumadocs，支持使用 MDX 快速书写专业文档。"
+      },
+      {
+        "icon": "home:DashboardIcon",
+        "title": "企业级认证与沟通",
+        "description": "集成 better-auth 快速实现用户登录认证，并通过 Crisp 提供用户内嵌网页沟通对话。"
+      },
+      {
+        "icon": "home:DatabaseIcon",
+        "title": "全球支付与电商准备",
+        "description": "支持 Stripe (含 Alipay, WeChat Pay) 支付，实现全球交易变现。"
+      },
+      {
+        "icon": "home:BarChartIcon",
+        "title": "业务分析与数据",
+        "description": "集成 DataFast, OpenPanel 和 Plausible 等工具，帮助您收集、分析用户行为和产品使用数据，驱动增长决策。"
+      },
+      {
+        "icon": "home:CheckBadgeIcon",
+        "title": "极速部署与 CDN",
+        "description": "支持 Cloudflare / Vercel 快速部署。利用 Cloudflare R2 进行文件存储和 CDN 加速，保证全球用户访问速度。"
+      }
+    ]
+  },
+  "comment": {
+    "testimonials": [
+      {
+        "cover": "/images/comment.png",
+        "title": "用户如何评价 PressFast",
+        "description": "我强烈推荐 PressFast。随着我们公司的持续发展，它对我们来说非常重要。我已经使用 PressFast 一年多了，我很喜欢它！没有它我无法想象生活。它非常易于使用，客户服务也很棒。我尝试过很多类似的产品，PressFast 是最好的！",
+        "author": {
+          "name": "Jack Friks",
+          "role": "公司 CEO",
+          "avatar": "/images/comment.png"
+        }
+      },
+      {
+        "cover": "/images/comment.png",
+        "title": "内容创作的神奇工具",
+        "description": "PressFast 彻底改变了我们创建和管理内容的方式。AI 驱动的功能每周为我们节省数小时，输出质量始终如一。自从我们开始使用它以来，团队生产力提高了 300%。",
+        "author": {
+          "name": "Sarah Chen",
+          "role": "TechCorp 内容经理",
+          "avatar": "/images/comment.png"
+        }
+      },
+      {
+        "cover": "/images/comment.png",
+        "title": "初创公司的完美选择",
+        "description": "作为一名创业者，我需要快速且可靠的东西。PressFast 正好满足了这一点。模板很专业，定制选项无穷无尽，它帮助我们提前 2 个月推出了产品。",
+        "author": {
+          "name": "Mike Rodriguez",
+          "role": "StartupXYZ 创始人",
+          "avatar": "/images/comment.png"
+        }
+      },
+      {
+        "cover": "/images/comment.png",
+        "title": "营销领域的游戏规则改变者",
+        "description": "我们的营销活动从未如此有效。PressFast 的分析和优化功能帮助我们将转化率提高了 150%。对于任何认真的营销团队来说，这都是必不可少的工具。",
+        "author": {
+          "name": "Emily Johnson",
+          "role": "GrowthCo 营销总监",
+          "avatar": "/images/comment.png"
+        }
+      },
+      {
+        "cover": "/images/comment.png",
+        "title": "卓越的客户支持",
+        "description": "PressFast 不仅是一个令人难以置信的产品，而且他们的客户支持也非常出色。他们响应迅速，提供详细的解决方案，真正关心用户的成功。很少能找到如此专注于客户满意度的团队。",
+        "author": {
+          "name": "David Park",
+          "role": "InnovateLab 产品经理",
+          "avatar": "/images/comment.png"
+        }
+      }
+    ]
+  },
+  "pricing": {
+    "title": "定价",
+    "description": "获取 PressFast 的所有功能，快速启动您的 AI SaaS 创业项目。",
+    "plans": [
+      {
+        "name": "按月付费",
+        "price": "$39",
+        "unit": "美元",
+        "description": "开始您的第一个 SaaS 创业项目。",
+        "features": [
+          "NextJS 模板",
+          "SEO 友好结构",
+          "博客和 CMS",
+          "Stripe 支付",
+          "PostgreSQL 数据存储",
+          "Google Oauth 和一键登录",
+          "i18n 支持",
+          "订阅期间代码开放"
+        ],
+        "tip": "按月付费。快速启动您的 SaaS 创业项目。",
+        "isMostPopular": false,
+        "buttonText": "获取 PressFast",
+        "buttonHref": "",
+        "metadata": {
+          "product_id": "standard-monthly",
+          "product_name": "PressFast Boilerplate Standard Monthly",
+          "amount": 3900,
+          "cn_amount": 12900,
+          "currency": "USD",
+          "interval": "month",
+          "credits": 200,
+          "valid_months": 1,
+          "payMethod": "us",
+          "github_repo_name": "press-fast"
+        },
+        "supportPayments": ["card"]
+      },
+      {
+        "name": "一次性付费",
+        "price": "$299",
+        "unit": "美元",
+        "description": "开始您的第一个 SaaS 创业项目。",
+        "features": [
+          "NextJS 模板",
+          "SEO 友好结构",
+          "博客和 CMS",
+          "Stripe 支付",
+          "PostgreSQL 数据存储",
+          "Google Oauth 和一键登录",
+          "i18n 支持",
+          "终生代码开放"
+        ],
+        "tip": "一次性付费。构建无限项目！",
+        "isMostPopular": true,
+        "buttonText": "获取 PressFast",
+        "buttonHref": "",
+        "metadata": {
+          "product_id": "standard",
+          "product_name": "PressFast Boilerplate Standard",
+          "amount": 29900,
+          "cn_amount": 219900,
+          "currency": "USD",
+          "interval": "one-time",
+          "credits": 200,
+          "valid_months": -1,
+          "payMethod": "us",
+          "github_repo_name": "press-fast"
+        },
+        "supportPayments": ["alipay", "wechatpay", "card"]
+      }
+    ]
+  },
+  "faq": {
+    "title": "常见问题",
+    "description": "获取启动 AI 创业项目所需的一切 - 从即用型模板到技术支持。",
+    "questions": [
+      {
+        "question": "PressFast 到底是什么，如何运作？",
+        "answer": "PressFast 是一个 AI 原生的高性能代码样板（Boilerplate），专为快速启动 B2B、B2C 和 SaaS 项目而设计。它提供生产级代码和预集成组件，让您从购买代码到上线变现的过程以天为单位计算。"
+      },
+      {
+        "question": "PressFast 与 WordPress 有何本质区别？",
+        "answer": "PressFast 是对 WordPress 冗余的现代化替代方案。它基于 Next.js 等高性能技术栈，消除了不必要的臃肿和平台锁定，提供极速性能、完全代码掌控权和 AI-Native 开发体验。"
+      },
+      {
+        "question": "我需要高级技术技能来使用 PressFast 吗？",
+        "answer": "具备基础的编程知识（如 React/Next.js）会有帮助。但 PressFast 的代码结构清晰、文档完善，并支持 Vibe-coding，使二次开发效率极高，即使您不是 AI 或云架构专家也能轻松上手。"
+      },
+      {
+        "question": "定制模板来匹配我的品牌是否容易？",
+        "answer": "绝对可以！PressFast 的模板完全可定制。您可以使用 Vibe-coding 轻松修改设计、功能和业务逻辑，同时保留底层架构的稳健性。UI 组件基于 shadcn/ui，提供了高度的灵活性。"
+      },
+      {
+        "question": "启动一个项目通常需要多长时间？",
+        "answer": "启动速度是 PressFast 的核心价值。您可以在几小时内完成环境搭建，并通过 Vibe-coding 在数天内完成定制和部署，实现极速变现，大幅缩短传统数月长的开发周期。"
+      },
+      {
+        "question": "什么是 Vibe-coding？",
+        "answer": "Vibe-coding 是一种与 AI-coding 编辑器配合使用的开发模式，旨在利用 AI 提升二次开发和定制的效率，让您的代码修改过程如意念般流畅。"
+      },
+      {
+        "question": "PressFast 内置了哪些关键集成？",
+        "answer": "核心集成了：better-auth (认证)、Stripe (支付)、Crisp (聊天)、CMS、Cloudflare/Vercel (部署) 以及 DataFast 等业务分析工具。"
+      },
+      {
+        "question": "如何使用 AI 功能？",
+        "answer": "PressFast 基于 Replicate 平台封装了 AI-SDK 工具包，用于在您的**定制开发（二开）过程中调用强大的 AI 功能。该工具包支持：文本/图像生成、图像背景移除等多媒体处理。开发者需要在 Replicate 平台申请 API Token 即可开始使用。"
+      },
+      {
+        "question": "CMS 提供了哪些内容模型？",
+        "answer": "CMS 的本质是提供多种内容模型：它支持面向 SEO 目标的 BLOG 发布**、产品展示和商品交易所需的结构化内容模型，以满足不同的业务需求。"
+      },
+      {
+        "question": "如何启用网页中的对话功能？",
+        "answer": " 网页对话功能是通过 Crisp 集成实现的。您需要在 Crisp 平台注册账户，获取您的 Crisp Website ID，并将其配置到 PressFast 项目的环境变量中。代码会自动渲染聊天插件。"
+      }
+    ]
+  },
+  "footer": {
+    "brandName": "PressFast",
+    "logo": "",
+    "copyright": "版权所有 © 2025 - 保留所有权利",
+    "sections": [
+      {
+        "title": "产品",
+        "links": [
+          { "text": "首页", "href": "/" },
+          { "text": "定价", "href": "#pricing" },
+          { "text": "文档", "href": "/docs" }
+        ]
+      },
+      {
+        "title": "公司",
+        "links": [
+          { "text": "服务条款", "href": "/terms-of-service" },
+          { "text": "隐私政策", "href": "/privacy-policy" }
+        ]
+      },
+      {
+        "title": "友情链接",
+        "links": [
+          { "text": "Deamoy", "href": "https://deamoy.com" },
+          { "text": "ShipAny", "href": "https://shipany.ai/" }
+        ]
+      }
+    ]
+  }
+}

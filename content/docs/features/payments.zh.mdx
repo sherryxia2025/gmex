@@ -1,0 +1,304 @@
+---
+title: 支付
+description: 使用 Stripe 接受付款
+---
+
+# 支付
+
+集成 Stripe 以接受一次性付款和订阅。
+
+## 设置
+
+### 1. 安装 Stripe
+
+```bash
+pnpm add stripe @stripe/stripe-js
+```
+
+### 2. 配置环境变量
+
+```bash
+STRIPE_PUBLIC_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+
+### 3. 初始化 Stripe
+
+```typescript
+// lib/stripe.ts
+import Stripe from 'stripe';
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2023-10-16',
+});
+```
+
+## 一次性付款
+
+### 创建支付意图
+
+```typescript
+// app/api/create-payment-intent/route.ts
+import { stripe } from '@/lib/stripe';
+import { NextResponse } from 'next/server';
+
+export async function POST(request: Request) {
+  const { amount } = await request.json();
+
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount * 100, // 转换为美分
+      currency: 'usd',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    return NextResponse.json({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    console.error('支付意图错误:', error);
+    return NextResponse.json(
+      { error: '创建支付意图失败' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### 支付表单
+
+```tsx
+'use client';
+
+import { useState } from 'react';
+import {
+  PaymentElement,
+  Elements,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
+
+function CheckoutForm() {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) return;
+
+    setIsProcessing(true);
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/payment/success`,
+      },
+    });
+
+    if (error) {
+      console.error('支付错误:', error);
+    }
+
+    setIsProcessing(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <PaymentElement />
+      <button type="submit" disabled={!stripe || isProcessing}>
+        {isProcessing ? '处理中...' : '立即支付'}
+      </button>
+    </form>
+  );
+}
+
+export function PaymentPage({ clientSecret }: { clientSecret: string }) {
+  return (
+    <Elements stripe={stripePromise} options={{ clientSecret }}>
+      <CheckoutForm />
+    </Elements>
+  );
+}
+```
+
+## 订阅
+
+有关详细实现，请参阅 [Stripe 订阅教程](/docs/tutorials/stripe-subscriptions)。
+
+## Webhook 事件
+
+处理 Stripe Webhook 事件：
+
+```typescript
+// app/api/webhooks/stripe/route.ts
+import { stripe } from '@/lib/stripe';
+import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
+
+export async function POST(request: Request) {
+  const body = await request.text();
+  const signature = request.headers.get('stripe-signature')!;
+
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: '无效签名' },
+      { status: 400 }
+    );
+  }
+
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      const paymentIntent = event.data.object;
+      console.log('支付成功:', paymentIntent.id);
+      // 更新数据库，发送确认电子邮件等。
+      break;
+
+    case 'payment_intent.payment_failed':
+      const failedPayment = event.data.object;
+      console.log('支付失败:', failedPayment.id);
+      // 通知用户，重试付款等。
+      break;
+
+    case 'invoice.payment_succeeded':
+      const invoice = event.data.object;
+      console.log('发票已支付:', invoice.id);
+      break;
+
+    default:
+      console.log(`未处理的事件类型: ${event.type}`);
+  }
+
+  return NextResponse.json({ received: true });
+}
+```
+
+## 产品和价格
+
+### 创建产品
+
+```typescript
+const product = await stripe.products.create({
+  name: '高级计划',
+  description: '所有高级功能',
+  images: ['https://yoursite.com/product-image.jpg'],
+  metadata: {
+    category: '订阅',
+  },
+});
+```
+
+### 创建价格
+
+```typescript
+const price = await stripe.prices.create({
+  product: product.id,
+  unit_amount: 2000, // $20.00
+  currency: 'usd',
+  recurring: {
+    interval: 'month',
+  },
+});
+```
+
+## 客户门户
+
+允许客户管理账单：
+
+```typescript
+// app/api/create-portal-session/route.ts
+import { stripe } from '@/lib/stripe';
+import { auth } from '@/lib/auth';
+import { db } from '@/prisma';
+import { NextResponse } from 'next/server';
+
+export async function POST() {
+  const session = await auth();
+
+  if (!session) {
+    return NextResponse.json({ error: '未授权' }, { status: 401 });
+  }
+
+  const user = await db.user.findUnique({
+    where: { id: session.user.id },
+  });
+
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: user!.stripeCustomerId!,
+    return_url: `${process.env.NEXT_PUBLIC_URL}/dashboard`,
+  });
+
+  return NextResponse.json({ url: portalSession.url });
+}
+```
+
+## 测试
+
+使用 Stripe 测试卡：
+
+- **成功**：`4242 4242 4242 4242`
+- **拒绝**：`4000 0000 0000 0002`
+- **3D 安全**：`4000 0025 0000 3155`
+
+## 定价表
+
+显示定价选项：
+
+```tsx
+export function PricingTable({ prices }) {
+  return (
+    <div className="grid grid-cols-3 gap-8">
+      {prices.map((price) => (
+        <div key={price.id} className="border rounded-lg p-6">
+          <h3 className="text-2xl font-bold">{price.product.name}</h3>
+          <p className="text-4xl font-bold mt-4">
+            ${price.unit_amount / 100}
+            <span className="text-lg text-gray-500">/月</span>
+          </p>
+          <ul className="mt-6 space-y-4">
+            {price.product.features.map((feature) => (
+              <li key={feature} className="flex items-center">
+                <CheckIcon className="w-5 h-5 text-green-500 mr-2" />
+                {feature}
+              </li>
+            ))}
+          </ul>
+          <button className="w-full mt-8 btn-primary">
+            订阅
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+## 安全最佳实践
+
+1. **切勿暴露密钥**：使用环境变量
+2. **验证 Webhook 签名**：防止伪造事件
+3. **使用 HTTPS**：生产环境必需
+4. **实施幂等性**：处理重复事件
+5. **存储最少数据**：让 Stripe 处理敏感信息
+6. **使用客户门户**：不要构建自定义账单 UI
+
+## 后续步骤
+
+- 在 [Stripe 仪表板](https://dashboard.stripe.com/webhooks) 中设置 Webhook
+- 了解 [错误处理](/docs/features/error-handling)
+- 探索 [客户支持](/docs/features/customer-support)

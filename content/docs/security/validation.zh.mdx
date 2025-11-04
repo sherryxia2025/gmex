@@ -1,0 +1,435 @@
+---
+title: 架构验证
+description: 使用 Zod 验证用户输入
+---
+
+# 架构验证
+
+始终在客户端和服务器端验证用户输入，以防止安全问题。
+
+## 为什么需要验证？
+
+- 防止 SQL 注入（Prisma 可以防止此问题）
+- 阻止恶意数据进入您的系统
+- 确保数据完整性
+- 提供更好的错误信息
+- 类型安全
+
+## Zod 架构验证
+
+### 安装
+
+```bash
+pnpm add zod
+```
+
+### 基本验证
+
+```typescript
+import { z } from 'zod';
+
+const userSchema = z.object({
+  email: z.string().email('无效的电子邮件地址'),
+  password: z.string().min(8, '密码必须至少包含 8 个字符'),
+  name: z.string().min(2, '姓名必须至少包含 2 个字符'),
+});
+
+type User = z.infer<typeof userSchema>;
+
+// 验证数据
+const result = userSchema.safeParse(data);
+
+if (!result.success) {
+  console.error('验证错误:', result.error.errors);
+} else {
+  console.log('有效数据:', result.data);
+}
+```
+
+### API 路由验证
+
+```typescript
+// app/api/users/route.ts
+import { z } from 'zod';
+import { NextResponse } from 'next/server';
+
+const createUserSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  name: z.string().min(2).max(50),
+});
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+
+    // 验证输入
+    const validatedData = createUserSchema.parse(body);
+
+    // 使用验证过的数据创建用户
+    const user = await db.user.create({
+      data: validatedData,
+    });
+
+    return NextResponse.json(user, { status: 201 });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          error: '验证失败',
+          details: error.errors,
+        },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: '内部服务器错误' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## 常见验证模式
+
+### 电子邮件验证
+
+```typescript
+const emailSchema = z.string().email();
+
+// 自定义电子邮件验证
+const customEmailSchema = z.string().refine(
+  (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+  { message: '无效的电子邮件格式' }
+);
+```
+
+### 密码验证
+
+```typescript
+const passwordSchema = z.string()
+  .min(8, '密码必须至少包含 8 个字符')
+  .regex(/[A-Z]/, '密码必须包含一个大写字母')
+  .regex(/[a-z]/, '密码必须包含一个小写字母')
+  .regex(/[0-9]/, '密码必须包含一个数字')
+  .regex(/[^A-Za-z0-9]/, '密码必须包含一个特殊字符');
+```
+
+### URL 验证
+
+```typescript
+const urlSchema = z.string().url('无效的 URL');
+
+// 或者自定义验证
+const httpsOnlySchema = z.string().refine(
+  (url) => url.startsWith('https://'),
+  { message: 'URL 必须使用 HTTPS' }
+);
+```
+
+### 电话号码验证
+
+```typescript
+const phoneSchema = z.string().regex(
+  /^\+?[1-9]\d{1,14}$/,
+  '无效的电话号码'
+);
+```
+
+### 日期验证
+
+```typescript
+const dateSchema = z.string().datetime();
+
+// 或者自定义验证
+const futureDate = z.string().refine(
+  (date) => new Date(date) > new Date(),
+  { message: '日期必须在将来' }
+);
+```
+
+## 复杂验证
+
+### 条件字段
+
+```typescript
+const schema = z.object({
+  type: z.enum(['individual', 'company']),
+  name: z.string(),
+  companyName: z.string().optional(),
+}).refine(
+  (data) => {
+    if (data.type === 'company') {
+      return !!data.companyName;
+    }
+    return true;
+  },
+  {
+    message: '公司名称是公司账户必需的',
+    path: ['companyName'],
+  }
+);
+```
+
+### 相关字段
+
+```typescript
+const passwordSchema = z.object({
+  password: z.string().min(8),
+  confirmPassword: z.string(),
+}).refine(
+  (data) => data.password === data.confirmPassword,
+  {
+    message: '密码不匹配',
+    path: ['confirmPassword'],
+  }
+);
+```
+
+### 数组验证
+
+```typescript
+const tagsSchema = z.array(z.string())
+  .min(1, '至少需要一个标签')
+  .max(5, '最多允许 5 个标签');
+
+const usersSchema = z.array(
+  z.object({
+    id: z.string(),
+    email: z.string().email(),
+  })
+);
+```
+
+### 嵌套对象
+
+```typescript
+const addressSchema = z.object({
+  street: z.string(),
+  city: z.string(),
+  zipCode: z.string().regex(/^\d{5}$/),
+  country: z.string(),
+});
+
+const userSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  address: addressSchema,
+});
+```
+
+## 清理
+
+### 去除空格
+
+```typescript
+const schema = z.object({
+  name: z.string().trim().min(2),
+  email: z.string().trim().email(),
+});
+```
+
+### 转换数据
+
+```typescript
+const schema = z.object({
+  email: z.string().email().toLowerCase(),
+  age: z.string().transform((val) => parseInt(val, 10)),
+  tags: z.string().transform((val) => val.split(',')),
+});
+```
+
+### 移除 HTML
+
+```typescript
+import sanitizeHtml from 'sanitize-html';
+
+const contentSchema = z.string().transform((val) =>
+  sanitizeHtml(val, {
+    allowedTags: ['b', 'i', 'em', 'strong', 'a'],
+    allowedAttributes: {
+      a: ['href'],
+    },
+  })
+);
+```
+
+## 服务器操作验证
+
+```typescript
+// app/actions/user.ts
+'use server';
+
+import { z } from 'zod';
+import { revalidatePath } from 'next/cache';
+
+const updateUserSchema = z.object({
+  name: z.string().min(2).max(50),
+  bio: z.string().max(500).optional(),
+});
+
+export async function updateUser(formData: FormData) {
+  const rawData = {
+    name: formData.get('name'),
+    bio: formData.get('bio'),
+  };
+
+  try {
+    const validatedData = updateUserSchema.parse(rawData);
+
+    // 在数据库中更新用户
+    await db.user.update({
+      where: { id: userId },
+      data: validatedData,
+    });
+
+    revalidatePath('/profile');
+
+    return { success: true };
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        errors: error.errors,
+      };
+    }
+
+    return {
+      success: false,
+      error: '更新用户失败',
+    };
+  }
+}
+```
+
+## 文件上传验证
+
+```typescript
+const fileSchema = z.object({
+  name: z.string(),
+  size: z.number().max(5 * 1024 * 1024, '文件必须小于 5MB'),
+  type: z.enum(['image/jpeg', 'image/png', 'image/gif']),
+});
+
+export async function POST(request: Request) {
+  const formData = await request.formData();
+  const file = formData.get('file') as File;
+
+  const result = fileSchema.safeParse({
+    name: file.name,
+    size: file.size,
+    type: file.type,
+  });
+
+  if (!result.success) {
+    return NextResponse.json(
+      { error: '无效文件', details: result.error.errors },
+      { status: 400 }
+    );
+  }
+
+  // 处理文件
+}
+```
+
+## 环境变量验证
+
+```typescript
+// lib/env.ts
+import { z } from 'zod';
+
+const envSchema = z.object({
+  DATABASE_URL: z.string().url(),
+  NEXTAUTH_SECRET: z.string().min(32),
+  NEXTAUTH_URL: z.string().url(),
+  STRIPE_SECRET_KEY: z.string().startsWith('sk_'),
+  STRIPE_PUBLIC_KEY: z.string().startsWith('pk_'),
+});
+
+export const env = envSchema.parse({
+  DATABASE_URL: process.env.DATABASE_URL,
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
+});
+
+// 现在使用 env.DATABASE_URL 而不是 process.env.DATABASE_URL
+```
+
+## 可重用架构
+
+```typescript
+// lib/schemas.ts
+import { z } from 'zod';
+
+export const emailSchema = z.string().email();
+export const passwordSchema = z.string().min(8);
+export const nameSchema = z.string().min(2).max(50);
+export const urlSchema = z.string().url();
+
+export const paginationSchema = z.object({
+  page: z.number().int().positive().default(1),
+  limit: z.number().int().positive().max(100).default(10),
+});
+
+export const idSchema = z.string().cuid();
+```
+
+## 最佳实践
+
+1. **双向验证**：客户端用于用户体验，服务器用于安全
+2. **使用 TypeScript**：从架构中获取类型安全
+3. **清理输入**：删除危险内容
+4. **白名单，而不是黑名单**：定义允许的内容
+5. **验证文件上传**：检查类型、大小、内容
+6. **转换数据**：存储前进行规范化
+7. **重用架构**：DRY 原则
+8. **测试验证**：单元测试您的架构
+
+## 测试验证
+
+```typescript
+// __tests__/validation.test.ts
+import { describe, it, expect } from 'vitest';
+import { userSchema } from '@/lib/schemas';
+
+describe('用户架构', () => {
+  it('应该验证正确的数据', () => {
+    const result = userSchema.safeParse({
+      email: 'test@example.com',
+      password: 'SecurePass123!',
+      name: 'John Doe',
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it('应该拒绝无效的电子邮件', () => {
+    const result = userSchema.safeParse({
+      email: 'invalid-email',
+      password: 'SecurePass123!',
+      name: 'John Doe',
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it('应该拒绝过短的密码', () => {
+    const result = userSchema.safeParse({
+      email: 'test@example.com',
+      password: 'short',
+      name: 'John Doe',
+    });
+
+    expect(result.success).toBe(false);
+  });
+});
+```
+
+## 后续步骤
+
+- 实施 [速率限制](/docs/security/rate-limiting)
+- 配置 [安全头](/docs/security/headers)
+- 了解 [错误处理](/docs/features/error-handling)

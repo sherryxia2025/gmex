@@ -1,0 +1,89 @@
+---
+title: Components
+description: Pre-built UI components for your app
+---
+
+# Components
+
+Explore the pre-built components to accelerate your development.
+
+## UI Components
+
+This starter includes a comprehensive set of UI components built with Tailwind CSS and Radix UI.
+
+## Available Components
+
+- [Button](/docs/components/button) - Buttons and CTAs
+- [Dialog](/docs/components/dialog) - Modal dialogs
+- [Forms](/docs/components/forms) - Form components
+- [Navigation](/docs/components/navigation) - Navigation components
+- [Layout](/docs/components/layout) - Layout components
+
+## Component Library
+
+All components are located in the `/components` directory and follow these principles:
+
+- **Accessible**: Built with Radix UI primitives
+- **Customizable**: Easily styled with Tailwind CSS
+- **TypeScript**: Fully typed for better DX
+- **Responsive**: Mobile-first design
+
+## Installation
+
+Components use shadcn/ui. Add new components:
+
+```bash
+pnpm dlx shadcn-ui@latest add button
+pnpm dlx shadcn-ui@latest add dialog
+pnpm dlx shadcn-ui@latest add input
+```
+
+## Basic Usage
+
+```tsx
+import { Button } from '@/components/ui/button';
+import { Dialog } from '@/components/ui/dialog';
+
+export function MyComponent() {
+  return (
+    <div>
+      <Button>Click me</Button>
+      <Dialog>
+        {/* Dialog content */}
+      </Dialog>
+    </div>
+  );
+}
+```
+
+## Customization
+
+Components use Tailwind CSS for styling:
+
+```tsx
+<Button className="bg-blue-500 hover:bg-blue-600">
+  Custom Button
+</Button>
+```
+
+## Theme Configuration
+
+Update `tailwind.config.ts` to customize your theme:
+
+```typescript
+export default {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#4F46E5',
+        secondary: '#7C3AED',
+      },
+    },
+  },
+};
+```
+
+## Next Steps
+
+Explore individual component documentation to learn more about each component.
+

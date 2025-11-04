@@ -1,0 +1,156 @@
+---
+title: 用户身份验证
+description: 在您的应用中实现用户身份验证
+---
+
+# 用户身份验证
+
+设置带有电子邮件/密码和 OAuth 提供程序的身份验证。
+
+## 身份验证设置
+
+此启动器使用 Better Auth 进行身份验证，支持多种提供程序。
+
+## 电子邮件/密码身份验证
+
+用户可以使用电子邮件和密码注册和登录。
+
+### 注册流程
+
+```tsx
+import { authClient } from '@/lib/auth-client';
+
+async function handleSignUp(email: string, password: string, name: string) {
+  const { data, error } = await authClient.signUp.email({
+    email,
+    password,
+    name,
+  });
+
+  if (error) {
+    console.error('注册失败:', error);
+    return;
+  }
+
+  console.log('用户已创建:', data);
+}
+```
+
+### 登录流程
+
+```tsx
+import { authClient } from '@/lib/auth-client';
+
+async function handleSignIn(email: string, password: string) {
+  const { data, error } = await authClient.signIn.email({
+    email,
+    password,
+  });
+
+  if (error) {
+    console.error('登录失败:', error);
+    return;
+  }
+
+  console.log('已登录:', data);
+}
+```
+
+## OAuth 提供程序
+
+### Google OAuth
+
+在您的 `.env.local` 中配置 Google OAuth：
+
+```bash
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
+
+### GitHub OAuth
+
+在您的 `.env.local` 中配置 GitHub OAuth：
+
+```bash
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+```
+
+## 保护路由
+
+### 服务器端保护
+
+```tsx
+// app/[locale]/dashboard/page.tsx
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+
+export default async function DashboardPage() {
+  const session = await auth();
+
+  if (!session) {
+    redirect('/');
+  }
+
+  return (
+    <div>
+      <h1>仪表板</h1>
+      <p>欢迎，{session.user.name}</p>
+    </div>
+  );
+}
+```
+
+### 客户端保护
+
+```tsx
+'use client';
+
+import { useSession } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+export default function ProtectedPage() {
+  const { data: session, isPending } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push('/');
+    }
+  }, [session, isPending, router]);
+
+  if (isPending) {
+    return <div>加载中...</div>;
+  }
+
+  return <div>受保护的内容</div>;
+}
+```
+
+## 会话管理
+
+### 获取当前用户
+
+```tsx
+import { authClient } from '@/lib/auth-client';
+
+const { data: session } = await authClient.getSession();
+console.log('当前用户:', session?.user);
+```
+
+### 注销
+
+```tsx
+import { authClient } from '@/lib/auth-client';
+
+async function handleSignOut() {
+  await authClient.signOut();
+  window.location.href = '/';
+}
+```
+
+## 后续步骤
+
+- 了解 [私有页面](/docs/tutorials/private-page)
+- 探索 [API 调用](/docs/tutorials/api-call)

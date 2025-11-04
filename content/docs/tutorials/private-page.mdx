@@ -1,0 +1,191 @@
+---
+title: Private Page
+description: Create pages that require authentication
+---
+
+# Private Page
+
+Learn how to create pages that require user authentication.
+
+## Server-Side Protection
+
+The most secure way to protect pages is on the server side.
+
+### Basic Protected Page
+
+```tsx
+// app/[locale]/dashboard/page.tsx
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+
+export default async function DashboardPage() {
+  const session = await auth();
+
+  if (!session) {
+    redirect('/');
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <p>Welcome back, {session.user.name}!</p>
+    </div>
+  );
+}
+```
+
+### Protected Layout
+
+Protect multiple pages with a shared layout:
+
+```tsx
+// app/[locale]/dashboard/layout.tsx
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { ReactNode } from 'react';
+
+export default async function DashboardLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const session = await auth();
+
+  if (!session) {
+    redirect('/');
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <nav className="bg-white shadow">
+        <div className="container mx-auto px-4 py-4">
+          <p>Logged in as {session.user.email}</p>
+        </div>
+      </nav>
+      <main>{children}</main>
+    </div>
+  );
+}
+```
+
+## Client-Side Protection
+
+For dynamic content and interactivity:
+
+```tsx
+'use client';
+
+import { useSession } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { Spinner } from '@/components/ui/spinner';
+
+export default function ProfilePage() {
+  const { data: session, isPending } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push('/');
+    }
+  }, [session, isPending, router]);
+
+  if (isPending) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!session) {
+    return null;
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-4">Profile</h1>
+      <div className="bg-white rounded-lg shadow p-6">
+        <p><strong>Name:</strong> {session.user.name}</p>
+        <p><strong>Email:</strong> {session.user.email}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+## Role-Based Access Control
+
+Implement role-based permissions:
+
+```tsx
+// app/[locale]/admin/page.tsx
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { db } from '@/prisma';
+
+export default async function AdminPage() {
+  const session = await auth();
+
+  if (!session) {
+    redirect('/');
+  }
+
+  // Check if user has admin role
+  const user = await db.user.findUnique({
+    where: { id: session.user.id },
+  });
+
+  if (user?.role !== 'ADMIN') {
+    redirect('/dashboard');
+  }
+
+  return (
+    <div>
+      <h1>Admin Panel</h1>
+      {/* Admin content */}
+    </div>
+  );
+}
+```
+
+## Middleware Protection
+
+Protect routes at the middleware level:
+
+```typescript
+// middleware.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+export function middleware(request: NextRequest) {
+  const session = request.cookies.get('session');
+
+  // Protect dashboard routes
+  if (request.nextUrl.pathname.startsWith('/dashboard')) {
+    if (!session) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*', '/admin/:path*'],
+};
+```
+
+## Best Practices
+
+1. **Always validate on the server**: Client-side checks can be bypassed
+2. **Use middleware for route protection**: More efficient than per-page checks
+3. **Implement role-based access**: Not all authenticated users should access everything
+4. **Handle loading states**: Provide feedback while checking authentication
+5. **Redirect appropriately**: Send users to login or appropriate pages
+
+## Next Steps
+
+- Set up [Stripe Subscriptions](/docs/tutorials/stripe-subscriptions)
+- Learn about [API Protection](/docs/tutorials/api-call)
+

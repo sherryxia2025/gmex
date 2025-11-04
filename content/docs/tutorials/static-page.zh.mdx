@@ -1,0 +1,92 @@
+---
+title: 静态页面
+description: 在你的应用中创建一个静态页面
+---
+
+# 静态页面
+
+了解如何在你的 Next.js 应用中创建一个静态页面。
+
+## 创建新页面
+
+在 Next.js 应用路由中，`/app` 下的每个文件夹代表一个路由段。
+
+### 第1步: 创建新路由
+
+在 `/app/[locale]` 中创建一个新的文件夹:
+
+```bash
+mkdir -p app/[locale]/about
+```
+
+### 第2步: 添加页面组件
+
+创建一个 `page.tsx` 文件:
+
+```tsx
+// app/[locale]/about/page.tsx
+export default function AboutPage() {
+  return (
+    <main className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold mb-4">关于我们</h1>
+      <p className="text-lg text-gray-600">
+        欢迎来到我们的关于页面!
+      </p>
+    </main>
+  );
+}
+```
+
+### 第3步: 添加元数据
+
+为 SEO 添加元数据:
+
+```tsx
+// app/[locale]/about/page.tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '关于我们',
+  description: '了解更多关于我们的公司',
+};
+
+export default function AboutPage() {
+  return (
+    <main className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold mb-4">关于我们</h1>
+      <p className="text-lg text-gray-600">
+        欢迎来到我们的关于页面!
+      </p>
+    </main>
+  );
+}
+```
+
+## 动态路由
+
+使用方括号创建动态路由:
+
+```bash
+mkdir -p app/[locale]/blog/[slug]
+```
+
+```tsx
+// app/[locale]/blog/[slug]/page.tsx
+export default function BlogPost({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  return (
+    <main>
+      <h1>博客文章: {params.slug}</h1>
+    </main>
+  );
+}
+```
+
+## 了解更多
+
+- [Next.js 路由文档](https://nextjs.org/docs/app/building-your-application/routing)
+- [元数据 API](https://nextjs.org/docs/app/building-your-application/optimizing/metadata)
+

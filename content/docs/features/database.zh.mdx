@@ -1,0 +1,320 @@
+---
+title: 数据库
+description: 使用 Prisma ORM 进行数据库集成
+---
+
+# 数据库
+
+此启动器使用 Prisma 作为 ORM 进行数据库操作。
+
+## 设置
+
+Prisma 已在此项目中配置。模式位于 `/prisma/schema.prisma`。
+
+### 数据库连接
+
+在 `.env.local` 中配置您的数据库 URL：
+
+```bash
+DATABASE_URL="postgresql://user:password@localhost:5432/mydb"
+```
+
+支持的数据库：
+- PostgreSQL
+- MySQL
+- SQLite
+- MongoDB
+- SQL Server
+- CockroachDB
+
+## Prisma 模式
+
+在 `prisma/schema.prisma` 中定义您的数据模型：
+
+```prisma
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  posts         Post[]
+  sessions      Session[]
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+```
+
+## 迁移
+
+### 创建迁移
+
+```bash
+pnpm prisma migrate dev --name init
+```
+
+### 应用迁移
+
+```bash
+pnpm prisma migrate deploy
+```
+
+### 重置数据库
+
+```bash
+pnpm prisma migrate reset
+```
+
+## Prisma 客户端
+
+导入并使用 Prisma 客户端：
+
+```typescript
+// prisma/index.ts
+import { PrismaClient } from './generated/prisma';
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
+
+export const db = globalForPrisma.prisma ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
+```
+
+## CRUD 操作
+
+### 创建
+
+```typescript
+import { db } from '@/prisma';
+
+// 创建用户
+const user = await db.user.create({
+  data: {
+    name: 'John Doe',
+    email: 'john@example.com',
+  },
+});
+
+// 创建带关系的数据
+const post = await db.post.create({
+  data: {
+    title: 'Hello World',
+    content: '这是我的第一篇文章',
+    author: {
+      connect: { id: user.id },
+    },
+  },
+});
+```
+
+### 读取
+
+```typescript
+// 查找唯一
+const user = await db.user.findUnique({
+  where: { email: 'john@example.com' },
+});
+
+// 查找多个
+const users = await db.user.findMany({
+  where: {
+    posts: {
+      some: {
+        published: true,
+      },
+    },
+  },
+  include: {
+    posts: true,
+  },
+});
+
+// 查找第一个
+const post = await db.post.findFirst({
+  where: {
+    published: true,
+  },
+  orderBy: {
+    createdAt: 'desc',
+  },
+});
+```
+
+### 更新
+
+```typescript
+// 更新一个
+const user = await db.user.update({
+  where: { id: '123' },
+  data: {
+    name: 'Jane Doe',
+  },
+});
+
+// 更新多个
+await db.post.updateMany({
+  where: {
+    published: false,
+  },
+  data: {
+    published: true,
+  },
+});
+```
+
+### 删除
+
+```typescript
+// 删除一个
+await db.user.delete({
+  where: { id: '123' },
+});
+
+// 删除多个
+await db.post.deleteMany({
+  where: {
+    published: false,
+  },
+});
+```
+
+## 关系
+
+### 一对多
+
+```typescript
+// 获取带有帖子的用户
+const user = await db.user.findUnique({
+  where: { id: '123' },
+  include: {
+    posts: {
+      where: {
+        published: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    },
+  },
+});
+```
+
+### 多对多
+
+```prisma
+model Post {
+  id         String      @id @default(cuid())
+  title      String
+  categories Category[]  @relation("PostCategories")
+}
+
+model Category {
+  id    String  @id @default(cuid())
+  name  String  @unique
+  posts Post[]  @relation("PostCategories")
+}
+```
+
+```typescript
+// 创建带有类别的帖子
+const post = await db.post.create({
+  data: {
+    title: 'My Post',
+    categories: {
+      connect: [
+        { id: 'cat1' },
+        { id: 'cat2' },
+      ],
+    },
+  },
+});
+```
+
+## 事务
+
+```typescript
+// 顺序操作
+const [user, post] = await db.$transaction([
+  db.user.create({
+    data: { name: 'John', email: 'john@example.com' },
+  }),
+  db.post.create({
+    data: { title: 'First Post', authorId: 'user-id' },
+  }),
+]);
+
+// 交互式事务
+await db.$transaction(async (tx) => {
+  const user = await tx.user.create({
+    data: { name: 'John', email: 'john@example.com' },
+  });
+
+  await tx.post.create({
+    data: {
+      title: 'First Post',
+      authorId: user.id,
+    },
+  });
+});
+```
+
+## Prisma Studio
+
+打开 Prisma Studio 查看和编辑您的数据：
+
+```bash
+pnpm prisma studio
+```
+
+## 最佳实践
+
+1. **对相关操作使用事务**
+2. **为频繁查询的字段创建索引**以提高性能
+3. **明智地使用 select/include** 以避免过度获取
+4. **为重要数据实现软删除**
+5. **在生产环境中使用连接池**
+6. **在 CI/CD 管道中运行迁移**
+
+## 后续步骤
+
+- 了解 [API 路由](/docs/tutorials/api-call)
+- 探索 [身份验证](/docs/tutorials/user-authentication)
+

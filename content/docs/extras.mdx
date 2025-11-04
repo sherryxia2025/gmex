@@ -1,0 +1,397 @@
+---
+title: Extras
+description: Additional resources and tips
+---
+
+# Extras
+
+Additional resources and tips to enhance your development experience.
+
+## Useful Links
+
+### Documentation
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://react.dev)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Prisma Documentation](https://www.prisma.io/docs)
+
+### Tools
+
+- [shadcn/ui Components](https://ui.shadcn.com)
+- [Radix UI Primitives](https://www.radix-ui.com)
+- [Lucide Icons](https://lucide.dev)
+- [Vercel](https://vercel.com)
+
+## Development Tips
+
+### VS Code Extensions
+
+Recommended extensions:
+
+- **ES7+ React/Redux/React-Native snippets**: Code snippets
+- **Tailwind CSS IntelliSense**: Autocomplete for Tailwind
+- **Prisma**: Prisma schema support
+- **ESLint**: Code linting
+- **Prettier**: Code formatting
+- **GitLens**: Git integration
+
+### Code Snippets
+
+Add to `.vscode/settings.json`:
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative"
+}
+```
+
+### Git Hooks
+
+Use Husky for Git hooks:
+
+```bash
+pnpm add -D husky lint-staged
+npx husky init
+```
+
+`.husky/pre-commit`:
+
+```bash
+#!/bin/sh
+pnpm lint-staged
+```
+
+`package.json`:
+
+```json
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.{json,md,mdx}": ["prettier --write"]
+  }
+}
+```
+
+## Performance Optimization
+
+### Bundle Analysis
+
+Analyze your bundle size:
+
+```bash
+pnpm add -D @next/bundle-analyzer
+```
+
+`next.config.ts`:
+
+```typescript
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+export default withBundleAnalyzer(nextConfig);
+```
+
+Run analysis:
+
+```bash
+ANALYZE=true pnpm run build
+```
+
+### Lazy Loading
+
+```tsx
+import dynamic from 'next/dynamic';
+
+const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
+  loading: () => <p>Loading...</p>,
+  ssr: false,
+});
+```
+
+### Image Optimization
+
+```tsx
+import Image from 'next/image';
+
+<Image
+  src="/image.jpg"
+  alt="Description"
+  width={500}
+  height={300}
+  quality={85}
+  placeholder="blur"
+  blurDataURL="data:image/..."
+/>
+```
+
+## Testing
+
+### Vitest Setup
+
+```bash
+pnpm add -D vitest @vitejs/plugin-react
+```
+
+`vitest.config.ts`:
+
+```typescript
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+  },
+});
+```
+
+### Example Test
+
+```typescript
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { Button } from '@/components/ui/button';
+
+describe('Button', () => {
+  it('renders correctly', () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByText('Click me')).toBeInTheDocument();
+  });
+});
+```
+
+## Internationalization (i18n)
+
+The starter already includes i18n with `next-intl`.
+
+### Add New Locale
+
+1. Create message file:
+
+```json
+// i18n/messages/es.json
+{
+  "common": {
+    "welcome": "Bienvenido"
+  }
+}
+```
+
+2. Update routing:
+
+```typescript
+// i18n/routing.ts
+export const routing = {
+  locales: ['en', 'zh', 'es'],
+  defaultLocale: 'en',
+};
+```
+
+### Use Translations
+
+```tsx
+import { useTranslations } from 'next-intl';
+
+export function Component() {
+  const t = useTranslations('common');
+
+  return <h1>{t('welcome')}</h1>;
+}
+```
+
+## API Documentation
+
+Use OpenAPI/Swagger for API documentation:
+
+```bash
+pnpm add swagger-ui-react
+```
+
+Create API docs page:
+
+```tsx
+// app/[locale]/api-docs/page.tsx
+import SwaggerUI from 'swagger-ui-react';
+import 'swagger-ui-react/swagger-ui.css';
+
+export default function ApiDocs() {
+  return <SwaggerUI url="/api/openapi.json" />;
+}
+```
+
+## Database GUI
+
+### Prisma Studio
+
+```bash
+pnpm prisma studio
+```
+
+Opens at `http://localhost:5555`
+
+### Alternative Tools
+
+- [TablePlus](https://tableplus.com)
+- [DBeaver](https://dbeaver.io)
+- [pgAdmin](https://www.pgadmin.org)
+
+## Debugging
+
+### Next.js Debug Mode
+
+```json
+// .vscode/launch.json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: debug server-side",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm run dev"
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000"
+    }
+  ]
+}
+```
+
+### React DevTools
+
+Install browser extension:
+- [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+- [Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)
+
+## Code Quality
+
+### Type Coverage
+
+Check TypeScript coverage:
+
+```bash
+pnpm add -D type-coverage
+```
+
+```json
+{
+  "scripts": {
+    "type-coverage": "type-coverage"
+  }
+}
+```
+
+### Code Complexity
+
+Use ESLint complexity rules:
+
+```json
+{
+  "rules": {
+    "complexity": ["error", 10]
+  }
+}
+```
+
+## Useful Scripts
+
+Add to `package.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "clean": "rm -rf .next node_modules",
+    "reinstall": "pnpm run clean && pnpm install"
+  }
+}
+```
+
+## Environment Setup
+
+### Local HTTPS
+
+For testing OAuth locally:
+
+```bash
+pnpm add -D local-ssl-proxy
+```
+
+```json
+{
+  "scripts": {
+    "dev:https": "local-ssl-proxy --source 3001 --target 3000"
+  }
+}
+```
+
+### Multiple Environments
+
+```
+.env.local          # Local development
+.env.development    # Development
+.env.staging        # Staging
+.env.production     # Production
+```
+
+## Resources
+
+### Learning
+
+- [Next.js Learn](https://nextjs.org/learn)
+- [React Tutorial](https://react.dev/learn)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [Tailwind CSS Tutorial](https://tailwindcss.com/docs/utility-first)
+
+### Community
+
+- [Next.js Discord](https://nextjs.org/discord)
+- [React Discord](https://react.dev/community)
+- [GitHub Discussions](https://github.com/vercel/next.js/discussions)
+
+### Blogs
+
+- [Vercel Blog](https://vercel.com/blog)
+- [Next.js Blog](https://nextjs.org/blog)
+- [Lee Robinson](https://leerob.io)
+
+## Support
+
+If you need help:
+
+1. Check the [documentation](/docs)
+2. Search [GitHub Issues](https://github.com/yourusername/yourrepo/issues)
+3. Ask in [Discussions](https://github.com/yourusername/yourrepo/discussions)
+4. Contact support@yourapp.com
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](https://github.com/yourusername/yourrepo/blob/main/CONTRIBUTING.md).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/yourusername/yourrepo/blob/main/LICENSE) file for details.
+

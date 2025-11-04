@@ -1,0 +1,225 @@
+---
+title: SEO
+description: Search engine optimization for your Next.js app
+---
+
+# SEO
+
+Optimize your app for search engines with Next.js built-in SEO features.
+
+## Metadata API
+
+Next.js 14+ provides a powerful Metadata API for SEO.
+
+### Static Metadata
+
+```tsx
+// app/[locale]/about/page.tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description: 'Learn more about our company and mission',
+  keywords: ['about', 'company', 'mission'],
+  authors: [{ name: 'Your Name' }],
+  openGraph: {
+    title: 'About Us',
+    description: 'Learn more about our company and mission',
+    type: 'website',
+    images: ['/og-image.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Us',
+    description: 'Learn more about our company and mission',
+    images: ['/og-image.jpg'],
+  },
+};
+
+export default function AboutPage() {
+  return <div>About Us</div>;
+}
+```
+
+### Dynamic Metadata
+
+```tsx
+// app/[locale]/blog/[slug]/page.tsx
+import type { Metadata } from 'next';
+
+type Props = {
+  params: { slug: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const post = await getPost(params.slug);
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: 'article',
+      publishedTime: post.publishedAt,
+      authors: [post.author.name],
+      images: [post.coverImage],
+    },
+  };
+}
+
+export default async function BlogPost({ params }: Props) {
+  const post = await getPost(params.slug);
+  return <article>{/* Post content */}</article>;
+}
+```
+
+## Open Graph Images
+
+Create dynamic OG images:
+
+```tsx
+// app/api/og/route.tsx
+import { ImageResponse } from 'next/og';
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const title = searchParams.get('title') || 'Default Title';
+
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          fontSize: 60,
+          background: 'linear-gradient(to bottom, #4F46E5, #7C3AED)',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          fontWeight: 'bold',
+        }}
+      >
+        {title}
+      </div>
+    ),
+    {
+      width: 1200,
+      height: 630,
+    }
+  );
+}
+```
+
+## Sitemap
+
+Generate a sitemap automatically:
+
+```typescript
+// app/sitemap.ts
+import { MetadataRoute } from 'next';
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    {
+      url: 'https://yoursite.com',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 1,
+    },
+    {
+      url: 'https://yoursite.com/about',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://yoursite.com/blog',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.5,
+    },
+  ];
+}
+```
+
+## Robots.txt
+
+Configure search engine crawling:
+
+```typescript
+// app/robots.ts
+import { MetadataRoute } from 'next';
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: '*',
+      allow: '/',
+      disallow: '/admin/',
+    },
+    sitemap: 'https://yoursite.com/sitemap.xml',
+  };
+}
+```
+
+## Structured Data
+
+Add JSON-LD structured data:
+
+```tsx
+export default function ProductPage({ product }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.image,
+    description: product.description,
+    offers: {
+      '@type': 'Offer',
+      price: product.price,
+      priceCurrency: 'USD',
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div>{/* Product content */}</div>
+    </>
+  );
+}
+```
+
+## Canonical URLs
+
+Set canonical URLs to avoid duplicate content:
+
+```tsx
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://yoursite.com/page',
+  },
+};
+```
+
+## Best Practices
+
+1. **Use descriptive titles**: 50-60 characters
+2. **Write compelling descriptions**: 150-160 characters
+3. **Include relevant keywords**: But avoid keyword stuffing
+4. **Add alt text to images**: For accessibility and SEO
+5. **Use semantic HTML**: Proper heading hierarchy (h1, h2, h3)
+6. **Implement schema markup**: Help search engines understand content
+7. **Optimize images**: Use WebP format and appropriate sizes
+8. **Create a sitemap**: Help search engines discover pages
+
+## Next Steps
+
+- Learn about [Analytics](/docs/features/analytics)
+- Explore [Performance Optimization](https://nextjs.org/docs/app/building-your-application/optimizing)
+

@@ -1,0 +1,142 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+  output        = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  role       String?
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
+}
+
+model Order {
+  id               Int       @id @default(autoincrement())
+  orderNo          String    @unique @map("order_no")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  userUuid         String    @default("") @map("user_uuid")
+  userEmail        String    @default("") @map("user_email")
+  amount           Int
+  interval         String?   @db.VarChar(50)
+  expiredAt        DateTime? @map("expired_at")
+  status           String    @db.VarChar(50)
+  stripeSessionId  String?   @map("stripe_session_id")
+  credits          Int
+  currency         String?   @db.VarChar(50)
+  subId            String?   @map("sub_id")
+  subIntervalCount Int?      @map("sub_interval_count")
+  subCycleAnchor   Int?      @map("sub_cycle_anchor")
+  subPeriodEnd     Int?      @map("sub_period_end")
+  subPeriodStart   Int?      @map("sub_period_start")
+  subTimes         Int?      @map("sub_times")
+  productId        String?   @map("product_id")
+  productName      String?   @map("product_name")
+  validMonths      Int?      @map("valid_months")
+  orderDetail      String?   @map("order_detail")
+  paidAt           DateTime? @map("paid_at")
+  paidEmail        String?   @map("paid_email")
+  paidDetail       String?   @map("paid_detail")
+  githubUsername   String?   @map("github_username")
+  githubRepoName   String?   @map("github_repo_name")
+
+  @@map("orders")
+}
+
+model Post {
+  id              Int      @id @default(autoincrement())
+  uuid            String   @unique @db.VarChar(255)
+  slug            String?  @db.VarChar(255)
+  title           String?  @db.VarChar(255)
+  description     String?  @db.Text
+  content         String?  @db.Text
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  status          String?  @db.VarChar(50)
+  coverUrl        String?  @map("cover_url") @db.VarChar(255)
+  authorName      String?  @map("author_name") @db.VarChar(255)
+  authorAvatarUrl String?  @map("author_avatar_url") @db.VarChar(255)
+  locale          String?  @db.VarChar(50)
+  categoryUuid    String?  @map("category_uuid") @db.VarChar(255)
+
+  @@map("posts")
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  uuid        String   @unique @db.VarChar(255)
+  name        String   @unique @db.VarChar(255)
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  status      String?  @db.VarChar(50)
+  sort        Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("categories")
+}
