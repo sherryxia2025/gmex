@@ -1,0 +1,5 @@
+.clip-text-selection::-moz-selection,
+.clip-text-selection::selection {
+  color: #000;
+  background: #fff;
+}
