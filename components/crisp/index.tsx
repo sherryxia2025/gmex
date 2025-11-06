@@ -12,7 +12,7 @@ export const CrispChat = () => {
 
     if (websiteId) {
       Crisp.configure(websiteId);
-      Crisp.setColorTheme(ChatboxColors.Grey);
+      Crisp.setColorTheme(ChatboxColors.BlueGrey);
 
       if (user) {
         Crisp.setTokenId(user.id);

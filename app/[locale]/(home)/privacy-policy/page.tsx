@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Footer from "@/components/blocks/home/footer";
-import Header from "@/components/blocks/home/header";
-import { getLandingPage } from "@/i18n";
+import { Footer } from "@/components/blocks/footer";
+import { Header } from "@/components/blocks/header";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
@@ -16,16 +15,14 @@ export default async function PrivacyPolicyPage(props: PrivacyPolicyPageProps) {
   if (!page) notFound();
 
   const MDX = page.data.body;
-  const landingPage = await getLandingPage(locale);
 
   return (
     <article className="min-h-screen w-full bg-white dark:bg-[#212121] transition-colors">
-      {landingPage.header && (
-        <Header
-          {...landingPage.header}
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-full z-10"
-        />
-      )}
+      <Header
+        logo="/images/dark-logo.png"
+        darkLogo="/images/dark-logo.png"
+        navColor="#3D3D3D"
+      />
       <div className="max-w-7xl mx-auto px-4 md:px-5 pt-24 pb-16">
         <h1 className="text-4xl md:text-5xl font-bold text-[#3D3D3D] dark:text-[#E5E5E5] mb-4">
           {page.data.title}
@@ -39,7 +36,7 @@ export default async function PrivacyPolicyPage(props: PrivacyPolicyPageProps) {
           <MDX components={getMDXComponents()} />
         </div>
       </div>
-      {landingPage.footer && <Footer {...landingPage.footer} />}
+      <Footer />
     </article>
   );
 }

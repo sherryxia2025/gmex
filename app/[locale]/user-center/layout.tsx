@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { RiOrderPlayLine } from "react-icons/ri";
-import UserCenterHeader from "@/app/[locale]/user-center/user-center-header";
+import { Header } from "@/components/blocks/header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { auth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,7 @@ export default async function UserCenterLayout({
       )}
     >
       {/* Top Navigation */}
-      <UserCenterHeader />
+      <Header />
 
       <div className="pt-16">
         <div className="max-w-7xl mx-auto px-4 md:px-6">

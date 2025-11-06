@@ -1,5 +1,5 @@
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const OWNER = process.env.GITHUB_OWNER || "PressFast-test";
+const OWNER = process.env.GITHUB_OWNER || "test";
 export async function inviteToRepo(username: string, repoName: string) {
   if (!GITHUB_TOKEN) {
     throw new Error("GITHUB_TOKEN is not configured");

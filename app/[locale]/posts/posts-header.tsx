@@ -2,7 +2,7 @@
 
 import { useLocale } from "next-intl";
 import { useEffect, useState } from "react";
-import Header from "@/components/blocks/home/header";
+import { Header } from "@/components/blocks/header";
 import { getLandingPage } from "@/i18n";
 import type { LandingPage } from "@/types/pages/landing";
 
@@ -18,13 +18,5 @@ export default function PostsHeader() {
 
   if (!landingPage) return null;
 
-  return (
-    <Header
-      className="absolute top-0 left-1/2 -translate-x-1/2 w-full z-10"
-      brandName="PressFast"
-      navigation={landingPage.header?.navigation}
-      showLanguageSwitcher={true}
-      showThemeSwitcher={true}
-    />
-  );
+  return <Header />;
 }

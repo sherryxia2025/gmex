@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import Header from "@/components/blocks/home/header";
+import { Header } from "@/components/blocks/header";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -184,12 +184,7 @@ export default function AuthErrorPage() {
       )}
     >
       {/* Header with theme and language switchers */}
-      <Header
-        brandName="PressFast"
-        showLanguageSwitcher={true}
-        showThemeSwitcher={true}
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-full z-10"
-      />
+      <Header />
 
       <div className="flex flex-col items-center justify-center min-h-screen">
         <div className="text-center max-w-md mx-auto px-6">

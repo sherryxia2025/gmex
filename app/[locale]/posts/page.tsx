@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import PostsHeader from "@/app/[locale]/posts/posts-header";
-import Footer from "@/components/blocks/home/footer";
-import CategoryFilter from "@/components/posts/category-filter";
+import { Footer } from "@/components/blocks/footer";
 import PostsList from "@/components/posts/posts-list";
 import { getLandingPage } from "@/i18n";
 import { CategoryStatus, getCategories } from "@/models/category";
@@ -88,7 +87,7 @@ export default async function PostsPage({
           />
         </Suspense>
       </div>
-      <Footer {...(landingPage.footer || {})} />
+      <Footer />
     </article>
   );
 }

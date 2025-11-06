@@ -1,13 +1,11 @@
-import { Calendar, User } from "lucide-react";
 import moment from "moment";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import PostsHeader from "@/app/[locale]/posts/posts-header";
-import Footer from "@/components/blocks/home/footer";
+import { Footer } from "@/components/blocks/footer";
 import TiptapRenderer from "@/components/posts/tiptap-renderer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getLandingPage } from "@/i18n";
 import { findPostBySlug } from "@/models/post";
 
 interface PostPageProps {
@@ -43,7 +41,6 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) {
     notFound();
   }
-  const page = await getLandingPage(locale);
 
   return (
     <article className="min-h-screen w-full bg-white dark:bg-[#0F0F0F] transition-colors select-none flex flex-col justify-between">
@@ -100,7 +97,7 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         </div>
       </div>
-      <Footer {...(page.footer || {})} />
+      <Footer />
     </article>
   );
 }

@@ -12,10 +12,10 @@ export function baseOptions(locale: string): BaseLayoutProps {
   // you can change brandName, links by locale
   const nav = {
     zh: {
-      title: "PressFast",
+      title: process.env.NEXT_PUBLIC_APP_NAME || "",
     },
     en: {
-      title: "PressFast",
+      title: process.env.NEXT_PUBLIC_APP_NAME || "",
     },
   };
   return {
@@ -23,7 +23,13 @@ export function baseOptions(locale: string): BaseLayoutProps {
     nav: {
       title: (
         <>
-          <img src="/favicon.svg" alt="logo" width={24} height={24} style={{display:'inline',verticalAlign:'middle'}} />
+          <img
+            src="/favicon.svg"
+            alt="logo"
+            width={24}
+            height={24}
+            style={{ display: "inline", verticalAlign: "middle" }}
+          />
           {nav[locale as keyof typeof nav]?.title || nav.en.title}
         </>
       ),
