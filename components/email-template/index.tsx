@@ -1,18 +1,18 @@
 import { Tailwind } from "@react-email/components";
 
-interface EmailTemplateProps {
+interface ContactEmailTemplateProps {
   firstName: string;
   email: string;
   contactNumber: string;
   message: string;
 }
 
-export function EmailTemplate({
+export function ContactEmailTemplate({
   firstName,
   email,
   contactNumber,
   message,
-}: EmailTemplateProps) {
+}: ContactEmailTemplateProps) {
   return (
     <Tailwind>
       <head></head>

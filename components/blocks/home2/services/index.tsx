@@ -1,0 +1,99 @@
+"use client";
+
+import { ArrowRight } from "lucide-react";
+
+interface ServiceItem {
+  id: number;
+  title: string;
+  description?: string;
+  background: string;
+}
+
+interface ServicesProps {
+  services?: ServiceItem[];
+}
+
+const defaultServices: ServiceItem[] = [
+  {
+    id: 1,
+    title: "Petroleum And Gas",
+    description:
+      "We provide comprehensive solutions for the petroleum and gas industry, ensuring efficiency and safety in all operations.",
+    background: "/images/comment1.png",
+  },
+  {
+    id: 2,
+    title: "Machine Engineering",
+    description:
+      "We first create the highest level of trust and integrity with our clients.",
+    background: "/images/comment2.png",
+  },
+  {
+    id: 3,
+    title: "Flyover Construction",
+    description:
+      "Expert construction services for infrastructure projects including flyovers and bridges.",
+    background: "/images/comment3.png",
+  },
+  {
+    id: 4,
+    title: "Warehouse Industry",
+    description:
+      "Modern warehouse solutions with advanced logistics and storage systems.",
+    background: "/images/comment4.png",
+  },
+];
+
+export const Services = ({ services = defaultServices }: ServicesProps) => {
+  return (
+    <section className="py-10 md:py-24">
+      <div className="px-4 sm:px-6 md:px-10 lg:px-[80px]">
+        <div className="flex flex-wrap gap-4 sm:gap-6 h-auto justify-between">
+          {services.map((service) => (
+            <div
+              key={service.id}
+              className="w-full lg:flex-1 group relative h-64 sm:h-80 md:h-[420px] lg:h-[520px] overflow-hidden rounded-lg cursor-pointer"
+            >
+              {/* Background Image */}
+              <div
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out md:group-hover:scale-110"
+                style={{ backgroundImage: `url(${service.background})` }}
+              >
+                {/* Dark Overlay */}
+                <div className="absolute inset-0 bg-black/50 md:group-hover:bg-black/60 transition-colors duration-500" />
+              </div>
+
+              {/* Content */}
+              <div className="relative h-full flex flex-col justify-end p-4 sm:p-6">
+                <h3 className="text-white hover:text-[#FC5220]/90 text-xl sm:text-2xl md:text-3xl font-bold mb-3 transition-all duration-500">
+                  {service.title}
+                </h3>
+
+                {/* Divider */}
+                <div className="w-full h-0.5 bg-white/50 mb-3" />
+
+                {/* Description - Hidden by default, shown on hover */}
+                {service.description && (
+                  <div className="md:max-h-0 md:group-hover:max-h-40 max-h-24 overflow-hidden transition-[max-height,margin] duration-300 ease-linear mb-2 md:mb-0 md:group-hover:mb-4">
+                    <p className="text-white text-sm md:text-base opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-all duration-500 ease-out">
+                      {service.description}
+                    </p>
+                  </div>
+                )}
+
+                {/* Read More Link */}
+                <a
+                  href="#"
+                  className={`inline-flex items-center gap-2 text-sm sm:text-base font-medium underline transition-colors duration-300 text-white md:group-hover:text-[#FC5220]/90`}
+                >
+                  Read More
+                  <ArrowRight className="size-4" />
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};

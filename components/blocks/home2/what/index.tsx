@@ -1,106 +1,90 @@
 "use client";
 
-import { useState } from "react";
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
-interface FeatureItem {
-  id: number;
-  title: string;
-  image: string;
-  description: string;
+interface CaseItem {
+  name: string;
+  avatar: string;
+  job: string;
+  content: string;
+  cardBg: string; // color
 }
 
 interface WhatProps {
-  features?: FeatureItem[];
+  cases?: CaseItem[];
+  title?: string;
 }
 
-export const What = ({
-  features = [
-    {
-      id: 1,
-      title: "Ready-to-Use UI Blocks",
-      image: "/images/what1.png",
-      description:
-        "Browse through our extensive collection of pre-built UI blocks designed with shadcn/ui. Each block is carefully crafted to be responsive, accessible, and easily customizable. Simply copy and paste the code into your project.",
-    },
-    {
-      id: 2,
-      title: "Tailwind CSS & TypeScript",
-      image: "/images/what2.png",
-      description:
-        "Built with Tailwind CSS for rapid styling and TypeScript for type safety. Our blocks leverage the full power of Tailwind's utility classes while maintaining clean, type-safe code that integrates seamlessly with your Next.js projects.",
-    },
-    {
-      id: 3,
-      title: "Dark Mode & Customization",
-      image: "/images/what3.png",
-      description:
-        "Every block supports dark mode out of the box and can be customized to match your brand. Modify colors, spacing, and typography using Tailwind's configuration. The shadcn/ui theming system makes it easy to maintain consistency across your site.",
-    },
-  ],
-}: WhatProps) => {
-  const [activeTabId, setActiveTabId] = useState<number | null>(1);
-  const [activeImage, setActiveImage] = useState(features[0].image);
+const defaultTitle = "What Users Say About GMEX";
 
+const defaultCases: CaseItem[] = [
+  {
+    name: "Jack Friks",
+    avatar: "/images/what1.png",
+    job: "Designer",
+    content:
+      "I highly recommend industrial. It has been so important for us as we continue to grow our company. I have been using industrial for over a year now and i love it! I can't imagine life without it. It's so easy to use, and the customer service is great. I have tried a lot of similar products and Industrial is the best!",
+    cardBg: "white",
+  },
+  {
+    name: "Tom",
+    avatar: "/images/what2.png",
+    job: "Designer",
+    content:
+      "I can't say enough about industrial. Industrial has really helped our business. Would definitely recommend industrial and will definitely be ordering again. Industrial has made a huge difference! I have tried a few software of this kind and industrial is the best by far! Industrial is exactly what i've been looking for.",
+    cardBg: "#EA9320",
+  },
+];
+
+export const What = ({
+  cases = defaultCases,
+  title = defaultTitle,
+}: WhatProps) => {
   return (
-    <section className="py-32">
-      <div className="container mx-auto">
-        <div className="mb-12 flex w-full items-start justify-between gap-12">
-          <div className="w-full md:w-1/2">
-            <Accordion
-              type="single"
-              collapsible
-              className="w-full"
-              defaultValue="item-1"
-            >
-              {features.map((tab) => (
-                <AccordionItem
-                  key={tab.id}
-                  value={`item-${tab.id}`}
-                  className="transition-opacity hover:opacity-80"
+    <section
+      className="w-full py-16 md:py-24 lg:py-28 bg-cover bg-center"
+      style={{ backgroundImage: "url(/images/comment.png)" }}
+    >
+      <div className="container mx-auto px-4">
+        <h2 className="text-white text-2xl sm:text-3xl md:text-5xl font-[800] text-center mb-10 md:mb-16">
+          {title}
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+          {cases.map((item, idx) => {
+            const isDarkCard = item.cardBg !== "white";
+            return (
+              <div
+                key={`${item.name}-${idx}`}
+                className="rounded-sm py-10 px-15 shadow-xl"
+                style={{ background: item.cardBg }}
+              >
+                <p
+                  className={`text-sm md:text-base leading-relaxed ${
+                    isDarkCard ? "text-white" : "text-[#3D3D3D]"
+                  }`}
                 >
-                  <AccordionTrigger
-                    onClick={() => {
-                      setActiveImage(tab.image);
-                      setActiveTabId(tab.id);
-                    }}
-                    className="no-underline! cursor-pointer py-5 transition"
+                  {item.content}
+                </p>
+
+                <div className="flex items-center gap-3 md:gap-4 mt-10">
+                  <img
+                    src={item.avatar}
+                    alt={item.name}
+                    className="rounded-full size-12"
+                  />
+                  <div
+                    className={`text-sm ${isDarkCard ? "text-white" : "text-[#3D3D3D]"}`}
                   >
-                    <h4
-                      className={`text-xl font-semibold ${tab.id === activeTabId ? "text-[#FC5220]" : "text-muted-foreground"}`}
+                    <div className="font-bold">{item.name}</div>
+                    <div
+                      className={`${isDarkCard ? "opacity-80" : "opacity-60"}`}
                     >
-                      {tab.title}
-                    </h4>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground text-base">
-                      {tab.description}
-                    </p>
-                    <div className="mt-4 md:hidden">
-                      <img
-                        src={tab.image}
-                        alt={tab.title}
-                        className="h-full max-h-80 w-full rounded-md object-cover"
-                      />
+                      {item.job}
                     </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-          <div className="bg-muted relative m-auto hidden w-1/2 overflow-hidden rounded-xl md:block">
-            <img
-              src={activeImage}
-              alt="Feature preview"
-              className="aspect-4/3 rounded-md object-cover pl-4 w-full"
-            />
-          </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

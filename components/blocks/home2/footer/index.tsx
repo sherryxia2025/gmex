@@ -14,25 +14,18 @@ interface FooterProps {
     url: string;
     src: string;
     alt: string;
-    title: string;
   };
-  tagline?: string;
-  menuItems?: MenuItem[];
   copyright?: string;
-  bottomLinks?: {
-    text: string;
-    url: string;
-  }[];
+  menuItems?: MenuItem[];
 }
 
 export const Footer = ({
   logo = {
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/block-1.svg",
+    src: "/images/logo.png",
     alt: "blocks for shadcn/ui",
-    title: "GEMX",
     url: "https://www.shadcnblocks.com",
   },
-  tagline = "Components made easy.",
+  copyright = "Copyright © 2025 - All rights reserved.",
   menuItems = [
     {
       title: "Product",
@@ -73,53 +66,30 @@ export const Footer = ({
       ],
     },
   ],
-  copyright = "© 2024 Shadcnblocks.com. All rights reserved.",
-  bottomLinks = [
-    { text: "Terms and Conditions", url: "#" },
-    { text: "Privacy Policy", url: "#" },
-  ],
 }: FooterProps) => {
   return (
-    <section className="py-32">
+    <section className="py-32 bg-[#151515] text-[rgba(255,255,255,0.5)]">
       <div className="container">
         <footer>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             <div className="col-span-2 mb-8 lg:mb-0">
               <div className="flex items-center gap-2 lg:justify-start">
-                <Image src={logo.src} alt={logo.alt} width={28} height={28} />
-                <Link href="/">
-                  <h1 className="text-[#3D3D3D] dark:text-[#E5E5E5] text-[22px] font-lt-saeada font-[600] leading-[24px]">
-                    {logo.title}
-                  </h1>
-                </Link>
+                <Image src={logo.src} alt={logo.alt} width={100} height={100} />
               </div>
-              <p className="mt-4 font-bold">{tagline}</p>
+              <p className="mt-4 font-bold">{copyright}</p>
             </div>
             {menuItems.map((section, sectionIdx) => (
               <div key={sectionIdx}>
-                <h3 className="mb-4 font-bold">{section.title}</h3>
+                <h3 className="mb-4 font-bold text-white">{section.title}</h3>
                 <ul className="text-muted-foreground space-y-4">
                   {section.links.map((link, linkIdx) => (
-                    <li
-                      key={linkIdx}
-                      className="hover:text-primary font-medium"
-                    >
+                    <li key={linkIdx} className="hover:text-white font-medium">
                       <a href={link.url}>{link.text}</a>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
-          </div>
-          <div className="text-muted-foreground mt-24 flex flex-col justify-between gap-4 border-t pt-8 text-sm font-medium md:flex-row md:items-center">
-            <p>{copyright}</p>
-            <ul className="flex gap-4">
-              {bottomLinks.map((link, linkIdx) => (
-                <li key={linkIdx} className="hover:text-primary underline">
-                  <a href={link.url}>{link.text}</a>
-                </li>
-              ))}
-            </ul>
           </div>
         </footer>
       </div>

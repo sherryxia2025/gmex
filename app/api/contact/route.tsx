@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { EmailTemplate } from "@/components/email-template";
+import { ContactEmailTemplate } from "@/components/email-template";
 import { resend } from "@/lib/resend";
 
 export async function POST(request: NextRequest) {
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       to: [emailTo],
       subject: subject,
       react: (
-        <EmailTemplate
+        <ContactEmailTemplate
           firstName={name}
           email={userEmail}
           contactNumber={contactNumber}
