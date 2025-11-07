@@ -10,7 +10,7 @@ interface ScenariosProps {
 
 const defaultTitle = "Application Scenarios";
 const defaultDescription =
-  "Everything you need to launch your AI SaaS startup quickly and efficiently.";
+  "Partnering to power the future of clean energy and modern transportation.";
 const defaultItems: ScenariosProps["items"] = [
   {
     title: "Wind Power Generation",
@@ -33,7 +33,7 @@ const defaultItems: ScenariosProps["items"] = [
     cover: "/images/scenarios5.png",
   },
   {
-    title: "Next",
+    title: "Automation",
     cover: "/images/scenarios6.png",
   },
 ];

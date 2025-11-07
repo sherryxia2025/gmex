@@ -11,9 +11,11 @@ interface CaseItem {
 interface WhatProps {
   cases?: CaseItem[];
   title?: string;
+  backgroundImage?: string;
 }
 
 const defaultTitle = "What Users Say About GMEX";
+const defaultBackgroundImage = "/images/what1.jpg";
 
 const defaultCases: CaseItem[] = [
   {
@@ -37,11 +39,12 @@ const defaultCases: CaseItem[] = [
 export const What = ({
   cases = defaultCases,
   title = defaultTitle,
+  backgroundImage = defaultBackgroundImage,
 }: WhatProps) => {
   return (
     <section
       className="w-full py-16 md:py-24 lg:py-28 bg-cover bg-center"
-      style={{ backgroundImage: "url(/images/comment.png)" }}
+      style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       <div className="container mx-auto px-4">
         <h2 className="text-white text-2xl sm:text-3xl md:text-5xl font-[800] text-center mb-10 md:mb-16">

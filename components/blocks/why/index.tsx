@@ -11,24 +11,24 @@ interface WhyProps {
 
 const defaultTitle = "Why choose us?";
 const defaultDescription =
-  "We are a team of experienced professionals who are dedicated to providing the best possible service to our clients.";
+  "By seamlessly integrating high quality, low cost, and accelerated timelines to optimize your entire operation.";
 const defaultItems: WhyProps["items"] = [
   {
-    title: "Why Choose GMEX",
+    title: "High Quality",
     description:
-      "We are a team of experienced professionals who are dedicated to providing the best possible service to our clients.",
+      "Leveraging proven global expertise, we provide tailored solutions and advanced technology to get you to market faster, enhance customer satisfaction, and optimize performance.",
     cover: "/images/why1.png",
   },
   {
-    title: "Why Choose GMEX",
+    title: "Low Cost",
     description:
-      "We are a team of experienced professionals who are dedicated to providing the best possible service to our clients.",
+      "By combining deep expertise with cost-effective manufacturing, we deliver precise product costing and strategic global sourcing.",
     cover: "/images/why2.png",
   },
   {
-    title: "Why Choose GMEX",
+    title: "Short Leadtime",
     description:
-      "We are a team of experienced professionals who are dedicated to providing the best possible service to our clients.",
+      "By providing customized intelligent logistics, we deliver a reliable supply chain, granting you full control and more time for your core business.",
     cover: "/images/why3.png",
   },
 ];

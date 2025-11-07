@@ -3,11 +3,11 @@ export const contactConfig = {
   contactMethods: {
     email: {
       title: "Send E-Mail",
-      value: "info@example.com",
+      value: "sales@gemx.com",
     },
     phone: {
       title: "Call Anytime",
-      value: "+44 205-658-1823",
+      value: "+86 512 8398 2453",
     },
     whatsapp: {
       title: "Whatsapp",

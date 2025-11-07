@@ -12,7 +12,7 @@ export interface LogosConfig {
 export const defaultLogosConfig: LogosConfig = {
   title: "Our Customer&Quality",
   subtitle:
-    "Everything you need to launch your AI SaaS startup quickly and efficiently.",
+    "Forging lasting partnerships through rigorous quality standards and a shared pursuit of excellence in every project.",
   items: [
     { name: "BEEHE", src: "/images/customer-1.png" },
     { name: "SAINT-GOBAIN", src: "/images/customer-2.png" },

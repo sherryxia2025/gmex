@@ -13,8 +13,8 @@ interface GoogleMapProps {
 }
 
 const defaultCenter = {
-  lat: 51.5074, // London latitude
-  lng: -0.1278, // London longitude
+  lat: 31.3089, // Suzhou New District, Bosen Building, Guangda Road
+  lng: 120.5853, // Suzhou New District, Bosen Building, Guangda Road
 };
 
 const defaultZoom = 13;
@@ -28,7 +28,7 @@ export const GoogleMap = ({
   const finalApiKey =
     apiKey || process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
-  // if (!finalApiKey) then use Google Maps Embed API（iframe 方式，无需 key）
+  // if (!finalApiKey) then use Google Maps Embed API（iframe mode, no key required）
   if (!finalApiKey) {
     const { lat, lng } = center;
     // use Google Maps standard embed URL (without API key)

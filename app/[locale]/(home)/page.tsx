@@ -21,10 +21,14 @@ export default async function HomePage(props: HomePageProps) {
       <Why />
       <AboutUs
         title="About GMEX"
-        description="We break through the boundaries of connection technology and create the world's advanced and cost-effective fastener connection technology.We design,manufacture,test,and support customized fasteners to enable our connection technology to interact and thrive."
+        description="GMEX pioneers advanced, cost-effective fastener connection technologies. We design, manufacture, test, and support customized fasteners that enable robust and innovative connections worldwide. By collaborating closely with customers, we drive progress across equipment, enterprises, and industries—redefining connectivity, solving today’s challenges, and building lasting partnerships to meet future needs."
         imageSrc="/images/about1.png"
         imageAlt="About Us"
-        features={["We Are Bring Quality Services", "Exprience And Telented"]}
+        features={[
+          "The Strict Quality Monitoring",
+          "Fullfill International Standard",
+          "Provide Service Efficiency",
+        ]}
         buttonSecondary={{
           text: "Learn More",
           href: "/",
