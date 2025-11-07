@@ -40,8 +40,9 @@ export const SubHero = ({
         bgImage
           ? {
               backgroundImage: `url(${bgImage})`,
-              backgroundSize: "contain",
+              backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
             }
           : undefined
       }
