@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { Prisma } from "@/prisma/generated/prisma";
 import { insertProduct } from "@/models/product";
 import { findProductCategoryByName } from "@/models/product-category";
 
@@ -118,10 +119,10 @@ export async function POST(request: NextRequest) {
         }
 
         // Parse metadata if provided
-        let metadata: unknown;
+        let metadata: Prisma.InputJsonValue | undefined;
         if (row.metadata) {
           try {
-            metadata = JSON.parse(row.metadata);
+            metadata = JSON.parse(row.metadata) as Prisma.InputJsonValue;
           } catch {
             // If not valid JSON, treat as plain string
             metadata = row.metadata;
