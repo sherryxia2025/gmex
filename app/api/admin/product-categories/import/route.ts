@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { Prisma } from "@/prisma/generated/prisma";
 import { insertProductCategory } from "@/models/product-category";
 
 interface CategoryImportRow {
@@ -101,10 +102,10 @@ export async function POST(request: NextRequest) {
       const row = rows[i];
       try {
         // Parse features if provided
-        let features: unknown;
+        let features: Prisma.InputJsonValue | undefined;
         if (row.features) {
           try {
-            features = JSON.parse(row.features);
+            features = JSON.parse(row.features) as Prisma.InputJsonValue;
           } catch {
             // If not valid JSON, treat as comma-separated string
             features = row.features.split(",").map((f) => f.trim()).filter(Boolean);
