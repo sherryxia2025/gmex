@@ -16,30 +16,30 @@ interface ServicesProps {
 const defaultServices: ServiceItem[] = [
   {
     id: 1,
-    title: "Petroleum And Gas",
+    title: "Screws",
     description:
-      "We provide comprehensive solutions for the petroleum and gas industry, ensuring efficiency and safety in all operations.",
+      "Screw is a cylindrical fastener with threads that generates clamping force through rotation and is used to detachably connect two or more objects.",
     background: "/images/service1.jpg",
   },
   {
     id: 2,
-    title: "Machine Engineering",
+    title: "Terminal",
     description:
-      "We first create the highest level of trust and integrity with our clients.",
+      "Terminal block is a standardized electrical connection component used to reliably connect wires to electrical devices or other wires, facilitating installation and maintenance.",
     background: "/images/service2.jpg",
   },
   {
     id: 3,
-    title: "Flyover Construction",
+    title: "Cable Lug",
     description:
-      "Expert construction services for infrastructure projects including flyovers and bridges.",
+      "Cable Lug this is a screw-type terminal block assembly that clamps wires by tightening screws to achieve reliable and detachable connections in electrical circuits, commonly used in the wiring of industrial and electronic equipment.",
     background: "/images/service3.jpg",
   },
   {
     id: 4,
-    title: "Warehouse Industry",
+    title: "Spring",
     description:
-      "Modern warehouse solutions with advanced logistics and storage systems.",
+      "Spring is a mechanical component made of elastic material that stores/releases energy and transmits force through deformation, widely used in buffering, resetting, clamping and other scenarios.",
     background: "/images/service4.jpg",
   },
 ];

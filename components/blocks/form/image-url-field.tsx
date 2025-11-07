@@ -1,8 +1,9 @@
 "use client";
 
-import { Image as ImageIcon, Loader, X } from "lucide-react";
+import { Image as ImageIcon, Loader, Upload, X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,12 +19,14 @@ interface ImageUrlFieldProps {
 export function ImageUrlField({
   value = "",
   onChange,
-  placeholder = "Enter image URL...",
+  placeholder = "Enter image URL or upload a file...",
   disabled = false,
   className = "",
 }: ImageUrlFieldProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageLoad = () => {
     setIsLoading(false);
@@ -46,6 +49,9 @@ export function ImageUrlField({
   const clearImage = () => {
     onChange?.("");
     setImageError(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const isValidUrl = (url: string) => {
@@ -57,6 +63,60 @@ export function ImageUrlField({
     }
   };
 
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error(`File type not allowed. Allowed types: ${allowedTypes.join(", ")}`);
+      return;
+    }
+
+    // Validate file size (10MB)
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error(`File size exceeds maximum allowed (${maxSize / 1024 / 1024}MB)`);
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload/image", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Upload failed");
+      }
+
+      onChange?.(data.url);
+      toast.success("Image uploaded successfully");
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to upload image"
+      );
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className={`space-y-3 ${className}`}>
       <div className="flex gap-2">
@@ -65,22 +125,43 @@ export function ImageUrlField({
             value={value}
             onChange={(e) => handleUrlChange(e.target.value)}
             placeholder={placeholder}
-            disabled={disabled}
+            disabled={disabled || isUploading}
             type="url"
           />
         </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleUploadClick}
+          disabled={disabled || isUploading}
+        >
+          {isUploading ? (
+            <Loader className="h-4 w-4 animate-spin" />
+          ) : (
+            <Upload className="h-4 w-4" />
+          )}
+        </Button>
         {value && (
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={clearImage}
-            disabled={disabled}
+            disabled={disabled || isUploading}
           >
             <X className="h-4 w-4" />
           </Button>
         )}
       </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+        onChange={handleFileSelect}
+        className="hidden"
+        disabled={disabled || isUploading}
+      />
 
       {value && isValidUrl(value) && (
         <Card className="p-4">

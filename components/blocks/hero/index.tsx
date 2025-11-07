@@ -28,35 +28,35 @@ const defaultItems: HeroItem[] = [
     title: "Special industrial production process in our places",
     description:
       "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "Explore services",
+    buttonText: "EXPLORE SERVICES",
   },
   {
     background: "/images/comment3.png",
     title: "Special industrial production process in our places",
     description:
       "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "Explore services",
+    buttonText: "EXPLORE SERVICES",
   },
   {
     background: "/images/comment4.png",
     title: "Special industrial production process in our places",
     description:
       "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "Explore services",
+    buttonText: "EXPLORE SERVICES",
   },
   {
     background: "/images/comment5.png",
     title: "Special industrial production process in our places",
     description:
       "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "Explore services",
+    buttonText: "EXPLORE SERVICES",
   },
   {
     background: "/images/comment1.png",
     title: "Special industrial production process in our places",
     description:
       "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "Explore services",
+    buttonText: "EXPLORE SERVICES",
   },
 ];
 

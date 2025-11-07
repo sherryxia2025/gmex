@@ -4,7 +4,10 @@
     "english": "English",
     "chinese": "Chinese",
     "generate": "Generate",
-    "optimize": "Optimize"
+    "optimize": "Optimize",
+    "key": "Key",
+    "value": "Value",
+    "addKeyValuePair": "Add Key-Value Pair"
   },
   "home": {
     "title": "Welcome to Next.js",
@@ -176,7 +179,9 @@
       "title": "Navigation",
       "users": "Users",
       "orders": "Orders",
-      "categories": "Categories",
+      "categories": "Posts Categories",
+      "productCategories": "Product Categories",
+      "products": "Products",
       "posts": "Posts"
     },
     "users": {
@@ -282,6 +287,65 @@
       },
       "messages": {
         "noCategoriesFound": "No categories found"
+      }
+    },
+    "productCategories": {
+      "title": "Product Categories",
+      "description": "Manage product categories",
+      "addCategory": "Add Category",
+      "table": {
+        "name": "Name",
+        "title": "Title",
+        "description": "Description",
+        "createdAt": "Created At",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "view": "View",
+        "delete": "Delete"
+      },
+      "messages": {
+        "noCategoriesFound": "No categories found"
+      },
+      "importCategories": "Import",
+      "importDialog": {
+        "title": "Import Product Categories",
+        "description": "Upload a CSV or JSON file to import product categories in bulk. CSV format should include columns: name, title, description, features, coverUrl."
+      },
+      "fields": {
+        "title": "Title",
+        "name": "Name",
+        "description": "Description",
+        "coverUrl": "Cover Image URL",
+        "features": "Features"
+      }
+    },
+    "products": {
+      "title": "Products",
+      "description": "Manage product information",
+      "addProduct": "Add Product",
+      "table": {
+        "name": "Name",
+        "title": "Title",
+        "category": "Category",
+        "price": "Price",
+        "status": "Status",
+        "createdAt": "Created At",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "view": "View",
+        "delete": "Delete"
+      },
+      "messages": {
+        "noProductsFound": "No products found"
+      },
+      "importProducts": "Import",
+      "importDialog": {
+        "title": "Import Products",
+        "description": "Upload a CSV or JSON file to import products in bulk. CSV format should include columns: name, title, description, categoryName, status, coverUrl, metadata."
       }
     },
     "posts": {

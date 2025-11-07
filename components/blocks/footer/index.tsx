@@ -76,6 +76,15 @@ export const Footer = ({
                 </Link>
               </div>
               <p className="mt-4 font-bold">{copyright}</p>
+              <p className="mt-4 font-bold">
+                <a
+                  href="https://pressfa.st"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Build with PressFast
+                </a>
+              </p>
             </div>
             {menuItems.map((section, sectionIdx) => (
               <div key={sectionIdx}>

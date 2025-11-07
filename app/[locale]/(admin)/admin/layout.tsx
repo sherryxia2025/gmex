@@ -1,4 +1,12 @@
-import { Folder, Home, Image, ShoppingCart, Users } from "lucide-react";
+import {
+  Folder,
+  Home,
+  Image,
+  Package,
+  ShoppingBag,
+  ShoppingCart,
+  Users,
+} from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -45,6 +53,12 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
       icon: Folder,
     },
     { name: t("navigation.posts"), href: "/admin/posts", icon: Image },
+    {
+      name: t("navigation.productCategories"),
+      href: "/admin/product-categories",
+      icon: ShoppingBag,
+    },
+    { name: t("navigation.products"), href: "/admin/products", icon: Package },
   ];
 
   return (

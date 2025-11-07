@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { ImageUrlField } from "@/components/blocks/form/image-url-field";
+import { KeyValueField } from "@/components/blocks/form/key-value-field";
 import TiptapEditor from "@/components/blocks/tiptapeditor";
 import Icon from "@/components/icon";
 import { Button } from "@/components/ui/button";
@@ -437,10 +438,28 @@ export default function ({
         }
       } else if (isForImage) {
         if (aiButton.targetField === "coverUrl") {
-          const context = ["title", "description"]
+          // build context information, using title, name, description fields
+          const contextFields = ["title", "name", "description"];
+
+          const context = contextFields
+            .filter((key) => formData[key] && String(formData[key]).trim())
             .map((key) => `${key}: ${formData[key]}`)
             .join(", ");
-          prompt = `Based on the following information, generate a cover image: ${context}.
+
+          if (!context) {
+            toast.error(
+              "please fill in the title, name or description first to generate a cover image",
+            );
+            return;
+          }
+
+          prompt = `Based on the following information, generate a professional cover image: ${context}.
+
+          Requirements:
+          - High quality, professional design
+          - Visually appealing and relevant to the content
+          - Modern and clean style
+          - Suitable for use as a cover image
 
           IMPORTANT: Don't use any text in the image.`;
 
@@ -608,6 +627,14 @@ export default function ({
                       />
                     ) : item.type === "image-url" ? (
                       <ImageUrlField
+                        value={String(field.value || "")}
+                        onChange={field.onChange}
+                        placeholder={item.placeholder}
+                        disabled={loading}
+                        {...item.attributes}
+                      />
+                    ) : item.type === "key-value" ? (
+                      <KeyValueField
                         value={String(field.value || "")}
                         onChange={field.onChange}
                         placeholder={item.placeholder}

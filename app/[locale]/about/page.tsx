@@ -11,7 +11,7 @@ export default function AboutPage() {
       <Header />
       <SubHero
         title="About Us"
-        bgImage="/images/about1.png"
+        bgImage="/images/about-hero.jpg"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
       />
       <AboutUs

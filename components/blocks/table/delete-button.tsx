@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 interface DeleteButtonProps {
   uuid: string;
   onDelete?: () => void;
-  type?: "post" | "category";
+  type?: "post" | "category" | "product" | "productCategory";
 }
 
 export default function DeleteButton({
@@ -32,7 +32,7 @@ export default function DeleteButton({
         });
       } else {
         // Fallback to original delete route for other types
-        const resource = type === "category" ? "categories" : `${type}s`;
+        const resource = type === "category" ? "categories" : type === "product" ? "products" : type === "productCategory" ? "product-categories" : `${type}s`;
         response = await fetch(`/admin/${resource}/${uuid}/delete`, {
           method: "POST",
         });

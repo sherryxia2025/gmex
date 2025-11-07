@@ -23,7 +23,8 @@ export interface FormField {
     | "editor"
     | "code_editor"
     | "richtext_editor"
-    | "markdown_editor";
+    | "markdown_editor"
+    | "key-value";
   placeholder?: string;
   options?: {
     title: string;

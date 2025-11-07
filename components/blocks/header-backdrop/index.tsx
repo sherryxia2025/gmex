@@ -47,8 +47,10 @@ export function Header({
   return (
     <div
       className={cn(
-        `md:h-24 fixed z-50 transition-all duration-300 bg-transparent top-0 left-0 w-full`,
-        isScrolled ? "bg-white shadow-lg" : "",
+        `md:h-24 fixed z-50 transition-all duration-300`,
+        isScrolled
+          ? "bg-white/25 dark:bg-gray-900/25 backdrop-blur-md shadow-lg left-4 right-4 top-4 rounded-2xl"
+          : "bg-transparent top-0 left-0 w-full",
         isMobileMenuOpen && !isScrolled
           ? "bg-white/25 dark:bg-gray-900/25 backdrop-blur-md shadow-lg"
           : "",

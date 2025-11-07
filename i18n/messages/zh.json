@@ -4,7 +4,10 @@
     "english": "English",
     "chinese": "Chinese",
     "generate": "生成",
-    "optimize": "优化"
+    "optimize": "优化",
+    "key": "键",
+    "value": "值",
+    "addKeyValuePair": "添加键值对"
   },
   "home": {
     "title": "欢迎使用 Next.js",
@@ -176,7 +179,9 @@
       "title": "导航",
       "users": "用户管理",
       "orders": "订单管理",
-      "categories": "分类管理",
+      "categories": "文章分类管理",
+      "productCategories": "商品分类管理",
+      "products": "商品管理",
       "posts": "文章管理"
     },
     "users": {
@@ -282,6 +287,65 @@
       },
       "messages": {
         "noCategoriesFound": "未找到分类"
+      }
+    },
+    "productCategories": {
+      "title": "商品分类管理",
+      "description": "管理商品分类",
+      "addCategory": "添加分类",
+      "table": {
+        "name": "名称",
+        "title": "标题",
+        "description": "描述",
+        "createdAt": "创建时间",
+        "actions": "操作"
+      },
+      "actions": {
+        "edit": "编辑",
+        "view": "查看",
+        "delete": "删除"
+      },
+      "messages": {
+        "noCategoriesFound": "未找到分类"
+      },
+      "importCategories": "批量导入",
+      "importDialog": {
+        "title": "批量导入产品分类",
+        "description": "上传 CSV 或 JSON 文件来批量导入产品分类。CSV 格式需要包含 name, title, description, features, coverUrl 列。"
+      },
+      "fields": {
+        "title": "标题",
+        "name": "名称",
+        "description": "描述",
+        "coverUrl": "封面图片URL",
+        "features": "特性"
+      }
+    },
+    "products": {
+      "title": "商品管理",
+      "description": "管理商品信息",
+      "addProduct": "添加商品",
+      "table": {
+        "name": "名称",
+        "title": "标题",
+        "category": "分类",
+        "price": "价格",
+        "status": "状态",
+        "createdAt": "创建时间",
+        "actions": "操作"
+      },
+      "actions": {
+        "edit": "编辑",
+        "view": "查看",
+        "delete": "删除"
+      },
+      "messages": {
+        "noProductsFound": "未找到商品"
+      },
+      "importProducts": "批量导入",
+      "importDialog": {
+        "title": "批量导入产品",
+        "description": "上传 CSV 或 JSON 文件来批量导入产品。CSV 格式需要包含 name, title, description, categoryName, status, coverUrl, metadata 列。"
       }
     },
     "posts": {
