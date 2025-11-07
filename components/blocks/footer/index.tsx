@@ -19,14 +19,14 @@ interface FooterProps {
   menuItems?: MenuItem[];
 }
 
-export const Footer = ({
-  logo = {
+const defaultConfig = {
+  logo: {
     src: "/images/logo.png",
     alt: process.env.NEXT_PUBLIC_APP_NAME || "",
     url: "/",
   },
-  copyright = "Copyright © 2025 - All rights reserved.",
-  menuItems = [
+  copyright: "Copyright © 2025 - All rights reserved.",
+  menuItems: [
     {
       title: "LINKS",
       links: [
@@ -51,6 +51,12 @@ export const Footer = ({
       ],
     },
   ],
+};
+
+export const Footer = ({
+  logo = defaultConfig.logo,
+  copyright = defaultConfig.copyright,
+  menuItems = defaultConfig.menuItems,
 }: FooterProps) => {
   return (
     <section className="py-20 bg-[#151515] text-[rgba(255,255,255,0.5)]">

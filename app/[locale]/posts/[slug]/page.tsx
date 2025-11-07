@@ -58,6 +58,7 @@ export default async function PostPage({ params }: PostPageProps) {
                     src={post.coverUrl}
                     alt={post.title || "Post cover"}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 768px"
                     className="object-cover w-full h-full"
                     priority
                   />

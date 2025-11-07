@@ -176,7 +176,7 @@ export function Hero({
           {items.map((item, index) => (
             <CarouselItem key={item.background} className="w-full h-full">
               <div
-                className="bg-cover bg-center w-full h-screen flex flex-col justify-center px-4 sm:px-6 md:px-0 md:items-center 2xl:items-start 2xl:pl-80"
+                className="bg-cover bg-center w-full h-screen flex flex-col justify-center px-4 sm:px-6 md:px-0 md:items-start md:pl-50 2xl:items-start 2xl:pl-80"
                 style={{ backgroundImage: `url(${item.background})` }}
               >
                 <AnimatedContent index={index} item={item} />

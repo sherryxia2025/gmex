@@ -19,28 +19,28 @@ const defaultServices: ServiceItem[] = [
     title: "Petroleum And Gas",
     description:
       "We provide comprehensive solutions for the petroleum and gas industry, ensuring efficiency and safety in all operations.",
-    background: "/images/comment1.png",
+    background: "/images/service1.jpg",
   },
   {
     id: 2,
     title: "Machine Engineering",
     description:
       "We first create the highest level of trust and integrity with our clients.",
-    background: "/images/comment2.png",
+    background: "/images/service2.jpg",
   },
   {
     id: 3,
     title: "Flyover Construction",
     description:
       "Expert construction services for infrastructure projects including flyovers and bridges.",
-    background: "/images/comment3.png",
+    background: "/images/service3.jpg",
   },
   {
     id: 4,
     title: "Warehouse Industry",
     description:
       "Modern warehouse solutions with advanced logistics and storage systems.",
-    background: "/images/comment4.png",
+    background: "/images/service4.jpg",
   },
 ];
 
@@ -60,7 +60,7 @@ export const Services = ({ services = defaultServices }: ServicesProps) => {
                 style={{ backgroundImage: `url(${service.background})` }}
               >
                 {/* Dark Overlay */}
-                <div className="absolute inset-0 bg-black/50 md:group-hover:bg-black/60 transition-colors duration-500" />
+                {/* <div className="absolute inset-0 bg-black/50 md:group-hover:bg-black/60 transition-colors duration-500" /> */}
               </div>
 
               {/* Content */}

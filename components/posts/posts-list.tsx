@@ -118,6 +118,7 @@ function PostCard({
               src={post.coverUrl}
               alt={post.title || "Post cover"}
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
             />
           </div>

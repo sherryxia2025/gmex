@@ -8,6 +8,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import Analytics from "@/components/analytics";
 import { CrispChat } from "@/components/crisp";
+import { Toaster } from "@/components/ui/sonner";
 import { routing } from "@/i18n";
 import { i18n } from "@/lib/i18n";
 import { AuthProvider } from "@/providers/auth-provider";
@@ -139,9 +140,6 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/favicon.svg" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${plusJakartaSans.variable} ${ltSaeada.variable} antialiased`}
       >
@@ -153,6 +151,7 @@ export default async function RootLayout({
             </NextIntlClientProvider>
             <CrispChat />
           </AuthProvider>
+          <Toaster richColors />
         </ThemeProvider>
       </body>
     </html>

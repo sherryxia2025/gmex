@@ -143,7 +143,7 @@ function DesktopHeader({
             key={item.href}
             href={item.href}
             className={cn(
-              "hover:text-[#FC5220] transition-colors py-2 px-4",
+              "hover:text-[#FC5220] transition-colors text-lg py-2 px-4",
               isActive(item.href) && "text-[#FC5220]",
             )}
           >
