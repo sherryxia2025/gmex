@@ -25,6 +25,7 @@ On a global scale, our employees and solutins are redefining connectivity,addres
         buttonSecondary={null}
       />
       <OurFactory
+        carousel={true}
         title="Our Factory"
         description="Everything you need to launch your AI SaaS startup quickly and efficiently."
         images={[
@@ -35,6 +36,14 @@ On a global scale, our employees and solutins are redefining connectivity,addres
           {
             src: "/images/factory2.png",
             alt: "factory2",
+          },
+          {
+            src: "/images/factory3.png",
+            alt: "factory3",
+          },
+          {
+            src: "/images/factory3.png",
+            alt: "factory3",
           },
           {
             src: "/images/factory3.png",
