@@ -60,7 +60,7 @@ export const Footer = ({
 }: FooterProps) => {
   return (
     <section className="py-20 bg-[#151515] text-[rgba(255,255,255,0.5)]">
-      <div className="container">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <footer>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-5">
             <div className="col-span-2 mb-8 lg:mb-0">

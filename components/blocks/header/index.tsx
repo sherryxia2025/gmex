@@ -3,7 +3,7 @@
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import AuthButton from "@/components/auth/auth-button";
+import UserButton from "@/components/auth/user-button";
 import { Button } from "@/components/ui/button";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
@@ -47,7 +47,7 @@ export function Header({
   return (
     <div
       className={cn(
-        `md:h-24 fixed z-50 transition-all duration-300 bg-transparent top-0 left-0 w-full`,
+        `lg:h-24 fixed z-50 transition-all duration-300 bg-black/20 top-0 left-0 w-full`,
         isScrolled ? "bg-white shadow-lg" : "",
         isMobileMenuOpen && !isScrolled
           ? "bg-white/25 dark:bg-gray-900/25 backdrop-blur-md shadow-lg"
@@ -55,7 +55,7 @@ export function Header({
         className,
       )}
     >
-      <div className="hidden md:block h-full">
+      <div className="hidden lg:block h-full">
         <DesktopHeader
           isScrolled={isScrolled}
           logo={logo}
@@ -65,7 +65,7 @@ export function Header({
           navColor={navColor}
         />
       </div>
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         <MobileHeader
           isScrolled={isScrolled}
           isOpen={isMobileMenuOpen}
@@ -118,20 +118,21 @@ function DesktopHeader({
   };
 
   return (
-    <div className="h-full w-full flex items-center justify-between py-5 px-16 sm:px-20 md:px-28 xl:px-50">
-      <div className="h-full flex items-center gap-2 w-50">
-        <Link href="/">
+    <div className="h-full w-full flex items-center justify-between py-5 px-8 lg:px-16 xl:px-28 2xl:px-50">
+      <div className="h-full flex items-center gap-2 flex-shrink-0">
+        <Link href="/" className="flex-shrink-0">
           <Image
             src={isScrolled ? darkLogo : logo}
             alt={brandName}
             width={150}
             height={54}
             priority
+            className="w-[120px] lg:w-[150px] h-[43px] lg:h-[54px] object-contain"
           />
         </Link>
       </div>
       <div
-        className={`h-full relative flex-1 flex justify-center items-center gap-4 font-bold text-xl transition-colors ${
+        className={`h-full relative flex-1 flex justify-center items-center gap-2 lg:gap-4 font-bold text-xl transition-colors min-w-0 ${
           navColor ||
           (isScrolled ? "text-[#3D3D3D] dark:text-[#E5E5E5]" : "text-white")
         }`}
@@ -141,7 +142,7 @@ function DesktopHeader({
             key={item.href}
             href={item.href}
             className={cn(
-              "hover:text-[#FC5220] transition-colors text-lg py-2 px-4",
+              "hover:text-[#FC5220] transition-colors text-sm lg:text-lg py-2 px-2 lg:px-4 whitespace-nowrap",
               isActive(item.href) && "text-[#FC5220]",
             )}
           >
@@ -150,7 +151,7 @@ function DesktopHeader({
         ))}
       </div>
       <div
-        className={`h-full relative flex items-center gap-4 w-50 transition-colors ${
+        className={`h-full relative flex items-center gap-2 lg:gap-4 flex-shrink-0 transition-colors ${
           navColor ||
           (isScrolled ? "text-[#3D3D3D] dark:text-[#E5E5E5]" : "text-white")
         }`}
@@ -158,7 +159,7 @@ function DesktopHeader({
         {/* <Link href="/" className="font-bold text-xl">
           Login
         </Link> */}
-        <AuthButton />
+        <UserButton />
       </div>
     </div>
   );
@@ -230,13 +231,14 @@ function MobileHeader({
       {/* Header Bar */}
       <div className="min-h-[72px] w-full flex items-center justify-between py-3 px-4">
         <div className="flex items-center gap-2">
-          <Link href="/">
+          <Link href="/" className="flex-shrink-0">
             <Image
               src={isScrolled ? darkLogo : logo}
               alt={brandName}
-              width={150}
-              height={54}
+              width={120}
+              height={43}
               priority
+              className="w-[120px] h-[43px] object-contain"
             />
           </Link>
         </div>
@@ -263,7 +265,11 @@ function MobileHeader({
           isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-4 pb-4">
+        <div className={`px-4 pb-4 ${
+          isScrolled
+            ? "bg-white"
+            : "bg-black/40 backdrop-blur-md"
+        }`}>
           {/* Navigation Links */}
           <nav className="space-y-2 mb-4">
             {navigation.map((item) => (
@@ -276,7 +282,7 @@ function MobileHeader({
                   navColor ||
                     (isScrolled
                       ? "text-[#3D3D3D] dark:text-[#E5E5E5] hover:bg-gray-100 dark:hover:bg-gray-800"
-                      : "text-[#3D3D3D] hover:bg-white/10"),
+                      : "text-white hover:bg-white/10"),
                   isActive(item.href) ? "text-[#FC5220]" : "",
                 )}
               >
@@ -286,7 +292,11 @@ function MobileHeader({
           </nav>
 
           {/* Auth Buttons */}
-          <div className="space-y-3 pt-4 border-t border-gray-300 dark:border-gray-700">
+          <div className={`space-y-3 pt-4 border-t ${
+            isScrolled
+              ? "border-gray-300 dark:border-gray-700"
+              : "border-white/20"
+          }`}>
             {/* <Link
               href="/"
               onClick={closeMenu}
@@ -298,7 +308,7 @@ function MobileHeader({
             >
               Login
             </Link> */}
-            <AuthButton />
+            <UserButton />
           </div>
         </div>
       </div>

@@ -47,20 +47,21 @@ export default function Why(props: WhyProps) {
 
   return (
     <section
-      className={`min-h-screen flex flex-col items-center justify-center gap-5 py-12 md:py-20 lg:py-25 px-4 md:px-6 ${className || ""}`}
+      className={`min-h-screen flex flex-col items-center justify-center gap-5 py-12 md:py-20 lg:py-25 ${className || ""}`}
     >
-      {title && (
-        <h1 className="max-w-3xl text-[#3D3D3D] dark:text-[#E5E5E5] font-extrabold text-2xl sm:text-3xl md:text-4xl text-center">
-          {title}
-        </h1>
-      )}
-      {description && (
-        <p className="max-w-3xl text-[#666666] dark:text-[#A0A0A0] text-base sm:text-lg md:text-xl text-center px-4">
-          {description}
-        </p>
-      )}
-      {items && items.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8 md:mt-12 lg:mt-15 gap-6 md:gap-8 lg:gap-10 w-full max-w-7xl">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8">
+        {title && (
+          <h1 className="max-w-3xl text-[#3D3D3D] dark:text-[#E5E5E5] font-extrabold text-2xl sm:text-3xl md:text-4xl text-center mx-auto">
+            {title}
+          </h1>
+        )}
+        {description && (
+          <p className="max-w-3xl text-[#666666] dark:text-[#A0A0A0] text-base sm:text-lg md:text-xl text-center px-4 mx-auto">
+            {description}
+          </p>
+        )}
+        {items && items.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8 md:mt-12 lg:mt-15 gap-6 md:gap-8 lg:gap-10 w-full">
           {items.map((item, index) => (
             <figure
               key={index}
@@ -84,8 +85,9 @@ export default function Why(props: WhyProps) {
               </figcaption>
             </figure>
           ))}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
