@@ -46,13 +46,6 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
 
   const navigation = [
     { name: t("navigation.users"), href: "/admin/users", icon: Users },
-    { name: t("navigation.orders"), href: "/admin/orders", icon: ShoppingCart },
-    {
-      name: t("navigation.categories"),
-      href: "/admin/categories",
-      icon: Folder,
-    },
-    { name: t("navigation.posts"), href: "/admin/posts", icon: Image },
     {
       name: t("navigation.productCategories"),
       href: "/admin/product-categories",
