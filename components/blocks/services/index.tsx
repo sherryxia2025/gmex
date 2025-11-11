@@ -26,14 +26,14 @@ const defaultServices: ServiceItem[] = [
     title: "Terminal",
     description:
       "Terminal block is a standardized electrical connection component used to reliably connect wires to electrical devices or other wires, facilitating installation and maintenance.",
-    background: "/images/service2.jpg",
+    background: "/images/service3.jpg",
   },
   {
     id: 3,
     title: "Cable Lug",
     description:
       "Cable Lug this is a screw-type terminal block assembly that clamps wires by tightening screws to achieve reliable and detachable connections in electrical circuits, commonly used in the wiring of industrial and electronic equipment.",
-    background: "/images/service3.jpg",
+    background: "/images/service2.jpg",
   },
   {
     id: 4,

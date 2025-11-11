@@ -77,12 +77,14 @@ export const Footer = ({
               </div>
               <p className="mt-4 font-bold">{copyright}</p>
               <p className="mt-4 font-bold">
+                Build with{" "}
                 <a
                   href="https://pressfa.st"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
                 >
-                  Build with PressFast
+                  PressFast
                 </a>
               </p>
             </div>

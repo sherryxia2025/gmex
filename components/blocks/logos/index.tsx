@@ -25,7 +25,7 @@ export function Logos({
           {items.map((logo) => (
             <div
               key={logo.name}
-              className="bg-white rounded-sm border border-black/5 min-w-[140px] sm:min-w-[150px] md:min-w-[160px] lg:min-w-[170px] flex-1 max-w-[190px] h-[78px] flex items-center justify-center"
+              className="bg-white rounded-sm border border-black/5 w-[140px] sm:w-[150px] md:w-[160px] lg:w-[170px] h-[78px] flex items-center justify-center"
             >
               <Image
                 src={logo.src}

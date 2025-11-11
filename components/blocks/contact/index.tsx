@@ -94,11 +94,11 @@ export const Contact = () => {
               <div className="w-16 h-16 rounded-sm bg-gray-200 flex items-center justify-center mb-4 md:mb-0 md:mr-4 flex-shrink-0">
                 <Mail className="w-8 h-8 text-gray-600" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
                   {contactConfig.contactMethods.email.title}
                 </h3>
-                <p className="text-gray-700">
+                <p className="text-gray-700 break-words">
                   {contactConfig.contactMethods.email.value}
                 </p>
               </div>
@@ -114,11 +114,11 @@ export const Contact = () => {
               <div className="w-16 h-16 rounded-sm bg-[#f7931e] flex items-center justify-center mb-4 md:mb-0 md:mr-4 flex-shrink-0">
                 <Phone className="w-8 h-8 text-white" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
                   {contactConfig.contactMethods.phone.title}
                 </h3>
-                <p className="text-gray-700">
+                <p className="text-gray-700 break-words">
                   {contactConfig.contactMethods.phone.value}
                 </p>
               </div>
@@ -136,11 +136,11 @@ export const Contact = () => {
               <div className="w-16 h-16 rounded-sm bg-gray-200 flex items-center justify-center mb-4 md:mb-0 md:mr-4 flex-shrink-0">
                 <FaWhatsapp className="w-8 h-8 text-gray-600" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
                   {contactConfig.contactMethods.whatsapp.title}
                 </h3>
-                <p className="text-gray-700">
+                <p className="text-gray-700 break-words">
                   {contactConfig.contactMethods.whatsapp.value}
                 </p>
               </div>

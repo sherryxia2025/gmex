@@ -3,15 +3,15 @@ export const contactConfig = {
   contactMethods: {
     email: {
       title: "Send E-Mail",
-      value: "sales@gemx.com",
+      value: "sherryxia05061@gmail.com",
     },
     phone: {
       title: "Call Anytime",
-      value: "+86 512 8398 2453",
+      value: "+86 15895423425",
     },
     whatsapp: {
       title: "Whatsapp",
-      value: "XXXXXXXXXXXX",
+      value: "15895423425",
     },
   },
   // form title
