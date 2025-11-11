@@ -110,60 +110,47 @@ export default function LoginPage() {
                   </p>
                 ) : (
                   <>
-                    {/* Primary action (full width, gradient) */}
-                    {providers.find((p) => p.id === "google") && (
-                      <Button
-                        onClick={providers.find((p) => p.id === "google")!.onClick}
-                        disabled={loadingProvider === "google"}
-                        className={cn(
-                          "w-full h-11 rounded-xl text-white font-medium",
-                          "bg-gradient-to-r from-[#7C3AED] to-[#6D28D9] hover:from-[#7C3AED]/90 hover:to-[#6D28D9]/90",
-                          "dark:shadow-[0_6px_20px_-6px_rgba(124,58,237,0.6)]",
-                        )}
-                      >
-                        {loadingProvider === "google" ? (
-                          <Spinner className="text-white" />
-                        ) : (
-                          <>
-                            <FcGoogle className="size-5 bg-white rounded-sm" />
-                            <span className="ml-2">With Google</span>
-                          </>
-                        )}
-                      </Button>
-                    )}
-
-                    {/* Divider */}
-                    <div className="relative my-6">
-                      <div className="h-px bg-black/10 dark:bg-white/10" />
-                      <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-white dark:bg-[#212121] px-3 text-xs text-[#888]">
-                        OR
-                      </span>
-                    </div>
-
-                    {/* Secondary providers row */}
+                    {/* Providers in one row */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {providers
-                        .filter((p) => p.id !== "google")
-                        .map((provider) => (
-                          <Button
-                            key={provider.id}
-                            variant="outline"
-                            className="h-11 rounded-xl w-full dark:bg-[#2A2A2A] dark:text-[#E5E5E5] dark:border-[#333] hover:bg-black/5 dark:hover:bg-white/10"
-                            onClick={provider.onClick}
-                            disabled={loadingProvider === provider.id}
-                          >
-                            {loadingProvider === provider.id ? (
-                              <Spinner />
-                            ) : (
-                              <>
-                                {provider.icon}
-                                <span className="ml-2">
-                                  {provider.id === "github" ? "With GitHub" : provider.name}
-                                </span>
-                              </>
-                            )}
-                          </Button>
-                        ))}
+                      {/* Google */}
+                      {providers.find((p) => p.id === "google") && (
+                        <Button
+                          onClick={providers.find((p) => p.id === "google")!.onClick}
+                          disabled={loadingProvider === "google"}
+                          className={cn(
+                            "w-full h-11 rounded-xl text-white font-medium",
+                            "bg-gradient-to-r from-[#7C3AED] to-[#6D28D9] hover:from-[#7C3AED]/90 hover:to-[#6D28D9]/90",
+                            "dark:shadow-[0_6px_20px_-6px_rgba(124,58,237,0.6)]",
+                          )}
+                        >
+                          {loadingProvider === "google" ? (
+                            <Spinner className="text-white" />
+                          ) : (
+                            <>
+                              <FcGoogle className="size-5 bg-white rounded-sm" />
+                              <span className="ml-2">With Google</span>
+                            </>
+                          )}
+                        </Button>
+                      )}
+                      {/* GitHub */}
+                      {providers.find((p) => p.id === "github") && (
+                        <Button
+                          onClick={providers.find((p) => p.id === "github")!.onClick}
+                          disabled={loadingProvider === "github"}
+                          variant="outline"
+                          className="h-11 rounded-xl w-full dark:bg-[#2A2A2A] dark:text-[#E5E5E5] dark:border-[#333] hover:bg-black/5 dark:hover:bg-white/10"
+                        >
+                          {loadingProvider === "github" ? (
+                            <Spinner />
+                          ) : (
+                            <>
+                              <FaGithub className="size-5" />
+                              <span className="ml-2">With GitHub</span>
+                            </>
+                          )}
+                        </Button>
+                      )}
                     </div>
                   </>
                 )}
