@@ -29,8 +29,10 @@ async function checkAdminAuth(request: NextRequest) {
         { status: 401 },
       );
     }
-    // For page routes, redirect to unauthorized page
-    return NextResponse.redirect(new URL("/unauthorized", request.url));
+    // For page routes, redirect to login page with callback URL
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackURL", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   const session = (await sessionResponse.json()) as Session | null;
@@ -42,8 +44,10 @@ async function checkAdminAuth(request: NextRequest) {
         { status: 401 },
       );
     }
-    // For page routes, redirect to unauthorized page
-    return NextResponse.redirect(new URL("/unauthorized", request.url));
+    // For page routes, redirect to login page with callback URL
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackURL", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
   const user = session.user;
   if (user.banned) {
