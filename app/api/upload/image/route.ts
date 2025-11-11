@@ -1,3 +1,4 @@
+import { put } from "@vercel/blob";
 import { nanoid } from "nanoid";
 import type { NextRequest } from "next/server";
 import { newStorage } from "@/lib/s3-storage";
@@ -40,6 +41,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const result = await put(file.name, file, {
+      access: "public",
+    });
+
+    /*
     const storage = newStorage();
 
     // Convert file to buffer
@@ -56,6 +62,7 @@ export async function POST(request: NextRequest) {
       key: `images/${nanoid()}.${extension}`,
       contentType,
     });
+    */
 
     return Response.json({
       success: true,
