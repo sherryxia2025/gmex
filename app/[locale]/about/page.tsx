@@ -55,6 +55,7 @@ On a global scale, our employees and solutins are redefining connectivity,addres
         className="bg-white"
         title="Equimpent"
         description="Everything you need to launch your AI SaaS startup quickly and efficiently."
+        imageFit="contain"
         images={[
           {
             src: "/images/equimpent1.png",

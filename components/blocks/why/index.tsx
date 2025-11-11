@@ -56,7 +56,7 @@ export default function Why(props: WhyProps) {
           </h1>
         )}
         {description && (
-          <p className="max-w-3xl text-[#666666] dark:text-[#A0A0A0] text-base sm:text-lg md:text-xl text-center px-4 mx-auto">
+          <p className="max-w-3xl text-[#666666] dark:text-[#A0A0A0] text-base sm:text-lg md:text-xl text-center px-4 mx-auto mt-5">
             {description}
           </p>
         )}
@@ -65,7 +65,7 @@ export default function Why(props: WhyProps) {
           {items.map((item, index) => (
             <figure
               key={index}
-              className="flex flex-col rounded-lg overflow-hidden w-full h-auto bg-[#F7F7F7] dark:bg-[#2A2A2A]"
+              className={`flex flex-col rounded-lg overflow-hidden w-full h-auto bg-[#F7F7F7] dark:bg-[#2A2A2A] ${index === 2 ? 'md:col-span-2 lg:col-span-1' : ''}`}
             >
               {item.cover && (
                 <img

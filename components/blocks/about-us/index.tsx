@@ -30,7 +30,7 @@ export const AboutUs = ({
               {title}
             </h2>
             {description && (
-              <p className="text-muted-foreground mb-8 max-w-xl lg:text-lg">
+              <p className="text-[#666] mb-8 max-w-xl lg:text-lg">
                 {description}
               </p>
             )}
@@ -40,7 +40,7 @@ export const AboutUs = ({
                   <div className="size-6 bg-[#FC5220]/10 rounded-full flex items-center justify-center">
                     <Check className="size-4 text-[#FC5220]" />
                   </div>
-                  <p>{item}</p>
+                  <p className="text-[#666]">{item}</p>
                 </div>
               ))}
             </div>

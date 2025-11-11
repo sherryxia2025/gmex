@@ -31,7 +31,7 @@ export default async function HomePage(props: HomePageProps) {
         ]}
         buttonSecondary={{
           text: "Learn More",
-          href: "/",
+          href: "/about",
         }}
       />
       <Services />

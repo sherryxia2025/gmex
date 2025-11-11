@@ -61,7 +61,7 @@ export default function Scenarios(props: ScenariosProps) {
           </h1>
         )}
         {description && (
-          <p className="max-w-3xl text-[#666666] dark:text-[#A0A0A0] text-base sm:text-lg md:text-xl text-center px-4 mx-auto">
+          <p className="max-w-3xl text-[#666666] dark:text-[#A0A0A0] text-base sm:text-lg md:text-xl text-center px-4 mx-auto mt-5">
             {description}
           </p>
         )}

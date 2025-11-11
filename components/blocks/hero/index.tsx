@@ -187,12 +187,12 @@ export function Hero({
         <CarouselPrevious
           icon={<ArrowLeft className="size-4 md:size-6" />}
           disabled={false}
-          className="size-15 md:size-16 bg-[#EA9320]/50 hover:bg-[#EA9320] opacity-20 hover:opacity-100 text-white hover:text-white rounded-full absolute top-1/2 left-2 md:left-15 -translate-y-1/2 cursor-pointer z-10 hidden md:flex"
+          className="size-15 md:size-16 bg-[#EA9320]/50 hover:bg-[#EA9320] opacity-20 hover:opacity-100 text-white hover:text-white rounded-full absolute top-1/2 left-2 md:left-15 -translate-y-1/2 cursor-pointer z-10 hidden md:flex border-none"
         />
         <CarouselNext
           icon={<ArrowRight className="size-4 md:size-6" />}
           disabled={false}
-          className="size-15 md:size-16 bg-[#EA9320]/50 hover:bg-[#EA9320] opacity-20 hover:opacity-100 text-white hover:text-white rounded-full absolute top-1/2 right-2 md:right-15 -translate-y-1/2 cursor-pointer z-10 hidden md:flex"
+          className="size-15 md:size-16 bg-[#EA9320]/50 hover:bg-[#EA9320] opacity-20 hover:opacity-100 text-white hover:text-white rounded-full absolute top-1/2 right-2 md:right-15 -translate-y-1/2 cursor-pointer z-10 hidden md:flex border-none"
         />
       </Carousel>
     </div>

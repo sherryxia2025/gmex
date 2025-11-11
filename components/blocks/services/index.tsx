@@ -48,11 +48,11 @@ export const Services = ({ services = defaultServices }: ServicesProps) => {
   return (
     <section className="py-10 md:py-24">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
-        <div className="flex flex-wrap gap-4 sm:gap-6 h-auto justify-between">
+        <div className="flex flex-wrap gap-4 sm:gap-6 h-auto">
           {services.map((service) => (
             <div
               key={service.id}
-              className="w-full lg:flex-1 group relative h-64 sm:h-80 md:h-[420px] lg:h-[520px] overflow-hidden rounded-lg cursor-pointer"
+              className="w-full md:w-[calc((100%-1.5rem)/2)] xl:flex-1 group relative h-64 sm:h-80 md:h-[420px] lg:h-[520px] overflow-hidden rounded-lg cursor-pointer"
             >
               {/* Background Image */}
               <div
@@ -70,11 +70,11 @@ export const Services = ({ services = defaultServices }: ServicesProps) => {
                 </h3>
 
                 {/* Divider */}
-                <div className="w-full h-0.5 bg-white/50 mb-3" />
+                <div className="w-full h-px bg-white/20 mb-3" />
 
                 {/* Description - Hidden by default, shown on hover */}
                 {service.description && (
-                  <div className="md:max-h-0 md:group-hover:max-h-40 max-h-24 overflow-hidden transition-[max-height,margin] duration-300 ease-linear mb-2 md:mb-0 md:group-hover:mb-4">
+                  <div className="md:max-h-0 md:group-hover:max-h-60 max-h-24 overflow-hidden transition-[max-height,margin] duration-300 ease-linear mb-2 md:mb-0 md:group-hover:mb-4">
                     <p className="text-white text-sm md:text-base opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-all duration-500 ease-out">
                       {service.description}
                     </p>
@@ -84,7 +84,7 @@ export const Services = ({ services = defaultServices }: ServicesProps) => {
                 {/* Read More Link */}
                 <a
                   href="#"
-                  className={`inline-flex items-center gap-2 text-sm sm:text-base font-medium underline transition-colors duration-300 text-white md:group-hover:text-[#FC5220]/90`}
+                  className={`inline-flex items-center gap-2 text-sm sm:text-base font-medium transition-colors duration-300 text-white md:group-hover:text-[#FC5220]/90`}
                 >
                   Read More
                   <ArrowRight className="size-4" />

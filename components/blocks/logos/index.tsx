@@ -17,15 +17,15 @@ export function Logos({
         <h2 className="text-center text-2xl sm:text-3xl md:text-5xl font-[800] text-[#1F2937] dark:text-white">
           {title}
         </h2>
-        <p className="mt-4 text-center text-sm md:text-base text-[#6B7280]">
+        <p className="mt-5 text-center text-sm md:text-base text-[#6B7280]">
           {subtitle}
         </p>
 
-        <div className="mt-10 md:mt-14 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+        <div className="mt-10 md:mt-14 flex flex-wrap justify-center gap-4 md:gap-6">
           {items.map((logo) => (
             <div
               key={logo.name}
-              className="bg-white rounded-sm shadow-sm border border-black/5 h-24 md:h-28 flex items-center justify-center"
+              className="bg-white rounded-sm border border-black/5 min-w-[140px] sm:min-w-[150px] md:min-w-[160px] lg:min-w-[170px] flex-1 max-w-[190px] h-[78px] flex items-center justify-center"
             >
               <Image
                 src={logo.src}

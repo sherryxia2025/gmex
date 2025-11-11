@@ -118,48 +118,50 @@ function DesktopHeader({
   };
 
   return (
-    <div className="h-full w-full flex items-center justify-between py-5 px-8 lg:px-16 xl:px-28 2xl:px-50">
-      <div className="h-full flex items-center gap-2 flex-shrink-0">
-        <Link href="/" className="flex-shrink-0">
-          <Image
-            src={isScrolled ? darkLogo : logo}
-            alt={brandName}
-            width={150}
-            height={54}
-            priority
-            className="w-[120px] lg:w-[150px] h-[43px] lg:h-[54px] object-contain"
-          />
-        </Link>
-      </div>
-      <div
-        className={`h-full relative flex-1 flex justify-center items-center gap-2 lg:gap-4 font-bold text-xl transition-colors min-w-0 ${
-          navColor ||
-          (isScrolled ? "text-[#3D3D3D] dark:text-[#E5E5E5]" : "text-white")
-        }`}
-      >
-        {navigation.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "hover:text-[#FC5220] transition-colors text-sm lg:text-lg py-2 px-2 lg:px-4 whitespace-nowrap",
-              isActive(item.href) && "text-[#FC5220]",
-            )}
-          >
-            {item.label}
+    <div className="h-full w-full">
+      <div className="container mx-auto h-full flex items-center justify-between py-5 px-4 md:px-6 lg:px-8">
+        <div className="h-full flex items-center gap-2 flex-shrink-0">
+          <Link href="/" className="flex-shrink-0">
+            <Image
+              src={isScrolled ? darkLogo : logo}
+              alt={brandName}
+              width={150}
+              height={54}
+              priority
+              className="w-[120px] lg:w-[150px] h-[43px] lg:h-[54px] object-contain"
+            />
           </Link>
-        ))}
-      </div>
-      <div
-        className={`h-full relative flex items-center gap-2 lg:gap-4 flex-shrink-0 transition-colors ${
-          navColor ||
-          (isScrolled ? "text-[#3D3D3D] dark:text-[#E5E5E5]" : "text-white")
-        }`}
-      >
-        {/* <Link href="/" className="font-bold text-xl">
-          Login
-        </Link> */}
-        <UserButton />
+        </div>
+        <div
+          className={`h-full relative flex-1 flex justify-center items-center gap-2 lg:gap-4 font-bold text-xl transition-colors min-w-0 ${
+            navColor ||
+            (isScrolled ? "text-[#3D3D3D] dark:text-[#E5E5E5]" : "text-white")
+          }`}
+        >
+          {navigation.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "hover:text-[#FC5220] transition-colors text-sm lg:text-lg py-2 px-2 lg:px-4 whitespace-nowrap",
+                isActive(item.href) && "text-[#FC5220]",
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+        <div
+          className={`h-full relative flex items-center gap-2 lg:gap-4 flex-shrink-0 transition-colors ${
+            navColor ||
+            (isScrolled ? "text-[#3D3D3D] dark:text-[#E5E5E5]" : "text-white")
+          }`}
+        >
+          {/* <Link href="/" className="font-bold text-xl">
+            Login
+          </Link> */}
+          <UserButton />
+        </div>
       </div>
     </div>
   );

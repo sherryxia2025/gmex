@@ -82,13 +82,13 @@ export const Contact = () => {
 
   return (
     <section className="py-10 md:py-24 bg-white">
-      <div className="px-4 sm:px-6 md:px-28 xl:px-50">
+      <div className="container px-4 md:px-6 lg:px-8">
         {/* Contact Method Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {/* Send E-Mail Card */}
           <a
             href={`mailto:${contactConfig.contactMethods.email.value}`}
-            className="bg-[#f8f8f8] rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+            className="bg-[#f8f8f8] rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
           >
             <div className="flex flex-col lg:flex-row items-center lg:items-start text-center lg:text-left">
               <div className="w-16 h-16 rounded-sm bg-gray-200 flex items-center justify-center mb-4 md:mb-0 md:mr-4 flex-shrink-0">
@@ -108,7 +108,7 @@ export const Contact = () => {
           {/* Call Anytime Card */}
           <a
             href={`tel:${contactConfig.contactMethods.phone.value.replace(/\s/g, "")}`}
-            className="bg-[#f8f8f8] rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+            className="bg-[#f8f8f8] rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
           >
             <div className="flex flex-col lg:flex-row items-center lg:items-start text-center lg:text-left">
               <div className="w-16 h-16 rounded-sm bg-[#f7931e] flex items-center justify-center mb-4 md:mb-0 md:mr-4 flex-shrink-0">
@@ -130,7 +130,7 @@ export const Contact = () => {
             href={`https://wa.me/${contactConfig.contactMethods.whatsapp.value.replace(/\D/g, "")}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#f8f8f8] rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+            className="bg-[#f8f8f8] rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
           >
             <div className="flex flex-col lg:flex-row items-center lg:items-start text-center lg:text-left">
               <div className="w-16 h-16 rounded-sm bg-gray-200 flex items-center justify-center mb-4 md:mb-0 md:mr-4 flex-shrink-0">
@@ -149,7 +149,7 @@ export const Contact = () => {
         </div>
 
         {/* Contact Form */}
-        <div className="bg-[#f8f8f8] rounded-sm p-6 md:p-10 shadow-md">
+        <div className="bg-[#f8f8f8] rounded-sm p-6 md:p-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
             {contactConfig.formTitle}
           </h2>
