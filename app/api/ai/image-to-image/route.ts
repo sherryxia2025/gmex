@@ -1,7 +1,6 @@
-import { nanoid } from "nanoid";
 import type { NextRequest } from "next/server";
 import { imageToImage } from "@/aisdk";
-import { newStorage } from "@/lib/s3-storage";
+import { upload } from "@/lib/storage";
 
 export async function POST(request: NextRequest) {
   try {
@@ -79,9 +78,7 @@ export async function POST(request: NextRequest) {
 
     console.log("Generated image:", result);
 
-    const storage = newStorage();
-
-    // Save the generated image to local storage
+    // Save the generated image to storage
     let imageUrl: string;
     if (Array.isArray(result)) {
       result = result[0];
@@ -96,22 +93,19 @@ export async function POST(request: NextRequest) {
         chunks.push(value);
       }
       const imageBuffer = Buffer.concat(chunks);
-      imageUrl = (
-        await storage.uploadFile({
-          body: imageBuffer,
-          key: `images/${nanoid()}.${outputFormat}`,
-          contentType: `image/${outputFormat}`,
-        })
-      ).url;
+      const uploadResult = await upload({
+        body: imageBuffer,
+        contentType: `image/${outputFormat}`,
+      });
+      imageUrl = uploadResult.url;
     } else if (typeof result === "string") {
       // If result is a string (URL or base64)
-      imageUrl = (
-        await storage.uploadFile({
-          body: Buffer.from(result),
-          key: `images/${nanoid()}.${outputFormat}`,
-          contentType: `image/${outputFormat}`,
-        })
-      ).url;
+      const imageBuffer = Buffer.from(result);
+      const uploadResult = await upload({
+        body: imageBuffer,
+        contentType: `image/${outputFormat}`,
+      });
+      imageUrl = uploadResult.url;
     } else {
       throw new Error("Unexpected result format");
     }

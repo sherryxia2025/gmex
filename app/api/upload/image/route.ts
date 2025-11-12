@@ -1,7 +1,5 @@
-import { put } from "@vercel/blob";
-import { nanoid } from "nanoid";
 import type { NextRequest } from "next/server";
-import { newStorage } from "@/lib/s3-storage";
+import { upload } from "@/lib/storage";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = [
@@ -41,28 +39,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await put(file.name, file, {
-      access: "public",
+    const result = await upload({
+      body: file,
+      contentType: file.type,
     });
-
-    /*
-    const storage = newStorage();
-
-    // Convert file to buffer
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    // Get file extension
-    const extension = file.name.split(".").pop() || "jpg";
-    const contentType = file.type || `image/${extension}`;
-
-    // Upload to storage
-    const result = await storage.uploadFile({
-      body: buffer,
-      key: `images/${nanoid()}.${extension}`,
-      contentType,
-    });
-    */
 
     return Response.json({
       success: true,

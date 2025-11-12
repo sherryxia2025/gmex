@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import type { NextRequest } from "next/server";
 import { imageToVideo } from "@/aisdk";
-import { newStorage } from "@/lib/s3-storage";
+import { upload } from "@/lib/storage";
 
 export async function POST(request: NextRequest) {
   try {
@@ -66,9 +66,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const storage = newStorage();
-
-    // Save the generated image to local storage
+    // Save the generated video to storage
     let videoUrl: string;
     if (Array.isArray(result)) {
       result = result[0];
@@ -82,23 +80,20 @@ export async function POST(request: NextRequest) {
         if (done) break;
         chunks.push(value);
       }
-      const imageBuffer = Buffer.concat(chunks);
-      videoUrl = (
-        await storage.uploadFile({
-          body: imageBuffer,
-          key: `videos/${nanoid()}.mp4`,
-          contentType: `video/mp4`,
-        })
-      ).url;
+      const videoBuffer = Buffer.concat(chunks);
+      const uploadResult = await upload({
+        body: videoBuffer,
+        contentType: `video/mp4`,
+      });
+      videoUrl = uploadResult.url;
     } else if (typeof result === "string") {
       // If result is a string (URL or base64)
-      videoUrl = (
-        await storage.uploadFile({
-          body: Buffer.from(result),
-          key: `videos/${nanoid()}.mp4`,
-          contentType: `video/mp4`,
-        })
-      ).url;
+      const videoBuffer = Buffer.from(result);
+      const uploadResult = await upload({
+        body: videoBuffer,
+        contentType: `video/mp4`,
+      });
+      videoUrl = uploadResult.url;
     } else {
       throw new Error("Unexpected result format");
     }

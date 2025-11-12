@@ -68,16 +68,26 @@ export function ImageUrlField({
     if (!file) return;
 
     // Validate file type
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
     if (!allowedTypes.includes(file.type)) {
-      toast.error(`File type not allowed. Allowed types: ${allowedTypes.join(", ")}`);
+      toast.error(
+        `File type not allowed. Allowed types: ${allowedTypes.join(", ")}`,
+      );
       return;
     }
 
     // Validate file size (10MB)
-    const maxSize = 10 * 1024 * 1024;
+    const maxSize = 4.5 * 1024 * 1024;
     if (file.size > maxSize) {
-      toast.error(`File size exceeds maximum allowed (${maxSize / 1024 / 1024}MB)`);
+      toast.error(
+        `File size exceeds maximum allowed (${maxSize / 1024 / 1024}MB)`,
+      );
       return;
     }
 
@@ -103,7 +113,7 @@ export function ImageUrlField({
     } catch (error) {
       console.error("Upload error:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to upload image"
+        error instanceof Error ? error.message : "Failed to upload image",
       );
     } finally {
       setIsUploading(false);
