@@ -22,7 +22,6 @@ export const defaultLogosConfig: LogosConfig = {
     { name: "WURTH", src: "/images/customer-6.png" },
     { name: "ESTUN", src: "/images/customer-7.png" },
     { name: "i-sens", src: "/images/customer-8.png" },
-    { name: "Panasonic", src: "/images/customer-9.png" },
     { name: "Hisense", src: "/images/customer-10.png" },
     { name: "ISO", src: "/images/customer-11.png" },
     { name: "CE", src: "/images/customer-12.png" },

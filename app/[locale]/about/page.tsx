@@ -27,7 +27,7 @@ On a global scale, our employees and solutins are redefining connectivity,addres
       <OurFactory
         carousel={true}
         title="Our Factory"
-        description="Everything you need to launch your AI SaaS startup quickly and efficiently."
+        description="Professional equipment, standardized processes, and technical team."
         images={[
           {
             src: "/images/factory1.png",
@@ -54,7 +54,7 @@ On a global scale, our employees and solutins are redefining connectivity,addres
       <OurFactory
         className="bg-white"
         title="Equimpent"
-        description="Everything you need to launch your AI SaaS startup quickly and efficiently."
+        description="High-precision manufacturing and inspection equipment forge the foundation of quality."
         imageFit="contain"
         images={[
           {
@@ -74,7 +74,6 @@ On a global scale, our employees and solutins are redefining connectivity,addres
           },
         ]}
       />
-      <Logos />
       <Footer />
     </>
   );

@@ -22,7 +22,7 @@ export const AboutUs = ({
   buttonSecondary,
 }: AboutUsProps) => {
   return (
-    <section className="py-25">
+    <section className="py-14 md:py-18 lg:py-20">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="grid items-center gap-8 lg:grid-cols-2">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">

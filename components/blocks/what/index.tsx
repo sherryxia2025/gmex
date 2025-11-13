@@ -21,17 +21,17 @@ const defaultCases: CaseItem[] = [
   {
     name: "Jack Friks",
     avatar: "/images/why1.png",
-    job: "Designer",
+    job: "Production Manager",
     content:
-      "I highly recommend industrial. It has been so important for us as we continue to grow our company. I have been using industrial for over a year now and i love it! I can't imagine life without it. It's so easy to use, and the customer service is great. I have tried a lot of similar products and Industrial is the best!",
+      "GMEX Group Fasteners has really helped our business. Would definitely recommend GMEX and will definitely be ordering again, very good customer service and efficient feedback, GMEX has made a huge difference! It is exactly what I have been looking for.",
     cardBg: "white",
   },
   {
     name: "Tom",
     avatar: "/images/why2.png",
-    job: "Designer",
+    job: "Manufacturing Director",
     content:
-      "I can't say enough about industrial. Industrial has really helped our business. Would definitely recommend industrial and will definitely be ordering again. Industrial has made a huge difference! I have tried a few software of this kind and industrial is the best by far! Industrial is exactly what i've been looking for.",
+      "I highly recommend GMEX Terminals. It has been so important for us as we continue to grow our company. I have been using terminals for over a year now and i love it! I can't imagine life without it. It's so easy to use, and the customer service is great. I have tried a lot of similar products and GEMEX is the best!",
     cardBg: "#EA9320",
   },
 ];
@@ -43,7 +43,7 @@ export const What = ({
 }: WhatProps) => {
   return (
     <section
-      className="w-full py-16 md:py-24 lg:py-28 bg-cover bg-center"
+      className="w-full py-14 md:py-18 lg:py-20 bg-cover bg-center"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
@@ -57,7 +57,7 @@ export const What = ({
             return (
               <div
                 key={`${item.name}-${idx}`}
-                className="rounded-sm py-10 px-15 shadow-xl"
+                className="flex h-full flex-col justify-between rounded-sm py-10 px-15 shadow-xl"
                 style={{ background: item.cardBg }}
               >
                 <p
@@ -68,7 +68,7 @@ export const What = ({
                   {item.content}
                 </p>
 
-                <div className="flex items-center gap-3 md:gap-4 mt-10">
+                <div className="flex items-center gap-3 md:gap-4 mt-auto pt-10">
                   <img
                     src={item.avatar}
                     alt={item.name}

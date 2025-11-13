@@ -18,35 +18,35 @@ const defaultServices: ServiceItem[] = [
     id: 1,
     title: "Screws",
     description:
-      "Screw is a cylindrical fastener with threads that generates clamping force through rotation and is used to detachably connect two or more objects.",
+      "More than 100K different kinds of fasteners, such as nuts, screws, bolts, washers, pins, anchor bolts, etc. and supplement with special items, tailored to your application.",
     background: "/images/service1.jpg",
   },
   {
     id: 2,
     title: "Terminal",
     description:
-      "Terminal block is a standardized electrical connection component used to reliably connect wires to electrical devices or other wires, facilitating installation and maintenance.",
+      'Serving as a "bridge" between the cable and the equipment terminal, the robust structure enables safe, reliable, and convenient electrical connections.',
     background: "/images/service3.jpg",
   },
   {
     id: 3,
     title: "Cable Lug",
     description:
-      "Cable Lug this is a screw-type terminal block assembly that clamps wires by tightening screws to achieve reliable and detachable connections in electrical circuits, commonly used in the wiring of industrial and electronic equipment.",
+      "High clamping force, reliable, user-friendly, cost-effective, broad wire range compatibility.",
     background: "/images/service2.jpg",
   },
   {
     id: 4,
     title: "Spring",
     description:
-      "Spring is a mechanical component made of elastic material that stores/releases energy and transmits force through deformation, widely used in buffering, resetting, clamping and other scenarios.",
+      "More than 50K different kinds of Springs, such as Compression Spring, Tension/Extension Spring, Torsion Spring, Leaf Spring, Disc Spring, etc.",
     background: "/images/service4.jpg",
   },
 ];
 
 export const Services = ({ services = defaultServices }: ServicesProps) => {
   return (
-    <section className="py-10 md:py-24">
+    <section className="pt-14 md:pt-18 lg:pt-20">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="flex flex-wrap gap-4 sm:gap-6 h-auto">
           {services.map((service) => (

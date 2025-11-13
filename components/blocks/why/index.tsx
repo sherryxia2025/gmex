@@ -16,19 +16,19 @@ const defaultItems: WhyProps["items"] = [
   {
     title: "High Quality",
     description:
-      "Leveraging proven global expertise, we provide tailored solutions and advanced technology to get you to market faster, enhance customer satisfaction, and optimize performance.",
+      "With global expertise, we deliver tailored solutions and cutting-edge tech to accelerate your market entry, boost satisfaction and maximize performance",
     cover: "/images/why1.png",
   },
   {
     title: "Low Cost",
     description:
-      "By combining deep expertise with cost-effective manufacturing, we deliver precise product costing and strategic global sourcing.",
+      "Cost-effective manufacturing with precise costing, economies of Scale,  global sourcing and direct to consumer to drive large-scale growth",
     cover: "/images/why2.png",
   },
   {
-    title: "Short Leadtime",
+    title: "Short Lead Time",
     description:
-      "By providing customized intelligent logistics, we deliver a reliable supply chain, granting you full control and more time for your core business.",
+      "Our customized intelligent logistics ensure a reliable supply chain, giving you full control and more time for your core business.",
     cover: "/images/why3.png",
   },
 ];
@@ -47,7 +47,7 @@ export default function Why(props: WhyProps) {
 
   return (
     <section
-      className={`min-h-screen flex flex-col items-center justify-center gap-5 py-12 md:py-20 lg:py-25 ${className || ""}`}
+      className={`pt-14 md:pt-18 lg:pt-20 flex flex-col items-center gap-5 ${className || ""}`}
     >
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         {title && (
@@ -62,29 +62,29 @@ export default function Why(props: WhyProps) {
         )}
         {items && items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8 md:mt-12 lg:mt-15 gap-6 md:gap-8 lg:gap-10 w-full">
-          {items.map((item, index) => (
-            <figure
-              key={index}
-              className={`flex flex-col rounded-lg overflow-hidden w-full h-auto bg-[#F7F7F7] dark:bg-[#2A2A2A] ${index === 2 ? 'md:col-span-2 lg:col-span-1' : ''}`}
-            >
-              {item.cover && (
-                <img
-                  draggable={false}
-                  src={item.cover}
-                  alt={item.title}
-                  className="w-full object-cover"
-                />
-              )}
-              <figcaption className="flex-1 p-4 md:p-6 space-y-3 md:space-y-4">
-                <h2 className="text-[#3D3D3D] dark:text-[#E5E5E5] text-lg md:text-xl font-extrabold line-clamp-1">
-                  {item.title}
-                </h2>
-                <p className="text-[#666666] dark:text-[#A0A0A0] text-sm md:text-base line-clamp-6">
-                  {item.description}
-                </p>
-              </figcaption>
-            </figure>
-          ))}
+            {items.map((item, index) => (
+              <figure
+                key={index}
+                className={`flex flex-col rounded-lg overflow-hidden w-full h-auto bg-[#F7F7F7] dark:bg-[#2A2A2A] ${index === 2 ? "md:col-span-2 lg:col-span-1" : ""}`}
+              >
+                {item.cover && (
+                  <img
+                    draggable={false}
+                    src={item.cover}
+                    alt={item.title}
+                    className="w-full h-48 md:h-56 lg:h-64 object-cover"
+                  />
+                )}
+                <figcaption className="flex-1 p-4 md:p-6 space-y-3 md:space-y-4">
+                  <h2 className="text-[#3D3D3D] dark:text-[#E5E5E5] text-lg md:text-xl font-extrabold line-clamp-1">
+                    {item.title}
+                  </h2>
+                  <p className="text-[#666666] dark:text-[#A0A0A0] text-sm md:text-base line-clamp-6">
+                    {item.description}
+                  </p>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         )}
       </div>

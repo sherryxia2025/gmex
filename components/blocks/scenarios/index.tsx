@@ -10,7 +10,7 @@ interface ScenariosProps {
 
 const defaultTitle = "Application Scenarios";
 const defaultDescription =
-  "Partnering to power the future of clean energy and modern transportation.";
+  "Reliable technology connects the entire power and network";
 const defaultItems: ScenariosProps["items"] = [
   {
     title: "Wind Power Generation",
@@ -52,7 +52,7 @@ export default function Scenarios(props: ScenariosProps) {
 
   return (
     <section
-      className={`min-h-screen flex flex-col items-center justify-center gap-5 py-12 md:py-20 lg:py-25 ${className || ""}`}
+      className={`py-14 md:py-18 lg:py-20 flex flex-col items-center gap-5 ${className || ""}`}
     >
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         {title && (
@@ -67,25 +67,25 @@ export default function Scenarios(props: ScenariosProps) {
         )}
         {items && items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8 md:mt-12 lg:mt-15 gap-6 md:gap-8 lg:gap-10 w-full cursor-pointer">
-          {items.map((item, idx) => (
-            <div
-              key={`${item.title}-${idx}`}
-              className="group relative h-48 sm:h-56 md:h-60 lg:h-64 overflow-hidden rounded-xl border border-transparent transition-colors duration-300 shadow-[0_2px_18px_rgba(0,0,0,0.08)]"
-            >
+            {items.map((item, idx) => (
               <div
-                className="absolute inset-0 bg-center bg-cover transition-transform duration-700 ease-out md:group-hover:scale-105"
-                style={{ backgroundImage: `url(${item.cover || ""})` }}
-              />
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/30 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0">
-                <div className="w-full bg-black/45 md:group-hover:bg-black/55 backdrop-blur-[2px] px-3 py-2">
-                  <p className="text-white text-lg md:text-xl font-semibold drop-shadow-sm">
-                    {item.title}
-                  </p>
+                key={`${item.title}-${idx}`}
+                className="group relative h-48 sm:h-56 md:h-60 lg:h-64 overflow-hidden rounded-xl border border-transparent transition-colors duration-300 shadow-[0_2px_18px_rgba(0,0,0,0.08)]"
+              >
+                <div
+                  className="absolute inset-0 bg-center bg-cover transition-transform duration-700 ease-out md:group-hover:scale-105"
+                  style={{ backgroundImage: `url(${item.cover || ""})` }}
+                />
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/30 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0">
+                  <div className="w-full bg-black/45 md:group-hover:bg-black/55 backdrop-blur-[2px] px-3 py-2">
+                    <p className="text-white text-lg md:text-xl font-semibold drop-shadow-sm">
+                      {item.title}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         )}
       </div>
