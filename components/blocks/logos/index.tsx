@@ -12,7 +12,7 @@ export function Logos({
   items = defaultLogosConfig.items,
 }: LogosProps) {
   return (
-    <section className="w-full py-16 md:py-24 lg:py-28">
+    <section className="w-full py-14 md:py-18 lg:py-20">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <h2 className="text-center text-2xl sm:text-3xl md:text-5xl font-[800] text-[#1F2937] dark:text-white">
           {title}

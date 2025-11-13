@@ -24,39 +24,32 @@ export interface HeroItem {
 
 const defaultItems: HeroItem[] = [
   {
-    background: "/images/hero-bg1.png",
-    title: "Special industrial production process in our places",
+    background: "/images/1-banner-fastners.png",
+    title: "Fastners",
     description:
-      "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "EXPLORE SERVICES",
+      "Over 100k standards and custom-tailored solutions for your needs",
+    buttonText: "EXPLORE MORE",
   },
   {
-    background: "/images/comment3.png",
-    title: "Special industrial production process in our places",
+    background: "/images/2-banner-terminals.png",
+    title: "Terminals",
     description:
-      "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "EXPLORE SERVICES",
+      "The connection of electrical power, we are a top connection provider",
+    buttonText: "EXPLORE MORE",
   },
   {
-    background: "/images/comment4.png",
-    title: "Special industrial production process in our places",
+    background: "/images/3-banner-global-supply-chain.png",
+    title: "Global Supply Chain",
     description:
-      "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "EXPLORE SERVICES",
+      "Seamless global logistics, VMI, Start Warehouse, powering your global supply chain",
+    buttonText: "EXPLORE MORE",
   },
   {
-    background: "/images/comment5.png",
-    title: "Special industrial production process in our places",
+    background: "/images/4-banner-design-and-optimize1.png",
+    title: "Design And Optimize",
     description:
-      "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "EXPLORE SERVICES",
-  },
-  {
-    background: "/images/comment1.png",
-    title: "Special industrial production process in our places",
-    description:
-      "A wide range of work – from planning and establishing the Framework completing and dispatching. Tight cutoff times, sensible.",
-    buttonText: "EXPLORE SERVICES",
+      "Continuous innovation and optimization for your competitive edge",
+    buttonText: "EXPLORE MORE",
   },
 ];
 
@@ -104,7 +97,7 @@ function AnimatedContent({ index, item }: { index: number; item: HeroItem }) {
 
   return (
     <motion.div
-      className="w-full max-w-[600px] md:w-[600px] text-white flex flex-col gap-3 md:gap-4 px-4 md:px-0"
+      className="relative z-10 w-full max-w-[600px] md:w-[600px] text-white flex flex-col gap-3 md:gap-4 px-4 md:px-0"
       variants={staggerContainer}
       initial="hidden"
       animate={isSelected ? "show" : "hidden"}
@@ -112,13 +105,13 @@ function AnimatedContent({ index, item }: { index: number; item: HeroItem }) {
     >
       <motion.h1
         variants={staggerItem}
-        className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-[800] leading-tight"
+        className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-[800] leading-tight whitespace-nowrap"
       >
         {item.title}
       </motion.h1>
       <motion.p
         variants={staggerItem}
-        className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed"
+        className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed"
       >
         {item.description}
       </motion.p>
@@ -176,9 +169,10 @@ export function Hero({
           {items.map((item, index) => (
             <CarouselItem key={item.background} className="w-full h-full">
               <div
-                className="bg-cover bg-center w-full h-screen flex flex-col justify-center px-4 sm:px-6 md:px-0 md:items-start md:pl-50 2xl:items-start 2xl:pl-80"
+                className="relative bg-cover bg-center w-full h-screen flex flex-col justify-center px-4 sm:px-6 md:px-0 md:items-start md:pl-50 2xl:items-start 2xl:pl-80"
                 style={{ backgroundImage: `url(${item.background})` }}
               >
+                <div className="absolute inset-0 bg-black/40" aria-hidden />
                 <AnimatedContent index={index} item={item} />
               </div>
             </CarouselItem>
