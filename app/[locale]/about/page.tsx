@@ -11,7 +11,7 @@ export default function AboutPage() {
       <Header />
       <SubHero
         title="About Us"
-        bgImage="/images/about-hero.jpg"
+        bgImage="/images/banner_about.jpg"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
       />
       <AboutUs
@@ -42,18 +42,22 @@ On a global scale, our employees and solutins are redefining connectivity,addres
             alt: "factory3",
           },
           {
-            src: "/images/factory3.png",
-            alt: "factory3",
+            src: "/images/factory-4.png",
+            alt: "factory4",
           },
           {
-            src: "/images/factory3.png",
-            alt: "factory3",
+            src: "/images/factory-5.png",
+            alt: "factory5",
+          },
+          {
+            src: "/images/factory-6.jpg",
+            alt: "factory6",
           },
         ]}
       />
       <OurFactory
         className="bg-white"
-        title="Equimpent"
+        title="Equipment"
         description="High-precision manufacturing and inspection equipment forge the foundation of quality."
         imageFit="contain"
         images={[
@@ -71,6 +75,16 @@ On a global scale, our employees and solutins are redefining connectivity,addres
             src: "/images/equimpent3.png",
             alt: "Inspection",
             description: "Inspection",
+          },
+          {
+            src: "/images/equipment-cold-form.jpg",
+            alt: "Cold Form",
+            description: "Cold Form",
+          },
+          {
+            src: "/images/equipment-visual-inspection.jpg",
+            alt: "Visual Inspection",
+            description: "Visual Inspection",
           },
         ]}
       />

@@ -9,6 +9,8 @@ type ProductCategory = {
   description: string | null;
   features: Prisma.JsonValue | null;
   coverUrl: string | null;
+  bannerUrl: string | null;
+  sort: number;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -20,6 +22,8 @@ export async function insertProductCategory(data: {
   description?: string;
   features?: Prisma.InputJsonValue;
   coverUrl?: string;
+  bannerUrl?: string;
+  sort?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }): Promise<ProductCategory> {
@@ -31,6 +35,8 @@ export async function insertProductCategory(data: {
       description: data.description,
       features: data.features,
       coverUrl: data.coverUrl,
+      bannerUrl: data.bannerUrl,
+      sort: data.sort ?? 0,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     },
@@ -47,6 +53,8 @@ export async function updateProductCategory(
     description?: string | null;
     features?: Prisma.InputJsonValue | null;
     coverUrl?: string | null;
+    bannerUrl?: string | null;
+    sort?: number;
     updatedAt?: Date;
   },
 ): Promise<ProductCategory> {
@@ -56,6 +64,8 @@ export async function updateProductCategory(
     description?: string | null;
     features?: Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput;
     coverUrl?: string | null;
+    bannerUrl?: string | null;
+    sort?: number;
     updatedAt: Date;
   } = {
     updatedAt: data.updatedAt || new Date(),
@@ -76,6 +86,12 @@ export async function updateProductCategory(
   }
   if (data.coverUrl !== undefined) {
     updateData.coverUrl = data.coverUrl || null;
+  }
+  if (data.bannerUrl !== undefined) {
+    updateData.bannerUrl = data.bannerUrl || null;
+  }
+  if (data.sort !== undefined) {
+    updateData.sort = data.sort;
   }
 
   const category = await prisma.productCategory.update({
@@ -118,7 +134,7 @@ export async function getProductCategories({
   const offset = (page - 1) * limit;
 
   const data = await prisma.productCategory.findMany({
-    orderBy: [{ createdAt: "desc" }],
+    orderBy: [{ sort: "asc" }, { createdAt: "desc" }],
     take: limit,
     skip: offset,
   });

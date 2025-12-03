@@ -24,7 +24,7 @@ export interface HeroItem {
 
 const defaultItems: HeroItem[] = [
   {
-    background: "/images/1-banner-fastners.png",
+    background: "/images/banner1-new.jpg",
     title: "Fastners",
     description:
       "Over 100k standards and custom-tailored solutions for your needs",

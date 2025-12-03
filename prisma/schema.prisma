@@ -149,6 +149,8 @@ model ProductCategory {
   description String?   @db.Text
   features    Json?     @db.JsonB // Stores string array: ["feature1", "feature2", ...]
   coverUrl    String?   @map("cover_url") @db.VarChar(255)
+  bannerUrl   String?   @map("banner_url") @db.VarChar(255)
+  sort        Int       @default(0)
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
   products    Product[]

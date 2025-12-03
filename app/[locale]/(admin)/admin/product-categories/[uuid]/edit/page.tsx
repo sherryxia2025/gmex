@@ -52,7 +52,7 @@ export default async function EditProductCategoryPage({
         validation: {
           required: true,
         },
-        tip: "category name should be unique",
+        tip: "category name should be unique and follow slug format (lowercase letters, numbers, and hyphens only, no spaces or special characters)",
       },
       {
         name: "description",
@@ -65,6 +65,20 @@ export default async function EditProductCategoryPage({
         title: "Cover URL",
         type: "image-url",
         placeholder: "Enter cover image URL...",
+      },
+      {
+        name: "bannerUrl",
+        title: "Banner URL",
+        type: "image-url",
+        placeholder: "Enter banner image URL...",
+      },
+      {
+        name: "sort",
+        title: "Sort",
+        type: "number",
+        placeholder: "0",
+        tip: "Lower numbers appear first",
+        value: (category.sort ?? 0).toString(),
       },
       {
         name: "features",
@@ -97,13 +111,24 @@ export default async function EditProductCategoryPage({
         const name = data.get("name") as string;
         const description = data.get("description") as string;
         const coverUrl = data.get("coverUrl") as string;
+        const bannerUrl = data.get("bannerUrl") as string;
+        const sortStr = data.get("sort") as string;
         const featuresStr = data.get("features") as string;
 
         if (!title || !title.trim() || !name || !name.trim()) {
           throw new Error("invalid form data");
         }
 
-        const existCategory = await findProductCategoryByName(name);
+        // Validate slug format: lowercase letters, numbers, and hyphens only
+        const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+        const trimmedName = name.trim();
+        if (!slugRegex.test(trimmedName)) {
+          throw new Error(
+            "Name must be a valid slug: lowercase letters, numbers, and hyphens only. Cannot start or end with a hyphen, and cannot have consecutive hyphens.",
+          );
+        }
+
+        const existCategory = await findProductCategoryByName(trimmedName);
         if (existCategory && existCategory.uuid !== uuid) {
           throw new Error("category with same name already exists");
         }
@@ -118,11 +143,15 @@ export default async function EditProductCategoryPage({
           features = null; // 清空 features
         }
 
+        const sort = sortStr ? Number.parseInt(sortStr, 10) : 0;
+
         const category = {
           title,
-          name,
+          name: trimmedName,
           description: description?.trim() || null,
           coverUrl: coverUrl?.trim() || null,
+          bannerUrl: bannerUrl?.trim() || null,
+          sort: Number.isNaN(sort) ? 0 : sort,
           features,
         };
 
