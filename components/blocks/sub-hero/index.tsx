@@ -47,6 +47,9 @@ export const SubHero = ({
           : undefined
       }
     >
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/50" aria-hidden />
+
       {/* Background overlay with industrial elements */}
       <div
         className="absolute inset-0 opacity-10"

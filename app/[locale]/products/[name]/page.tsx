@@ -47,9 +47,9 @@ export default async function ProductCategoryPage({
 
       <section className="bg-white py-10 md:py-24">
         <div className="px-4 sm:px-16 md:px-20 lg:px-28 xl:px-50">
-          {/* Products List */}
+          {/* Products Grid */}
           {products.length > 0 && (
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {products.map((product) => {
                 const metadata = product.metadata as Record<
                   string,
@@ -94,43 +94,51 @@ export default async function ProductCategoryPage({
                 return (
                   <div
                     key={product.uuid}
-                    className="bg-white rounded-lg overflow-hidden flex flex-col md:flex-row shadow-lg"
+                    className="bg-white rounded-lg overflow-hidden flex flex-col shadow-lg hover:shadow-xl transition-shadow"
                   >
                     {/* Product Image */}
                     {product.coverUrl && (
-                      <div className="w-full md:w-1/3 h-64 md:h-auto bg-gray-100 flex items-center justify-center overflow-hidden relative">
+                      <div className="w-full h-48 sm:h-56 lg:h-64 bg-gray-100 flex items-center justify-center overflow-hidden relative">
                         <Image
                           src={product.coverUrl}
                           alt={product.title || product.name}
                           fill
-                          sizes="(max-width: 768px) 100vw, 33vw"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           className="object-contain p-4"
                         />
                       </div>
                     )}
 
                     {/* Product Info */}
-                    <div className="flex-1 p-6 md:p-8">
-                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+                    <div className="flex-1 p-4 md:p-6 flex flex-col">
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 line-clamp-2">
                         {product.title || product.name}
                       </h3>
 
                       {metadataEntries.length > 0 ? (
-                        <div className="space-y-2 text-sm md:text-base">
-                          {metadataEntries.map(([key, value]) => (
-                            <div key={key} className="flex">
-                              <span className="font-semibold text-gray-700 min-w-[180px] md:min-w-[220px]">
+                        <div className="space-y-1.5 text-xs md:text-sm flex-1">
+                          {metadataEntries.slice(0, 3).map(([key, value]) => (
+                            <div
+                              key={key}
+                              className="flex flex-col sm:flex-row gap-1"
+                            >
+                              <span className="font-semibold text-gray-700">
                                 {formatKey(key)}:
                               </span>
-                              <span className="text-gray-600">
+                              <span className="text-gray-600 line-clamp-2">
                                 {formatValue(value)}
                               </span>
                             </div>
                           ))}
+                          {metadataEntries.length > 3 && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              +{metadataEntries.length - 3} more
+                            </div>
+                          )}
                         </div>
                       ) : (
                         product.description && (
-                          <p className="text-sm md:text-base text-gray-600 leading-relaxed">
+                          <p className="text-xs md:text-sm text-gray-600 leading-relaxed line-clamp-3 flex-1">
                             {product.description}
                           </p>
                         )
