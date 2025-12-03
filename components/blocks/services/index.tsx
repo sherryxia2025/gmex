@@ -7,6 +7,7 @@ interface ServiceItem {
   title: string;
   description?: string;
   background: string;
+  href?: string;
 }
 
 interface ServicesProps {
@@ -20,6 +21,7 @@ const defaultServices: ServiceItem[] = [
     description:
       "More than 100K different kinds of fasteners, such as nuts, screws, bolts, washers, pins, anchor bolts, etc. and supplement with special items, tailored to your application.",
     background: "/images/service1.jpg",
+    href: "/products/screws",
   },
   {
     id: 2,
@@ -27,6 +29,7 @@ const defaultServices: ServiceItem[] = [
     description:
       'Serving as a "bridge" between the cable and the equipment terminal, the robust structure enables safe, reliable, and convenient electrical connections.',
     background: "/images/service3.jpg",
+    href: "/products/terminals",
   },
   {
     id: 3,
@@ -34,6 +37,7 @@ const defaultServices: ServiceItem[] = [
     description:
       "High clamping force, reliable, user-friendly, cost-effective, broad wire range compatibility.",
     background: "/images/service2.jpg",
+    href: "/products/lug",
   },
   {
     id: 4,
@@ -41,6 +45,7 @@ const defaultServices: ServiceItem[] = [
     description:
       "More than 50K different kinds of Springs, such as Compression Spring, Tension/Extension Spring, Torsion Spring, Leaf Spring, Disc Spring, etc.",
     background: "/images/service4.jpg",
+    href: "/products/spring",
   },
 ];
 
@@ -82,13 +87,23 @@ export const Services = ({ services = defaultServices }: ServicesProps) => {
                 )}
 
                 {/* Read More Link */}
-                <a
-                  href="#"
-                  className={`inline-flex items-center gap-2 text-sm sm:text-base font-medium transition-colors duration-300 text-white md:group-hover:text-[#FC5220]/90`}
-                >
-                  Read More
-                  <ArrowRight className="size-4" />
-                </a>
+                {service.href ? (
+                  <a
+                    href={service.href}
+                    className={`inline-flex items-center gap-2 text-sm sm:text-base font-medium transition-colors duration-300 text-white md:group-hover:text-[#FC5220]/90`}
+                  >
+                    Read More
+                    <ArrowRight className="size-4" />
+                  </a>
+                ) : (
+                  <a
+                    href="#"
+                    className={`inline-flex items-center gap-2 text-sm sm:text-base font-medium transition-colors duration-300 text-white md:group-hover:text-[#FC5220]/90`}
+                  >
+                    Read More
+                    <ArrowRight className="size-4" />
+                  </a>
+                )}
               </div>
             </div>
           ))}

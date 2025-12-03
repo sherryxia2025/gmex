@@ -20,6 +20,7 @@ export interface HeroItem {
   title: string;
   description: string;
   buttonText: string;
+  buttonHref?: string;
 }
 
 const defaultItems: HeroItem[] = [
@@ -29,6 +30,7 @@ const defaultItems: HeroItem[] = [
     description:
       "Over 100k standards and custom-tailored solutions for your needs",
     buttonText: "EXPLORE MORE",
+    buttonHref: "/products",
   },
   {
     background: "/images/2-banner-terminals.png",
@@ -36,6 +38,7 @@ const defaultItems: HeroItem[] = [
     description:
       "The connection of electrical power, we are a top connection provider",
     buttonText: "EXPLORE MORE",
+    buttonHref: "/products/terminals",
   },
   {
     background: "/images/3-banner-global-supply-chain.png",
@@ -43,6 +46,7 @@ const defaultItems: HeroItem[] = [
     description:
       "Seamless global logistics, VMI, Start Warehouse, powering your global supply chain",
     buttonText: "EXPLORE MORE",
+    buttonHref: "/contact",
   },
   {
     background: "/images/4-banner-design-and-optimize1.png",
@@ -50,6 +54,7 @@ const defaultItems: HeroItem[] = [
     description:
       "Continuous innovation and optimization for your competitive edge",
     buttonText: "EXPLORE MORE",
+    buttonHref: "/about",
   },
 ];
 
@@ -116,14 +121,26 @@ function AnimatedContent({ index, item }: { index: number; item: HeroItem }) {
         {item.description}
       </motion.p>
       <motion.div variants={staggerItem}>
-        <Button
-          style={{
-            background: "linear-gradient(0deg, #EA9320, #EA9320), #FFCA37",
-          }}
-          className="rounded-sm cursor-pointer text-xs sm:text-sm px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-6 font-bold mt-3 sm:mt-4 md:mt-20 w-full sm:w-auto dark:text-white"
-        >
-          {item.buttonText}
-        </Button>
+        {item.buttonHref ? (
+          <Button
+            asChild
+            style={{
+              background: "linear-gradient(0deg, #EA9320, #EA9320), #FFCA37",
+            }}
+            className="rounded-sm cursor-pointer text-xs sm:text-sm px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-6 font-bold mt-3 sm:mt-4 md:mt-20 w-full sm:w-auto dark:text-white"
+          >
+            <a href={item.buttonHref}>{item.buttonText}</a>
+          </Button>
+        ) : (
+          <Button
+            style={{
+              background: "linear-gradient(0deg, #EA9320, #EA9320), #FFCA37",
+            }}
+            className="rounded-sm cursor-pointer text-xs sm:text-sm px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-6 font-bold mt-3 sm:mt-4 md:mt-20 w-full sm:w-auto dark:text-white"
+          >
+            {item.buttonText}
+          </Button>
+        )}
       </motion.div>
     </motion.div>
   );
