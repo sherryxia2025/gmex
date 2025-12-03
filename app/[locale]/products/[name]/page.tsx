@@ -4,24 +4,26 @@ import { Footer } from "@/components/blocks/footer";
 import { Header } from "@/components/blocks/header";
 import { SubHero } from "@/components/blocks/sub-hero";
 import { getProducts, ProductStatus } from "@/models/product";
-import { findProductCategoryByUuid } from "@/models/product-category";
+import { findProductCategoryByName } from "@/models/product-category";
 
 interface ProductCategoryPageProps {
-  params: Promise<{ uuid: string; locale: string }>;
+  params: Promise<{ name: string; locale: string }>;
 }
 
 export default async function ProductCategoryPage({
   params,
 }: ProductCategoryPageProps) {
-  const { uuid } = await params;
-  const category = await findProductCategoryByUuid(uuid);
+  const { name } = await params;
+  // Decode URL-encoded name (handle spaces and special characters)
+  const decodedName = decodeURIComponent(name);
+  const category = await findProductCategoryByName(decodedName);
 
   if (!category) {
     notFound();
   }
 
   const products = await getProducts({
-    categoryUuid: uuid,
+    categoryUuid: category.uuid,
     status: ProductStatus.Online,
     page: 1,
     limit: 100,

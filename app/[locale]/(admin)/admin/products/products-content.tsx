@@ -56,6 +56,7 @@ type Product = {
 type GroupedProducts = {
   categoryUuid: string | null;
   categoryTitle: string;
+  categorySort: number;
   products: Product[];
 };
 
@@ -133,10 +134,19 @@ function SortableRow({
   );
 }
 
+type ProductCategory = {
+  uuid: string;
+  name: string;
+  title: string;
+  sort: number;
+};
+
 export default function ProductsPageContent({
   products,
+  categories,
 }: {
   products: Array<Product & Record<string, unknown>>;
+  categories: ProductCategory[];
 }) {
   const t = useTranslations("admin.products");
   const [importDialogOpen, setImportDialogOpen] = useState(false);
@@ -144,18 +154,31 @@ export default function ProductsPageContent({
     products as Product[],
   );
 
+  // Create category map for quick lookup
+  const categoryMap = useMemo(() => {
+    const map = new Map<string | null, ProductCategory>();
+    map.set(null, { uuid: "", name: "", title: "未分类", sort: 999999 });
+    categories.forEach((cat) => {
+      map.set(cat.uuid, cat);
+    });
+    return map;
+  }, [categories]);
+
   // Group products by category
   const groupedProducts = useMemo(() => {
     const groups = new Map<string | null, GroupedProducts>();
 
     localProducts.forEach((product) => {
       const categoryUuid = product.categoryUuid || null;
-      const categoryTitle = product.category?.title || "未分类";
+      const category = categoryMap.get(categoryUuid);
+      const categoryTitle = category?.title || "未分类";
+      const categorySort = category?.sort ?? 999999;
 
       if (!groups.has(categoryUuid)) {
         groups.set(categoryUuid, {
           categoryUuid,
           categoryTitle,
+          categorySort,
           products: [],
         });
       }
@@ -171,8 +194,11 @@ export default function ProductsPageContent({
       group.products.sort((a, b) => a.sort - b.sort);
     });
 
-    return Array.from(groups.values());
-  }, [localProducts]);
+    // Sort groups by category sort field
+    return Array.from(groups.values()).sort(
+      (a, b) => a.categorySort - b.categorySort,
+    );
+  }, [localProducts, categoryMap]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),

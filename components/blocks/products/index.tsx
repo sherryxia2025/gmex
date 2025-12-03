@@ -35,7 +35,7 @@ export const Products = ({ categories }: ProductsProps) => {
           {categories.map((category) => (
             <Link
               key={category.uuid}
-              href={`/products/${category.uuid}`}
+              href={`/products/${encodeURIComponent(category.name)}`}
               className="bg-[rgba(246,246,246,0.898)] rounded-lg overflow-hidden flex flex-col p-2 transition-shadow"
             >
               {/* Category Image */}
