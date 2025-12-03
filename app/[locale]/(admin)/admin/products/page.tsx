@@ -4,7 +4,7 @@ import ProductsPageContent from "./products-content";
 export default async function ProductsPage() {
   const products = await getProducts({
     page: 1,
-    limit: 50,
+    limit: 1000, // Get all products for grouping and sorting
   });
 
   // Type assertion needed because getProducts returns Product[] with category included

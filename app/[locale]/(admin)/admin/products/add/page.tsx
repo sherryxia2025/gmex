@@ -85,6 +85,13 @@ export default async function AddProductPage() {
         placeholder: "Enter cover image URL...",
       },
       {
+        name: "sort",
+        title: "Sort",
+        type: "number",
+        placeholder: "0",
+        tip: "Lower numbers appear first",
+      },
+      {
         name: "metadata",
         title: "Metadata",
         type: "key-value",
@@ -112,6 +119,7 @@ export default async function AddProductPage() {
         const status = data.get("status") as string;
         const description = data.get("description") as string;
         const coverUrl = data.get("coverUrl") as string;
+        const sortStr = data.get("sort") as string;
         const metadataStr = data.get("metadata") as string;
 
         if (
@@ -139,6 +147,8 @@ export default async function AddProductPage() {
           }
         }
 
+        const sort = sortStr ? Number.parseInt(sortStr, 10) : 0;
+
         const product = {
           uuid: getUuid(),
           createdAt: new Date(),
@@ -148,6 +158,7 @@ export default async function AddProductPage() {
           description: description || undefined,
           categoryUuid: categoryUuid || undefined,
           coverUrl: coverUrl || undefined,
+          sort: Number.isNaN(sort) ? 0 : sort,
           metadata,
         };
 

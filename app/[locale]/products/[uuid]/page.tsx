@@ -27,12 +27,15 @@ export default async function ProductCategoryPage({
     limit: 100,
   });
 
+  // Use category banner if available, otherwise use default
+  const bannerImage = category.bannerUrl || "/images/banner_products.jpg";
+
   return (
     <>
       <Header />
       <SubHero
         title={category.title}
-        bgImage={"/images/banner_products.jpg"}
+        bgImage={bannerImage}
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Products", href: "/products" },

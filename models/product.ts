@@ -18,6 +18,7 @@ type Product = {
   status: string | null;
   coverUrl: string | null;
   metadata: Prisma.JsonValue | null;
+  sort: number;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -31,6 +32,7 @@ export async function insertProduct(data: {
   status?: string;
   coverUrl?: string;
   metadata?: Prisma.InputJsonValue;
+  sort?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }): Promise<Product> {
@@ -44,6 +46,7 @@ export async function insertProduct(data: {
       status: data.status,
       coverUrl: data.coverUrl,
       metadata: data.metadata,
+      sort: data.sort ?? 0,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     },
@@ -62,6 +65,7 @@ export async function updateProduct(
     status?: string;
     coverUrl?: string;
     metadata?: Prisma.InputJsonValue;
+    sort?: number;
     updatedAt?: Date;
   },
 ): Promise<Product> {
@@ -75,6 +79,7 @@ export async function updateProduct(
       status: data.status,
       coverUrl: data.coverUrl,
       metadata: data.metadata,
+      sort: data.sort,
       updatedAt: data.updatedAt,
     },
   });
@@ -130,7 +135,7 @@ export async function getProducts({
     include: {
       category: true,
     },
-    orderBy: [{ createdAt: "desc" }],
+    orderBy: [{ sort: "asc" }, { createdAt: "desc" }],
     take: limit,
     skip: offset,
   });

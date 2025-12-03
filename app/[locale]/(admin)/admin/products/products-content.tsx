@@ -1,9 +1,25 @@
 "use client";
 
-import { Edit, Plus, Upload } from "lucide-react";
+import {
+  closestCenter,
+  DndContext,
+  type DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { Edit, GripVertical, Plus, Upload } from "lucide-react";
 import moment from "moment";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ImportDialog } from "@/components/blocks/import-dialog";
 import DeleteButton from "@/components/blocks/table/delete-button";
 import ProductStatusSelect from "@/components/categories/product-status-select";
@@ -27,6 +43,7 @@ type Product = {
   status: string | null;
   coverUrl: string | null;
   metadata: unknown;
+  sort: number;
   createdAt: Date | null;
   updatedAt: Date | null;
   category: {
@@ -36,6 +53,86 @@ type Product = {
   } | null;
 };
 
+type GroupedProducts = {
+  categoryUuid: string | null;
+  categoryTitle: string;
+  products: Product[];
+};
+
+function SortableRow({
+  product,
+  t,
+}: {
+  product: Product;
+  t: (key: string) => string;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: product.uuid });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <TableRow
+      ref={setNodeRef}
+      style={style}
+      key={product.uuid}
+      className="hover:bg-muted/50 transition-colors h-16"
+    >
+      <TableCell className="w-8 cursor-grab active:cursor-grabbing">
+        <div {...attributes} {...listeners} className="flex items-center">
+          <GripVertical className="h-4 w-4 text-muted-foreground" />
+        </div>
+      </TableCell>
+      <TableCell>
+        <span className="font-medium" title={String(product.name || "")}>
+          {String(product.name || "")}
+        </span>
+      </TableCell>
+      <TableCell>{String(product.title || "")}</TableCell>
+      <TableCell className="text-muted-foreground">
+        {product.category ? product.category.title : "-"}
+      </TableCell>
+      <TableCell className="text-muted-foreground">
+        <ProductStatusSelect
+          uuid={String(product.uuid || "")}
+          value={product.status}
+        />
+      </TableCell>
+      <TableCell className="text-muted-foreground">
+        {product.createdAt
+          ? moment(product.createdAt).format("YYYY-MM-DD HH:mm:ss")
+          : "N/A"}
+      </TableCell>
+      <TableCell>
+        <div className="flex items-center gap-2">
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            <a href={`/admin/products/${product.uuid}/edit`}>
+              <Edit className="h-4 w-4" />
+              {t("actions.edit")}
+            </a>
+          </Button>
+          <DeleteButton uuid={String(product.uuid || "")} type="product" />
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
+
 export default function ProductsPageContent({
   products,
 }: {
@@ -43,6 +140,121 @@ export default function ProductsPageContent({
 }) {
   const t = useTranslations("admin.products");
   const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [localProducts, setLocalProducts] = useState<Product[]>(
+    products as Product[],
+  );
+
+  // Group products by category
+  const groupedProducts = useMemo(() => {
+    const groups = new Map<string | null, GroupedProducts>();
+
+    localProducts.forEach((product) => {
+      const categoryUuid = product.categoryUuid || null;
+      const categoryTitle = product.category?.title || "未分类";
+
+      if (!groups.has(categoryUuid)) {
+        groups.set(categoryUuid, {
+          categoryUuid,
+          categoryTitle,
+          products: [],
+        });
+      }
+
+      const group = groups.get(categoryUuid);
+      if (group) {
+        group.products.push(product);
+      }
+    });
+
+    // Sort products within each group by sort field
+    groups.forEach((group) => {
+      group.products.sort((a, b) => a.sort - b.sort);
+    });
+
+    return Array.from(groups.values());
+  }, [localProducts]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    // Find which category group the drag happened in
+    const activeProduct = localProducts.find((p) => p.uuid === active.id);
+    if (!activeProduct) return;
+
+    const categoryUuid = activeProduct.categoryUuid || null;
+    const group = groupedProducts.find((g) => g.categoryUuid === categoryUuid);
+    if (!group) return;
+
+    const oldIndex = group.products.findIndex((p) => p.uuid === active.id);
+    const newIndex = group.products.findIndex((p) => p.uuid === over.id);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    // Update local products state optimistically
+    setLocalProducts((prev) => {
+      const categoryProducts = prev.filter(
+        (p) => (p.categoryUuid || null) === categoryUuid,
+      );
+      const otherProducts = prev.filter(
+        (p) => (p.categoryUuid || null) !== categoryUuid,
+      );
+
+      const movedProduct = categoryProducts.find((p) => p.uuid === active.id);
+      if (!movedProduct) return prev;
+
+      const reordered = categoryProducts.filter((p) => p.uuid !== active.id);
+      const insertIndex = reordered.findIndex((p) => p.uuid === over.id);
+      if (insertIndex !== -1) {
+        reordered.splice(insertIndex, 0, movedProduct);
+      } else {
+        reordered.push(movedProduct);
+      }
+
+      return [...otherProducts, ...reordered];
+    });
+
+    // Update sort on server
+    try {
+      const response = await fetch("/api/admin/products/sort", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productUuid: active.id,
+          categoryUuid,
+          newIndex,
+        }),
+      });
+
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.error || "Failed to update sort");
+      }
+
+      // Update the product's sort value in local state
+      setLocalProducts((prev) =>
+        prev.map((p) =>
+          p.uuid === active.id ? { ...p, sort: data.data.sort } : p,
+        ),
+      );
+    } catch (error) {
+      console.error("Failed to update sort:", error);
+      // Revert on error
+      setLocalProducts(products as Product[]);
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -72,86 +284,61 @@ export default function ProductsPageContent({
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-card border rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <Table className="w-full">
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("table.name")}</TableHead>
-                <TableHead>{t("table.title")}</TableHead>
-                <TableHead>{t("table.category")}</TableHead>
-                <TableHead>{t("table.status")}</TableHead>
-                <TableHead>{t("table.createdAt")}</TableHead>
-                <TableHead>{t("table.actions")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {products && products.length > 0 ? (
-                products.map((item: Product, idx: number) => {
-                  return (
-                    <TableRow
-                      key={item.uuid || `product-${idx}`}
-                      className="hover:bg-muted/50 transition-colors h-16"
-                    >
-                      <TableCell>
-                        <span
-                          className="font-medium"
-                          title={String(item.name || "")}
-                        >
-                          {String(item.name || "")}
-                        </span>
-                      </TableCell>
-                      <TableCell>{String(item.title || "")}</TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {item.category ? item.category.title : "-"}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        <ProductStatusSelect
-                          uuid={String(item.uuid || "")}
-                          value={item.status}
-                        />
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {item.createdAt
-                          ? moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss")
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            asChild
-                            variant="outline"
-                            size="sm"
-                            className="flex items-center gap-2"
-                          >
-                            <a href={`/admin/products/${item.uuid}/edit`}>
-                              <Edit className="h-4 w-4" />
-                              {t("actions.edit")}
-                            </a>
-                          </Button>
-                          <DeleteButton
-                            uuid={String(item.uuid || "")}
-                            type="product"
-                          />
-                        </div>
-                      </TableCell>
+      {/* Grouped Tables */}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        {groupedProducts.map((group) => (
+          <div key={group.categoryUuid || "uncategorized"} className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">
+              {group.categoryTitle}
+            </h2>
+            <div className="bg-card border rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <Table className="w-full">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-8"></TableHead>
+                      <TableHead>{t("table.name")}</TableHead>
+                      <TableHead>{t("table.title")}</TableHead>
+                      <TableHead>{t("table.category")}</TableHead>
+                      <TableHead>{t("table.status")}</TableHead>
+                      <TableHead>{t("table.createdAt")}</TableHead>
+                      <TableHead>{t("table.actions")}</TableHead>
                     </TableRow>
-                  );
-                })
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={6}>
-                    <div className="flex w-full justify-center items-center py-8 text-muted-foreground">
-                      <p>{t("messages.noProductsFound")}</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+                  </TableHeader>
+                  <TableBody>
+                    {group.products.length > 0 ? (
+                      <SortableContext
+                        items={group.products.map((p) => p.uuid)}
+                        strategy={verticalListSortingStrategy}
+                      >
+                        {group.products.map((product) => (
+                          <SortableRow
+                            key={product.uuid}
+                            product={product}
+                            t={t}
+                          />
+                        ))}
+                      </SortableContext>
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={7}>
+                          <div className="flex w-full justify-center items-center py-8 text-muted-foreground">
+                            <p>{t("messages.noProductsFound")}</p>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </div>
+        ))}
+      </DndContext>
 
       {/* Import Dialog */}
       <ImportDialog
