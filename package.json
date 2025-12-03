@@ -51,6 +51,7 @@
     "@tiptap/pm": "^3.7.2",
     "@tiptap/react": "^3.7.2",
     "@tiptap/starter-kit": "^3.7.2",
+    "@vercel/analytics": "^1.6.1",
     "@vercel/blob": "^2.0.0",
     "ai": "^5.0.76",
     "aws4fetch": "^1.0.20",

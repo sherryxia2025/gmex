@@ -32,7 +32,7 @@ export default async function ProductCategoryPage({
       <Header />
       <SubHero
         title={category.title}
-        bgImage={"/images/product-hero.jpg"}
+        bgImage={"/images/banner_products.jpg"}
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Products", href: "/products" },

@@ -39,7 +39,7 @@ export default async function AddProductCategoryPage() {
         validation: {
           required: true,
         },
-        tip: "category name should be unique",
+        tip: "category name should be unique and follow slug format (lowercase letters, numbers, and hyphens only, no spaces or special characters)",
       },
       {
         name: "description",
@@ -52,6 +52,19 @@ export default async function AddProductCategoryPage() {
         title: "Cover URL",
         type: "image-url",
         placeholder: "Enter cover image URL...",
+      },
+      {
+        name: "bannerUrl",
+        title: "Banner URL",
+        type: "image-url",
+        placeholder: "Enter banner image URL...",
+      },
+      {
+        name: "sort",
+        title: "Sort",
+        type: "number",
+        placeholder: "0",
+        tip: "Lower numbers appear first",
       },
       {
         name: "features",
@@ -80,13 +93,24 @@ export default async function AddProductCategoryPage() {
         const name = data.get("name") as string;
         const description = data.get("description") as string;
         const coverUrl = data.get("coverUrl") as string;
+        const bannerUrl = data.get("bannerUrl") as string;
+        const sortStr = data.get("sort") as string;
         const featuresStr = data.get("features") as string;
 
         if (!title || !title.trim() || !name || !name.trim()) {
           throw new Error("invalid form data");
         }
 
-        const existCategory = await findProductCategoryByName(name);
+        // Validate slug format: lowercase letters, numbers, and hyphens only
+        const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+        const trimmedName = name.trim();
+        if (!slugRegex.test(trimmedName)) {
+          throw new Error(
+            "Name must be a valid slug: lowercase letters, numbers, and hyphens only. Cannot start or end with a hyphen, and cannot have consecutive hyphens.",
+          );
+        }
+
+        const existCategory = await findProductCategoryByName(trimmedName);
         if (existCategory) {
           throw new Error("category with same name already exists");
         }
@@ -99,13 +123,17 @@ export default async function AddProductCategoryPage() {
             .filter((line) => line.length > 0);
         }
 
+        const sort = sortStr ? Number.parseInt(sortStr, 10) : 0;
+
         const category = {
           uuid: getUuid(),
           createdAt: new Date(),
           title,
-          name,
+          name: trimmedName,
           description: description || undefined,
           coverUrl: coverUrl || undefined,
+          bannerUrl: bannerUrl || undefined,
+          sort: Number.isNaN(sort) ? 0 : sort,
           features,
         };
 

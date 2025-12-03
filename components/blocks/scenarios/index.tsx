@@ -34,7 +34,7 @@ const defaultItems: ScenariosProps["items"] = [
   },
   {
     title: "Automation",
-    cover: "/images/scenarios6.png",
+    cover: "/images/automation.png",
   },
 ];
 

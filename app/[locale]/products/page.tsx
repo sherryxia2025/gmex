@@ -31,7 +31,7 @@ export default async function ProductsPage() {
       <Header />
       <SubHero
         title="Products"
-        bgImage="/images/product-hero.jpg"
+        bgImage="/images/banner_products.jpg"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Products" }]}
       />
       <Products categories={transformedCategories} />

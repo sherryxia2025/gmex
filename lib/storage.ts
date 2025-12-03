@@ -77,11 +77,11 @@ function getExtensionAndDirFromContentType(contentType?: string): {
   dir: string;
   ext: string;
 } {
-  if (!contentType) return { dir: "binary", ext: "bin" };
+  if (!contentType) return { dir: "blobs", ext: "bin" };
 
   const [type, ext] = contentType.split("/");
   return {
-    dir: type ? `${type}s` : "binary",
+    dir: type ? `${type}s` : "blobs",
     ext: ext === "jpeg" ? "jpg" : ext || "bin",
   };
 }

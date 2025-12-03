@@ -9,7 +9,7 @@ export default function ContactPage() {
       <Header />
       <SubHero
         title="Contact"
-        bgImage="/images/contact-hero.jpg"
+        bgImage="/images/banner_contact.jpg"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
       />
       <Contact />
