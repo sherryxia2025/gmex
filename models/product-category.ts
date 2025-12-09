@@ -1,3 +1,6 @@
+import { revalidateTag } from "next/cache";
+import { cacheLife } from "next/dist/server/use-cache/cache-life";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import prisma from "@/prisma";
 import { Prisma } from "@/prisma/generated/prisma";
 
@@ -41,6 +44,7 @@ export async function insertProductCategory(data: {
       updatedAt: data.updatedAt,
     },
   });
+  revalidateTag("product-categories");
 
   return category;
 }
@@ -99,12 +103,20 @@ export async function updateProductCategory(
     data: updateData,
   });
 
+  revalidateTag(`product-category-name:${data.name}`);
+  revalidateTag(`product-category-id:${uuid}`);
+  revalidateTag("product-categories");
+
   return category;
 }
 
 export async function findProductCategoryByName(
   name: string,
 ): Promise<ProductCategory | null> {
+  "use cache";
+  cacheLife("days");
+  cacheTag(`product-category-name:${name}`);
+
   const category = await prisma.productCategory.findFirst({
     where: {
       name,
@@ -117,6 +129,9 @@ export async function findProductCategoryByName(
 export async function findProductCategoryByUuid(
   uuid: string,
 ): Promise<ProductCategory | null> {
+  "use cache";
+  cacheLife("days");
+  cacheTag(`product-category-id:${uuid}`);
   const category = await prisma.productCategory.findUnique({
     where: { uuid },
   });
@@ -131,6 +146,10 @@ export async function getProductCategories({
   page?: number;
   limit?: number;
 }): Promise<ProductCategory[]> {
+  "use cache";
+  cacheLife("days");
+  cacheTag("product-categories");
+
   const offset = (page - 1) * limit;
 
   const data = await prisma.productCategory.findMany({
@@ -143,6 +162,10 @@ export async function getProductCategories({
 }
 
 export async function getProductCategoriesTotal(): Promise<number> {
+  "use cache";
+  cacheLife("days");
+  cacheTag("product-categories");
+
   const total = await prisma.productCategory.count();
   return total;
 }
@@ -151,4 +174,5 @@ export async function deleteProductCategory(uuid: string): Promise<void> {
   await prisma.productCategory.delete({
     where: { uuid },
   });
+  revalidateTag("product-categories");
 }

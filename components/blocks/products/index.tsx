@@ -21,7 +21,7 @@ export const Products = ({ categories }: ProductsProps) => {
   if (categories.length === 0) {
     return (
       <section className="bg-white py-10 md:py-24">
-        <div className="px-4 sm:px-16 md:px-20 lg:px-28 xl:px-50">
+        <div className="container mx-auto px-4 md:px-6 lg:px-8">
           <div className="text-center">No product categories</div>
         </div>
       </section>
@@ -30,25 +30,27 @@ export const Products = ({ categories }: ProductsProps) => {
 
   return (
     <section className="bg-white py-10 md:py-24">
-      <div className="px-4 sm:px-16 md:px-20 lg:px-28 xl:px-50">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {categories.map((category) => (
             <Link
               key={category.uuid}
               href={`/products/${encodeURIComponent(category.name)}`}
-              className="bg-[rgba(246,246,246,0.898)] rounded-lg overflow-hidden flex flex-col p-2 transition-shadow"
+              className="group bg-gray-50 rounded-xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-gray-200"
             >
               {/* Category Image */}
               <div className="w-full h-48 md:h-56 lg:h-64 bg-gray-100 flex items-center justify-center overflow-hidden relative">
                 {category.coverUrl ? (
-                  <Image
-                    src={category.coverUrl}
-                    alt={category.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover"
-                    priority
-                  />
+                  <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+                    <Image
+                      src={category.coverUrl}
+                      alt={category.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      priority
+                    />
+                  </div>
                 ) : (
                   <div className="text-gray-400">{category.title}</div>
                 )}

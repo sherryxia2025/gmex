@@ -1,3 +1,6 @@
+import { revalidateTag } from "next/cache";
+import { cacheLife } from "next/dist/server/use-cache/cache-life";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import prisma from "@/prisma";
 import type { Prisma } from "@/prisma/generated/prisma";
 
@@ -52,6 +55,9 @@ export async function insertProduct(data: {
     },
   });
 
+  revalidateTag(`products:${data.categoryUuid}`);
+  revalidateTag(`products:`);
+
   return product;
 }
 
@@ -84,10 +90,19 @@ export async function updateProduct(
     },
   });
 
+  revalidateTag(`products:${data.categoryUuid}`);
+  revalidateTag(`products:`);
+  revalidateTag(`product-id:${uuid}`);
+  revalidateTag(`product-name:${data.name}`);
+
   return product;
 }
 
 export async function findProductByUuid(uuid: string): Promise<Product | null> {
+  "use cache";
+  cacheLife("days");
+  cacheTag(`product-id:${uuid}`);
+
   const product = await prisma.product.findUnique({
     where: { uuid },
     include: {
@@ -99,6 +114,9 @@ export async function findProductByUuid(uuid: string): Promise<Product | null> {
 }
 
 export async function findProductByName(name: string): Promise<Product | null> {
+  "use cache";
+  cacheLife("days");
+  cacheTag(`product-name:${name}`);
   const product = await prisma.product.findFirst({
     where: {
       name,
@@ -120,6 +138,10 @@ export async function getProducts({
   page?: number;
   limit?: number;
 }): Promise<Product[]> {
+  "use cache";
+  cacheLife("days");
+  cacheTag(`products:${categoryUuid}`);
+
   const offset = (page - 1) * limit;
 
   const where: Prisma.ProductWhereInput = {};
@@ -150,6 +172,10 @@ export async function getProductsTotal({
   status?: ProductStatus;
   categoryUuid?: string;
 }): Promise<number> {
+  "use cache";
+  cacheLife("days");
+  cacheTag(`products:${categoryUuid}`);
+
   const where: Prisma.ProductWhereInput = {};
   if (status) {
     where.status = status;

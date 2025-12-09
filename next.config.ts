@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     authInterrupts: true,
+    useCache: true,
   },
 };
 
