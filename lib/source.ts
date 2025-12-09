@@ -30,7 +30,24 @@ export function getPageImage(page: InferPageType<typeof source>) {
 }
 
 export async function getLLMText(page: InferPageType<typeof source>) {
-  const processed = await page.data.getText("processed");
+  // Get processed text if available, otherwise use title and description
+  let processed = "";
+  try {
+    // Try to get processed text if the method exists
+    if (
+      typeof (page.data as { getText?: (key: string) => Promise<string> })
+        .getText === "function"
+    ) {
+      processed = await (
+        page.data as { getText: (key: string) => Promise<string> }
+      ).getText("processed");
+    } else {
+      // Fallback: use description or empty string
+      processed = (page.data.description as string) || "";
+    }
+  } catch {
+    processed = (page.data.description as string) || "";
+  }
 
   return `# ${page.data.title} (${page.url})
 

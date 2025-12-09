@@ -82,7 +82,7 @@ export const Contact = () => {
 
   return (
     <section className="py-10 md:py-24 bg-white">
-      <div className="container px-4 md:px-6 lg:px-8">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8">
         {/* Contact Method Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {/* Send E-Mail Card */}

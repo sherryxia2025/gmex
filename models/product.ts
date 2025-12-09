@@ -55,8 +55,8 @@ export async function insertProduct(data: {
     },
   });
 
-  revalidateTag(`products:${data.categoryUuid}`);
-  revalidateTag(`products:`);
+  revalidateTag(`products:${data.categoryUuid}`, "default");
+  revalidateTag(`products:`, "default");
 
   return product;
 }
@@ -90,10 +90,10 @@ export async function updateProduct(
     },
   });
 
-  revalidateTag(`products:${data.categoryUuid}`);
-  revalidateTag(`products:`);
-  revalidateTag(`product-id:${uuid}`);
-  revalidateTag(`product-name:${data.name}`);
+  revalidateTag(`products:${data.categoryUuid}`, "default");
+  revalidateTag(`products:`, "default");
+  revalidateTag(`product-id:${uuid}`, "default");
+  revalidateTag(`product-name:${data.name}`, "default");
 
   return product;
 }

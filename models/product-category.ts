@@ -44,7 +44,7 @@ export async function insertProductCategory(data: {
       updatedAt: data.updatedAt,
     },
   });
-  revalidateTag("product-categories");
+  revalidateTag("product-categories", "default");
 
   return category;
 }
@@ -103,9 +103,9 @@ export async function updateProductCategory(
     data: updateData,
   });
 
-  revalidateTag(`product-category-name:${data.name}`);
-  revalidateTag(`product-category-id:${uuid}`);
-  revalidateTag("product-categories");
+  revalidateTag(`product-category-name:${data.name}`, "default");
+  revalidateTag(`product-category-id:${uuid}`, "default");
+  revalidateTag("product-categories", "default");
 
   return category;
 }
@@ -174,5 +174,5 @@ export async function deleteProductCategory(uuid: string): Promise<void> {
   await prisma.productCategory.delete({
     where: { uuid },
   });
-  revalidateTag("product-categories");
+  revalidateTag("product-categories", "default");
 }

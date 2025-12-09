@@ -44,7 +44,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         </h3>
 
         {product.description && (
-          <p className="text-sm text-gray-600 leading-relaxed line-clamp-4">
+          <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap break-words">
             {product.description}
           </p>
         )}

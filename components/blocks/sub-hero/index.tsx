@@ -33,7 +33,7 @@ export const SubHero = ({
   return (
     <section
       className={cn(
-        "relative flex items-center w-full py-16 md:py:24 lg:py-32 bg-black overflow-hidden",
+        "relative flex items-center w-full py-16 md:py-24 lg:py-32 bg-black overflow-hidden",
         className,
       )}
       style={
@@ -60,7 +60,7 @@ export const SubHero = ({
       />
 
       {/* Content */}
-      <div className="container relative mt-8 px-4 md:px-6 lg:px-8">
+      <div className="container mx-auto relative mt-8 px-4 md:px-6 lg:px-8">
         <div className="max-w-4xl">
           {/* Page Title */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight sm:leading-tight md:leading-tight mb-5">

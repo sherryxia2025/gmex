@@ -43,7 +43,7 @@ export const OurFactory = ({
         height={640}
         className={cn(
           "h-64 w-full md:h-72 lg:h-80 transition-transform duration-300 hover:scale-105",
-          imageFit === "contain" ? "object-contain" : "object-cover"
+          imageFit === "contain" ? "object-contain" : "object-cover",
         )}
       />
 
@@ -57,7 +57,7 @@ export const OurFactory = ({
 
   return (
     <section className={cn("py-20 bg-[#F7F7F7]", className)}>
-      <div className="container px-4 md:px-6 lg:px-8">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-10">
           <h2 className="text-3xl md:text-4xl font-semibold mb-4">{title}</h2>
           {description && (
