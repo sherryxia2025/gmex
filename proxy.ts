@@ -76,7 +76,8 @@ async function checkAdminAuth(request: NextRequest) {
   }
   return null;
 }
-export async function middleware(request: NextRequest) {
+
+export async function proxy(request: NextRequest) {
   // Check admin routes first (both API and page routes)
   if (
     request.nextUrl.pathname.startsWith("/api/admin") ||
@@ -97,6 +98,7 @@ export async function middleware(request: NextRequest) {
   const intlResponse = intlMiddleware(request);
   return intlResponse ?? NextResponse.next();
 }
+
 export const config = {
   matcher: [
     "/api/admin/(.*)",
@@ -104,3 +106,4 @@ export const config = {
     "/((?!api|trpc|_next|_vercel|.*\\..*).*)",
   ],
 };
+
